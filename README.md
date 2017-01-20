@@ -8,7 +8,7 @@
 ### 快速开始
 
 ``` bash
-weexpack plugin add weex-plugin-amap
+weexpack plugin add weex-plugin-amap  （目前还不支持，该组件很快上传插件市场后即将支持）
 ```
 
 你也可以使用本地插件添加，你可以clone 这个项目，然后存放到你本地目录添加
