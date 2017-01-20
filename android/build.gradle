@@ -1,63 +1,24 @@
+// Top-level build file where you can add configuration options common to all sub-projects/modules.
+
 buildscript {
     repositories {
-        maven { url "http://mvnrepo.alibaba-inc.com/mvn/repository" }
-        maven { url "http://mvnrepo.alibaba-inc.com/mvn/snapshots" }
+        // maven { url "http://mvnrepo.alibaba-inc.com/mvn/repository" }
         mavenCentral()
         jcenter()
     }
     dependencies {
-        classpath 'com.android.tools.build:gradle:2.1.2'
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.0'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+        classpath 'com.android.tools.build:gradle:2.2.2'
     }
 }
 
 allprojects {
     repositories {
-        maven { url "http://mvnrepo.alibaba-inc.com/mvn/repository" }
-        maven { url "http://mvnrepo.alibaba-inc.com/mvn/snapshots" }
+        // maven { url "http://mvnrepo.alibaba-inc.com/mvn/repository" }
         mavenCentral()
         jcenter()
     }
 }
 
-apply plugin: 'com.android.library'
-apply plugin: 'com.jfrog.bintray'
-apply plugin: 'com.github.dcendents.android-maven'
-
-android {
-    compileSdkVersion 23
-    buildToolsVersion "23.0.2"
-
-    defaultConfig {
-        minSdkVersion 14
-        targetSdkVersion 23
-        versionCode 1
-        versionName "1.0"
-
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
-    }
-    buildTypes {
-        release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-        }
-    }
-    compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_6
-        targetCompatibility JavaVersion.VERSION_1_6
-    }
-}
-
-dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:23.1.1'
-    compile 'com.taobao.android:weex_sdk:0.9.4'
-    compile 'com.amap.api:map3d-native:latest.integration'
-    compile 'com.amap.api:map3d:latest.integration'
-    compile 'com.amap.api:location:latest.integration'
+task clean(type: Delete) {
+    delete rootProject.buildDir
 }
