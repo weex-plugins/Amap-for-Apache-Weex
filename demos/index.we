@@ -1,0 +1,71 @@
+<template>
+  <div class="container">
+      <weex-amap class="map" id="map2017" scale="true" geolocation="true" zoom="5" center={{pos}} points={{pointArr}} ></weex-amap>
+      
+    <div onclick="changeCenter"><text class="btn" >set Center</text></div>
+    <div onclick="addPoints"><text class="btn">add points</text></div>
+     
+  </div>
+</template>
+
+<style>
+  .container{
+    position: relative;
+    height: 100%;
+    
+  }
+  .map{
+    
+    height: 600;
+    background-color: #fff;
+  }
+  .btn{
+    margin: 10;
+    padding: 10;
+    width:240;
+    background-color: #1ba1e2;
+    border-radius: 10;
+    color: #fff; 
+    text-align:center;
+    cursor: pointer;
+    font-size: 18;
+  }
+</style>
+
+<script>
+  
+  module.exports = {
+    data: {
+      pos:[116.487, 40.00003],
+      pointArr: [{
+        pos:[101,30],
+        title: '成都'
+      }]
+    },
+    
+    methods: {
+      changeCenter() {
+        this.pos = [100 + Math.random()*10,20 + Math.random()*20];
+      },
+        
+      addPoints() {
+        this.pointArr.push({pos:[80 + Math.random()*30,20 + Math.random()*20],title:'' + Math.random()*1000});
+        console.log(this.pointArr);
+        this.pointArr = Array.from( this.pointArr);
+        
+      },
+      
+      getLocation() {
+            
+      }
+      
+      
+      
+    },
+    
+    created () {
+     // console.log(this.$vm('map2017'));
+    },
+    
+  }
+</script>

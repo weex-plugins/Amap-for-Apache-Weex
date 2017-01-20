@@ -1,0 +1,56 @@
+<template>
+    <div class="wrap" >
+      <div class="map"></div>
+      <div class="btnpos">
+        <image style="width:32;height:32;" src="https://gw.alicdn.com/tps/TB1vGVkPXXXXXaNapXXXXXXXXXX-45-49.jpg" ></image>
+      </div>
+    </div>
+    
+</template>
+
+<style>
+  .wrap {
+    position: relative;flex:1;
+  }
+  .map{
+    flex:1;
+  }
+  .btnpos{
+    position:absolute;bottom:64;
+    right:10;
+    width:32;
+    height:32;
+  }
+  
+</style>
+
+<script>
+  
+  
+  module.exports = {
+    data:{
+      center:'',
+      zoom: 11,
+      zoomEnable: true,
+    },
+    
+    methods: {
+      setCenter() {
+        
+      },
+      setZoomEnable() {
+        
+      },
+      getGeolocation() {
+        
+      },
+      addMarker() {
+        
+      },
+    },
+    
+    created() {
+      console.log(this.center);
+    },
+  }
+</script>
