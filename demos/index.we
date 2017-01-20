@@ -11,13 +11,11 @@
 <style>
   .container{
     position: relative;
-    height: 100%;
-    
+    flex:1;
   }
   .map{
-    
-    height: 600;
     background-color: #fff;
+    flex:1;
   }
   .btn{
     margin: 10;
