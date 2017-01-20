@@ -71,17 +71,17 @@
                <!-- android -->
      <platform name="android">
          <config-file target="config.xml" parent="/*">
-             <feature name="WXMapViewComponent">
+             <feature name="weex-amap">
                  <param name="category" value="component" />
                  <param name="android-package" value="com.alibaba.weex.extend.WXMapViewComponent" />
-                 <param name="api" value="mapview" />
+                 <param name="api" value="weex-amap" />
              </feature>
          </config-file>
 
-         <source-file src="android/src/main/java/com/alibaba/weex/extend/WXMapViewComponent.java"
+         <source-file src="android/plugin/src/main/java/com/alibaba/weex/extend/WXMapViewComponent.java"
             target-dir="src/com/alibaba/weex/extend" />
 
-         <source-file src="android/src/main/java/com/alibaba/weex/extend/Constant.java"
+         <source-file src="android/plugin/src/main/java/com/alibaba/weex/extend/Constant.java"
             target-dir="src/com/alibaba/weex/extend" />
 
          <framework src="com.amap.api:map3d-native:latest.integration" />
