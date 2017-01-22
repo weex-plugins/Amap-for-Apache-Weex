@@ -1,9 +1,7 @@
-'use strict'
-
 const defaultAttr = {
   zoom: 13,
   resizeEnable: true,
-}
+};
 
 let params = {
   center: undefined,
@@ -19,9 +17,18 @@ let points = [];
 
 function addMarker(map) {
   for(let i = 0; i < points.length; i ++){
-    let point = Array.from(points[i]);
+    let point = points[i];
+    let icon = null;
+    if(point.icon) {
+      icon = new AMap.Icon({
+        image : point.icon,
+        size : new AMap.Size(64,64)
+      });  
+    }
      let marker = new AMap.Marker({
         position: point.pos,
+        title: point.title,
+        icon: icon,
         map: map,
       });
   }
@@ -39,7 +46,7 @@ const proto = {
     lib.addEventListener('load',function() {
       window.maploaded = true;
       self.ready();
-    })
+    });
     this.mapwrap.append(lib);    
     return this.mapwrap;
   },
@@ -59,7 +66,7 @@ const proto = {
       }   
   }
   
-}
+};
 
 
 
@@ -79,12 +86,13 @@ const attr = {
     }
   },
   points(val) {
-    if(Array.isArray(val)) {
-      points = val;   
-    }
-    if(window.AMap) {
+    if(Array.isArray(val) && val.length>0) {
+      points = val;  
+       if(window.AMap) {
       addMarker(this.map);
     }
+    }
+   
   },
   scale(val) {
      params.scale = val; 
@@ -93,35 +101,25 @@ const attr = {
      params.geolocation = val; 
   },
   
-}
-
-// style setters
-const style = {
-  
-}
-
-// event config
-const event = {
-  
-}
+};
 
 function init (Weex) {
-  const Component = Weex.Component
-  const extend = Weex.utils.extend
+  const Component = Weex.Component;
+  const extend = Weex.utils.extend;
 
   function Amap (data) {
-    Component.call(this, data)
+    Component.call(this, data);
   }
 
   Amap.prototype = Object.create(Component.prototype);
-  extend(Amap.prototype, proto)
-  extend(Amap.prototype, { attr })
+  extend(Amap.prototype, proto);
+  extend(Amap.prototype, { attr });
   extend(Amap.prototype, {
     style: extend(Object.create(Component.prototype.style), style)
-  })
+  });
   extend(Amap.prototype, { event });
 
   Weex.registerComponent('weex-amap', Amap);
 }
 
-export default { init }
+export default { init };
