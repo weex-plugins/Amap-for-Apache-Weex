@@ -21,12 +21,13 @@
 <plugin xmlns="http://apache.org/weexpack/ns/plugins/1.0"
     id="weex-plugin-amap"
     version="1.0.0">
-    <name>WXMapViewComponent</name>
+    <name>weex-plugin-amap</name>
     <description>weex mapview component</description>
     <license>Apache 2.0</license>
     <keywords>weex,map</keywords>
     <repo>https://github.com/weexteam/weex-plugins</repo>
     <issue>https://github.com/weexteam/weex-plugins/issues</issue>
+    <dependency id="/Users/yangshengtao/Desktop/Plugins/weex-adapterImage" version="^1.0.0" />
 
 
      <!-- ios -->
