@@ -85,10 +85,7 @@
 
 - (void)dealloc
 {
-    [_annotations removeAllObjects];
-    _annotations = nil;
-    [_iconAry removeAllObjects];
-    _iconAry = nil;
+    [self clearPOIData];
 }
 
 - (void)updateAttributes:(NSDictionary *)attributes
@@ -102,16 +99,7 @@
     
     if (attributes[@"points"]) {
         NSArray *points = attributes[@"points"];
-        if (_annotations) {
-            [_annotations removeAllObjects];
-        }else {
-            _annotations = [NSMutableArray arrayWithCapacity:5];
-        }
-        if (_iconAry) {
-            [_iconAry removeAllObjects];
-        }else {
-            _iconAry = [NSMutableArray arrayWithCapacity:5];
-        }
+        [self initPOIData];
         for (int i = 0; i < points.count; ++i)
         {
             NSDictionary *annotations = points[i];
@@ -142,8 +130,28 @@
     
 }
 
+#pragma mark - private method
+- (void)initPOIData {
+    if (_annotations) {
+        [_annotations removeAllObjects];
+    }else {
+        _annotations = [NSMutableArray arrayWithCapacity:5];
+    }
+    if (_iconAry) {
+        [_iconAry removeAllObjects];
+    }else {
+        _iconAry = [NSMutableArray arrayWithCapacity:5];
+    }
+}
 
-#pragma mark - 
+- (void)clearPOIData {
+    [_annotations removeAllObjects];
+    _annotations = nil;
+    [_iconAry removeAllObjects];
+    _iconAry = nil;
+}
+
+#pragma mark -
 /*!
  @brief 根据anntation生成对应的View
  @param mapView 地图View
