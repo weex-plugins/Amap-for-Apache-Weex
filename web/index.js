@@ -1,3 +1,7 @@
+import markerManage  from './service/marker';
+import mapLoader from './service/map-loader';
+import vendor from './service/vendor';
+
 const defaultAttr = {
   zoom: 13,
   resizeEnable: true,
@@ -11,49 +15,22 @@ let params = {
   geolocation: false,
   resizeEnable: true,
 };
-
-let points = [];
-
-
-function addMarker(map) {
-  for(let i = 0; i < points.length; i ++){
-    let point = points[i];
-    let icon = null;
-    if(point.icon) {
-      icon = new AMap.Icon({
-        image : point.icon,
-        size : new AMap.Size(64,64)
-      });  
-    }
-     let marker = new AMap.Marker({
-        position: point.pos,
-        title: point.title,
-        icon: icon,
-        map: map,
-      });
-  }
-}
 // prototype methods.
 const proto = {
+  
   create () {
-    
     this.mapwrap = document.createElement('div');
-    this.mapwrap.id = 'map' + (new Date()).getTime().toString().substring(9,3) + parseInt(Math.random() * 10000);
+    this.mapwrap.id = vendor.gengerateRandomId('map');
     this.mapwrap.append(document.createTextNode('高德地图加载中...'));
-    let lib = document.createElement('script');
-    lib.src = 'http://webapi.amap.com/maps?v=1.3';
-    let self = this;
-    lib.addEventListener('load',function() {
-      window.maploaded = true;
-      self.ready();
-    });
-    this.mapwrap.append(lib);    
+    mapLoader.load({},this.mapwrap,() => this.ready());   
     return this.mapwrap;
   },
+  
   ready () {
     let self = this;
       if(window.AMap) {
-        this.map = new AMap.Map(self.mapwrap.id,params);
+        console.log(this.mapwrap);
+        this.map = new AMap.Map(this.mapwrap.id,params);
         AMap.plugin(['AMap.ToolBar','AMap.Geolocation'],() => {
           if(params.scale) {
             self.map.addControl(new AMap.ToolBar());  
@@ -62,14 +39,14 @@ const proto = {
             self.map.addControl(new AMap.Geolocation()); 
           }
         });
-        addMarker(this.map);
+        markerManage.changeMarker(markers,this.map);
+        this.mapInstance = this.map;
       }   
   }
   
 };
 
-
-
+let markers = [];
 
 const attr = {
   center (val) {
@@ -81,18 +58,21 @@ const attr = {
     }
   },
   zoom(val) {
-    if(/^[0-9]$/.test(val)) {
+    if(/^[0-9]+$/.test(val)) {
       params.zoom = val;   
+    }
+    if(window.AMap) {
+      console.log(params.zoom);
+      this.map.setZoom(params.zoom);
     }
   },
   points(val) {
-    if(Array.isArray(val) && val.length>0) {
-      points = val;  
-       if(window.AMap) {
-      addMarker(this.map);
+    if(Array.isArray(val)) { 
+      markers = val;
+      if(window.AMap) {
+        markerManage.changeMarker(markers,this.map);
+      }
     }
-    }
-   
   },
   scale(val) {
      params.scale = val; 
@@ -110,12 +90,12 @@ function init (Weex) {
   function Amap (data) {
     Component.call(this, data);
   }
-
+  
   Amap.prototype = Object.create(Component.prototype);
   extend(Amap.prototype, proto);
   extend(Amap.prototype, { attr });
   extend(Amap.prototype, {
-    style: extend(Object.create(Component.prototype.style), style)
+    style: extend(Object.create(Component.prototype.style), {})
   });
   extend(Amap.prototype, { event });
 
