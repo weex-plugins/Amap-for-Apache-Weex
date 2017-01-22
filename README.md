@@ -7,7 +7,6 @@
 
 ### 快速开始
 
-
 编辑你的weex文件
 
 ``` we
@@ -70,7 +69,9 @@
 | title | string   |   'this is a marker' | 坐标点的名称 |
 
 
-##### demo
+[demo](https://weex-plugins.github.io/weex-plugin-amap/)
+
+
 
 
 
