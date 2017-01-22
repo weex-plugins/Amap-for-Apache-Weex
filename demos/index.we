@@ -7,7 +7,6 @@
       <div onclick="increaseZoom" if="{{zoom<15}}" class="btnbox"><text class="btn" >zoom + </text></div>
       <div onclick="decreaseZoom" if="{{zoom>=3}}" class="btnbox"><text class="btn" > zoom - </text></div>
       <div onclick="addPoints" class="btnbox"><text class="btn" >add points</text></div>
-      <div onclick="removePoints" class="btnbox"><text class="btn">remove points</text></div>
     </div>
     
      
