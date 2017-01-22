@@ -53,10 +53,9 @@
 | ------------- |:-------------:| -----:|----------:|
 | center     | array | [116.487, 40.00003] | 传入地理位置坐标[x,y] 默认为当前定位位置 |
 | zoom      | number      |  11 | 缩放级别 |
-| zoomEnable | boolean     |    false | 是否允许缩放 |
-| doubleClickZoom | boolean   |   false | 是否双击放大 |
-| marker |  array | [{position:[116,112]}] |  点标记物属性
-
+| zoomEnable | boolean  | true | 是否允许缩放
+| points |  array | [`{position:[116,12]}]` |  点标记物的属性
+| geolocation  | boolean | true | 添加定位控件
 
 
 #### 点标记marker的对象属性 
@@ -64,12 +63,11 @@
 | 属性        | 类型         | Demo  | 描述  |
 | ------------- |:-------------:| -----:|----------:|
 | position     | array | [116.487, 40.00003] | 传入地理位置坐标[x,y] 默认为当前定位位置 |
-| offset      | array      |  [1,2] | 位置偏移 |
 | icon | string     |    some_icon_url | 是否允许缩放 |
 | title | string   |   'this is a marker' | 坐标点的名称 |
 
 
-[demo](https://weex-plugins.github.io/weex-plugin-amap/)
+[Demo](https://weex-plugins.github.io/weex-plugin-amap/)
 
 
 
