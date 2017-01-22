@@ -1,0 +1,13 @@
+include ':app'
+include ':plugin'
+include ':weexplugin'
+include ':appframework'
+
+//include ":weex_sdk"
+//project(":weex_sdk").projectDir=new File("../sdk")
+
+//include ":inspector"
+//project(":inspector").projectDir=new File("../inspector")
+
+
+
