@@ -27,7 +27,7 @@
     <keywords>weex,map</keywords>
     <repo>https://github.com/weexteam/weex-plugins</repo>
     <issue>https://github.com/weexteam/weex-plugins/issues</issue>
-    <dependency id="/Users/yangshengtao/Desktop/Plugins/weex-adapterImage" version="^1.0.0" />
+    <dependency id="weex-adapterImage" version="^1.0.0" />
 
 
      <!-- ios -->
