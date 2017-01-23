@@ -23,6 +23,7 @@ public class Constant {
         String GESTURE = "gesture";
         String INDOORSWITCH = "indoorswitch";
         String CENTER = "center";
+        String MARKER = "marker";
 
     }
 }
