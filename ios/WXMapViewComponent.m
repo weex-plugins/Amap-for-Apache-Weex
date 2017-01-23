@@ -73,6 +73,9 @@ static const void *iconImageKey = &iconImageKey;
         _zoomLevel = [attributes[@"zoom"] floatValue];
         _showScale = [attributes[@"scale"] boolValue];
         _showGeolocation = [attributes[@"geolocation"] boolValue];
+        if (attributes[@"sdkKey"]) {
+            [self setAPIKey:[attributes[@"sdkKey"] objectForKey:@"ios"] ? : @""];
+        }
     }
     
     return self;
@@ -137,6 +140,10 @@ static const void *iconImageKey = &iconImageKey;
 }
 
 #pragma mark - component interface
+- (void)setAPIKey:(NSString *)appKey {
+    [AMapServices sharedServices].apiKey = appKey;
+}
+
 - (void)setCenter:(NSArray *)center {
     CLLocationCoordinate2D centerCoordinate;
     centerCoordinate.latitude = [center[1] doubleValue];
