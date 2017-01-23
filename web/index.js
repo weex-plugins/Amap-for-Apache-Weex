@@ -6,7 +6,7 @@ const defaultAttr = {
   zoom: 13,
   resizeEnable: true,
 };
-
+const loadingGif = 'http://img1.vued.vanthink.cn/vued2113eaa062abbaee0441d16a7848d23e.gif';
 let params = {
   center: undefined,
   zoom:11,
@@ -21,9 +21,23 @@ const proto = {
   create () {
     this.mapwrap = document.createElement('div');
     this.mapwrap.id = vendor.gengerateRandomId('map');
-    this.mapwrap.append(document.createTextNode('高德地图加载中...'));
+    this.mapwrap.append(this.renderLoadingSpinner());
     mapLoader.load({},this.mapwrap,() => this.ready());   
     return this.mapwrap;
+  },
+  
+  renderLoadingSpinner() {
+    let el = document.createElement('div');
+    el.style.height = 60;
+    el.style.margin = '20 auto';
+    el.style.textAlign = 'center';
+    let image = document.createElement('img');
+    image.src = loadingGif;
+    el.appendChild(image);
+    let text = document.createElement('div');
+    text.appendChild(document.createTextNode('高德地图加载中....'));
+    el.appendChild(text);
+    return el;
   },
   
   ready () {
