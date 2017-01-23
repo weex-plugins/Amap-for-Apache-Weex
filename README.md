@@ -7,15 +7,6 @@
 
 ### 快速开始
 
-``` bash
-weexpack plugin add weex-plugin-amap  （目前还不支持，该组件很快上传插件市场后即将支持）
-```
-
-你也可以使用本地插件添加，你可以clone 这个项目，然后存放到你本地目录添加
-``` bash
-weexpack plugin add ./weex-plugins/weex-plugin-amap
-```
-
 编辑你的weex文件
 
 ``` we
@@ -62,18 +53,24 @@ weexpack plugin add ./weex-plugins/weex-plugin-amap
 | ------------- |:-------------:| -----:|----------:|
 | center     | array | [116.487, 40.00003] | 传入地理位置坐标[x,y] 默认为当前定位位置 |
 | zoom      | number      |  11 | 缩放级别 |
-| zoomEnable | boolean     |    false | 是否允许缩放 |
-| doubleClickZoom | boolean   |   false | 是否双击放大 |
+| zoomEnable | boolean  | true | 是否允许缩放
+| points |  array | [`{position:[116,12]}]` |  点标记物的属性
+| geolocation  | boolean | true | 添加定位控件
 
 
-#### weex-amap-marker
+#### 点标记marker的对象属性 
 
 | 属性        | 类型         | Demo  | 描述  |
 | ------------- |:-------------:| -----:|----------:|
 | position     | array | [116.487, 40.00003] | 传入地理位置坐标[x,y] 默认为当前定位位置 |
-| offset      | array      |  [1,2] | 位置偏移 |
 | icon | string     |    some_icon_url | 是否允许缩放 |
-| content | string   |   'this is a marker' | 坐标点点击文本 |
+| title | string   |   'this is a marker' | 坐标点的名称 |
+
+
+[Demo](https://weex-plugins.github.io/weex-plugin-amap/)
+
+
+
 
 
 
