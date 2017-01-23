@@ -4,8 +4,6 @@
     <weex-amap class="map" id="map2017" scale="true" geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}} marker={{pointArr}} ></weex-amap>
     <div class="btn-wrap">
       <div onclick="changeCenter" class="btnbox"><text class="btn" >set Center</text></div>
-      <div onclick="increaseZoom" if="{{zoom<15}}" class="btnbox"><text class="btn" >zoom + </text></div>
-      <div onclick="decreaseZoom" if="{{zoom>=3}}" class="btnbox"><text class="btn" > zoom - </text></div>
       <div onclick="addPoints" class="btnbox"><text class="btn" >add points</text></div>
     </div>
     
@@ -50,12 +48,12 @@
       zoom: 9, 
       pointArr: [
         {
-          position:[101,30],
+          position:[116.3944071,39.9278548],
           title: '成都',
         },
         {
           position: [116.4848977,40.0004496],
-          title: '望京A座',
+          title: '故宫',
           icon: 'http://img1.vued.vanthink.cn/vuede9952ac37558a5d32a70c553986bd958.png'
         }
       ],
@@ -64,15 +62,19 @@
     
     methods: {
       changeCenter() {
-        this.pos = [116.4 + Math.random()*0.5,40.0 + Math.random()*0.5];
+        this.pos = [116.4 + Math.random()*0.5,40.25 + Math.random()*0.25];
       },
       
       increaseZoom() {
-        this.zoom = 'in';  
+        if(this.zoom <= 16) {
+          this.zoom ++; 
+        }
       },
       
       decreaseZoom() {
-        this.zoom = 'out';
+        if(this.zoom >= 3) {
+          this.zoom --; 
+        }
       },
         
       addPoints() {

@@ -60,12 +60,6 @@ const attr = {
   zoom(val) {
     if(/^[0-9]+$/.test(val)) {
       params.zoom = val;   
-    }else{
-      if(val == 'in') {
-        params.zoom ++; 
-      }esle if(val == 'out') {
-         params.zoom ++; 
-      }
     }
     if(window.AMap) {
       this.map.setZoom(params.zoom);
