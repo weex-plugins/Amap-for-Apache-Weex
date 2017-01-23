@@ -63,7 +63,7 @@
 | 属性        | 类型         | Demo  | 描述  |
 | ------------- |:-------------:| -----:|----------:|
 | position     | array | [116.487, 40.00003] | 传入地理位置坐标[x,y] 默认为当前定位位置 |
-| icon | string     |    some_icon_url | 是否允许缩放 |
+| icon | string     |    some_icon_url | 图片地址 |
 | title | string   |   'this is a marker' | 坐标点的名称 |
 
 
