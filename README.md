@@ -52,7 +52,7 @@
 | 属性        | 类型         | Demo  | 描述  |
 | ------------- |:-------------:| -----:|----------:|
 | center     | array | [116.487, 40.00003] | 传入地理位置坐标[x,y] 默认为当前定位位置 |
-| zoom      | number      |  11 | 缩放级别 |
+| zoom      | number     |  11 | 缩放级别 |
 | zoomEnable | boolean  | true | 是否允许缩放
 | marker |  array | [`{position:[116,12]}]` |  点标记物的属性
 | geolocation  | boolean | true | 添加定位控件

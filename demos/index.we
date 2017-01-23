@@ -68,17 +68,11 @@
       },
       
       increaseZoom() {
-        if(this.zoom < 15) {
-          this.zoom++;    
-        }   
-        
+        this.zoom = 'in';  
       },
       
       decreaseZoom() {
-        if(this.zoom >= 3) {
-          this.zoom--;    
-        }
-        console.log(this.zoom);
+        this.zoom = 'out';
       },
         
       addPoints() {
