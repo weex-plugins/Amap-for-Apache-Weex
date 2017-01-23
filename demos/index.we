@@ -2,13 +2,14 @@
   <div class="container">
     <h3>Weex-plugin-amap demo</h3>
     <weex-amap class="map" id="map2017" scale="true" sdk-key={{keys}} geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}} marker={{pointArr}} >
+    </weex-amap>
     <div class="btngeo" onclick="setUserLocation">
       <image class="imggeo" src="http://img1.vued.vanthink.cn/vued0bf8a9fdc3df5e1229edd1d38a9f79f8.png"></image>
-    </div>  
-    </weex-amap>
+    </div>
     <div class="btn-wrap">
       <div onclick="changeCenter" class="btnbox"><text class="btn" >set Center</text></div>
       <div onclick="addPoints" class="btnbox"><text class="btn" >add points</text></div>
+      <div onclick="setUserLocation" class="btnbox"><text class="btn" >set </text></div>
     </div>
   </div>
 </template>
@@ -26,7 +27,7 @@
   .btngeo{
     position: absolute;
     left: 20;
-    bottom: 20;
+    top: 20;
     width:40;
     height:40;
     background-color: #fff;
@@ -35,8 +36,8 @@
     text-align:center;
   }
   .imggeo{
-    width: 40;
-    height: 40;
+    width: 30;
+    height: 30;
   }
   .btn-wrap{
     flex:1;
@@ -118,7 +119,7 @@
       
       setUserLocation() {
         let self = this;
-        Amap.getUserLocation((data) => {
+        Amap.getUserLocation(this.$el['map2017'].ref, () => {
           console.log(data);
           this.center = data.postion;
         });
