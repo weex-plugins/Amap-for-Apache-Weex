@@ -67,6 +67,23 @@
 | title | string   |   'this is a marker' | 坐标点的名称 |
 
 
+#### Amap 模块
+
+#####  getUserLocation(completeFunc,errorFunc)
+
++ completeFunc 定位成功后的回调函数，返回的数据:
+```
+{
+  position: [],
+  title: '',
+}
+```
+
+
+
+
+
+
 [Demo](https://weex-plugins.github.io/weex-plugin-amap/)
 
 

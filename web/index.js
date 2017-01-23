@@ -1,6 +1,7 @@
 import markerManage  from './service/marker';
 import mapLoader from './service/map-loader';
 import vendor from './service/vendor';
+import amapModuleRegist from './module/amap';
 
 const defaultAttr = {
   zoom: 13,
@@ -113,6 +114,7 @@ function init (Weex) {
   extend(Amap.prototype, { event });
 
   Weex.registerComponent('weex-amap', Amap);
+  amapModuleRegist();
 }
 
 export default { init };

@@ -1,13 +1,15 @@
 <template>
   <div class="container">
     <h3>Weex-plugin-amap demo</h3>
-    <weex-amap class="map" id="map2017" scale="true" sdk-key={{keys}} geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}} marker={{pointArr}} ></weex-amap>
+    <weex-amap class="map" id="map2017" scale="true" sdk-key={{keys}} geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}} marker={{pointArr}} >
+    <div class="btngeo" onclick="setUserLocation">
+      <image class="imggeo" src="http://img1.vued.vanthink.cn/vued0bf8a9fdc3df5e1229edd1d38a9f79f8.png"></image>
+    </div>  
+    </weex-amap>
     <div class="btn-wrap">
       <div onclick="changeCenter" class="btnbox"><text class="btn" >set Center</text></div>
       <div onclick="addPoints" class="btnbox"><text class="btn" >add points</text></div>
     </div>
-    
-     
   </div>
 </template>
 
@@ -17,8 +19,24 @@
     flex:1;
   }
   .map{
+    position: relative;
     background-color: #fff;
     flex:1;
+  }
+  .btngeo{
+    position: absolute;
+    left: 20;
+    bottom: 20;
+    width:40;
+    height:40;
+    background-color: #fff;
+    border-radius: 2;
+    border: 1px solid #ccc;
+    text-align:center;
+  }
+  .imggeo{
+    width: 40;
+    height: 40;
   }
   .btn-wrap{
     flex:1;
@@ -81,7 +99,7 @@
           this.zoom --; 
         }
       },
-        
+      
       addPoints() {
         const coor = [115.9 + Math.random()*1,39.5 + Math.random()*0.5];
         this.pointArr.push({
@@ -96,6 +114,14 @@
         this.pointArr.pop();
         this.pointArr = Array.from(this.pointArr);
         console.log(this.mapInstance);
+      },
+      
+      setUserLocation() {
+        let self = this;
+        Amap.getUserLocation((data) => {
+          console.log(data);
+          this.center = data.postion;
+        });
       }
       
     },
