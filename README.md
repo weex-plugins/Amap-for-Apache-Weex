@@ -56,7 +56,7 @@
 | zoomEnable | boolean  | true | 是否允许缩放
 | marker |  array | [`{position:[116,12]}]` |  点标记物的属性
 | geolocation  | boolean | true | 添加定位控件
-
+| sdkKey   | object | {ios:'xxx',android: 'xxx',h5: 'xxx'} | 指定开发者的 SDK 密匙 
 
 #### 点标记marker的对象属性 
 

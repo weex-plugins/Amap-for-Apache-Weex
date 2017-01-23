@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h3>Weex-plugin-amap demo</h3>
-    <weex-amap class="map" id="map2017" scale="true" geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}} marker={{pointArr}} ></weex-amap>
+    <weex-amap class="map" id="map2017" scale="true" sdk-key={{keys}} geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}} marker={{pointArr}} ></weex-amap>
     <div class="btn-wrap">
       <div onclick="changeCenter" class="btnbox"><text class="btn" >set Center</text></div>
       <div onclick="addPoints" class="btnbox"><text class="btn" >add points</text></div>
@@ -44,6 +44,11 @@
   
   module.exports = {
     data: {
+      keys: {
+        h5:'',
+        ios: '',
+        android: ''
+      },
       pos: [116.487, 40.00003],
       zoom: 9, 
       pointArr: [
