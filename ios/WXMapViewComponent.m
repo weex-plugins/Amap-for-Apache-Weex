@@ -2,12 +2,37 @@
 //  WXMapViewComponent.m
 //  WeexDemo
 //
-//  Created by guibao on 2016/12/16.
+//  Created by yangshengtao on 2017/1/20.
 //  Copyright © 2016年 taobao. All rights reserved.
 //
 
 #import "WXMapViewComponent.h"
 #import "WXImgLoaderImpl.h"
+#import <objc/runtime.h>
+
+@interface MAPointAnnotation(imageAnnotation)
+
+@property(nonatomic, copy) NSString *iconImage;
+
+@end
+
+static const void *iconImageKey = &iconImageKey;
+
+@implementation MAPointAnnotation (imageAnnotation)
+
+@dynamic iconImage;
+
+- (void)setIconImage:(NSString *)iconImage {
+    objc_setAssociatedObject(self, iconImageKey, iconImage, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (NSString *)iconImage {
+    return objc_getAssociatedObject(self, iconImageKey);
+}
+
+@end
+
+
 @interface WXMapViewComponent()
 
 @property (nonatomic, strong) MAMapView *mapView;
@@ -21,7 +46,6 @@
     CGFloat _zoomLevel;
     BOOL _showScale;
     BOOL _showGeolocation;
-    NSMutableArray *_iconAry;
 }
 
 - (id<WXImgLoaderProtocol>)imageLoader
@@ -49,7 +73,6 @@
         _zoomLevel = [attributes[@"zoom"] floatValue];
         _showScale = [attributes[@"scale"] boolValue];
         _showGeolocation = [attributes[@"geolocation"] boolValue];
-        
     }
     
     return self;
@@ -90,33 +113,16 @@
 
 - (void)updateAttributes:(NSDictionary *)attributes
 {
-    if (attributes[@"center"] ) {
-        CLLocationCoordinate2D centerCoordinate;
-        centerCoordinate.latitude = [attributes[@"center"][1] doubleValue];
-        centerCoordinate.longitude = [attributes[@"center"][0] doubleValue];
-        [self.mapView setCenterCoordinate:centerCoordinate];
+    if (attributes[@"center"]) {
+        [self setCenter:attributes[@"center"]];
     }
     
-    if (attributes[@"points"]) {
-        NSArray *points = attributes[@"points"];
-        [self initPOIData];
-        for (int i = 0; i < points.count; ++i)
-        {
-            NSDictionary *annotations = points[i];
-            NSArray *coordinates = annotations[@"pos"];
-            if (annotations[@"icon"]) {
-                [_iconAry addObject:annotations[@"icon"]];
-            }
-            MAPointAnnotation *a1 = [[MAPointAnnotation alloc] init];
-            CLLocationCoordinate2D coordinate;
-            coordinate.latitude = [coordinates[1] doubleValue];
-            coordinate.longitude = [coordinates[0] doubleValue];
-            a1.coordinate = coordinate;
-            a1.title      = [NSString stringWithFormat:@"%@", annotations[@"title"]];
-            [_annotations addObject:a1];
-            [self.mapView addAnnotations:_annotations];
-            [self.mapView showAnnotations:_annotations edgePadding:UIEdgeInsetsMake(20, 20, 20, 80) animated:YES];
-        }
+    if (attributes[@"zoom"]) {
+        [self setZoomLevel:[attributes[@"zoom"] floatValue]];
+    }
+    
+    if (attributes[@"marker"]) {
+        [self setMarker:attributes[@"marker"]];
     }
 }
 
@@ -130,6 +136,37 @@
     
 }
 
+#pragma mark - component interface
+- (void)setCenter:(NSArray *)center {
+    CLLocationCoordinate2D centerCoordinate;
+    centerCoordinate.latitude = [center[1] doubleValue];
+    centerCoordinate.longitude = [center[0] doubleValue];
+    [self.mapView setCenterCoordinate:centerCoordinate];
+}
+
+- (void)setZoomLevel:(CGFloat)zoom {
+    [self.mapView setZoomLevel:zoom animated:YES];
+}
+
+- (void)setMarker:(NSArray *)points {
+    [self initPOIData];
+    for (int i = 0; i < points.count; ++i)
+    {
+        NSDictionary *annotations = points[i];
+        NSArray *coordinates = annotations[@"position"];
+        MAPointAnnotation *a1 = [[MAPointAnnotation alloc] init];
+        CLLocationCoordinate2D coordinate;
+        coordinate.latitude = [coordinates[1] doubleValue];
+        coordinate.longitude = [coordinates[0] doubleValue];
+        a1.coordinate = coordinate;
+        a1.title      = [NSString stringWithFormat:@"%@", annotations[@"title"]];
+        a1.iconImage = annotations[@"icon"] ? : nil;
+        [_annotations addObject:a1];
+        [self.mapView addAnnotations:_annotations];
+        [self.mapView showAnnotations:_annotations edgePadding:UIEdgeInsetsMake(20, 20, 20, 80) animated:NO];
+    }
+}
+
 #pragma mark - private method
 - (void)initPOIData {
     if (_annotations) {
@@ -137,18 +174,11 @@
     }else {
         _annotations = [NSMutableArray arrayWithCapacity:5];
     }
-    if (_iconAry) {
-        [_iconAry removeAllObjects];
-    }else {
-        _iconAry = [NSMutableArray arrayWithCapacity:5];
-    }
 }
 
 - (void)clearPOIData {
     [_annotations removeAllObjects];
     _annotations = nil;
-    [_iconAry removeAllObjects];
-    _iconAry = nil;
 }
 
 #pragma mark -
@@ -161,26 +191,37 @@
 - (MAAnnotationView*)mapView:(MAMapView *)mapView viewForAnnotation:(id <MAAnnotation>)annotation {
     if ([annotation isKindOfClass:[MAPointAnnotation class]])
     {
-        static NSString *pointReuseIndetifier = @"pointReuseIndetifier";
-        MAAnnotationView *annotationView = (MAAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:pointReuseIndetifier];
-        if (annotationView == nil)
-        {
-            annotationView = [[MAAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pointReuseIndetifier];
-        }
-        
-        annotationView.canShowCallout               = YES;
-        annotationView.draggable                    = YES;
-        annotationView.rightCalloutAccessoryView    = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-        NSInteger index = [_annotations indexOfObject:annotation];
-        if (_iconAry && _iconAry.count >= index) {
-            NSString *icon = [_iconAry objectAtIndex:index];
-            [[self imageLoader] downloadImageWithURL:icon imageFrame:CGRectMake(0, 0, 25, 25) userInfo:nil completed:^(UIImage *image, NSError *error, BOOL finished) {
+        MAPointAnnotation *pointAnnotation = (MAPointAnnotation *)annotation;
+        if (pointAnnotation.iconImage){
+            static NSString *pointReuseIndetifier = @"customReuseIndetifier";
+            MAAnnotationView *annotationView = (MAAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:pointReuseIndetifier];
+            if (annotationView == nil)
+            {
+                annotationView = [[MAAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pointReuseIndetifier];
+            }
+            
+            annotationView.canShowCallout               = YES;
+            annotationView.draggable                    = YES;
+            annotationView.rightCalloutAccessoryView    = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+            [[self imageLoader] downloadImageWithURL:pointAnnotation.iconImage imageFrame:CGRectMake(0, 0, 25, 25) userInfo:nil completed:^(UIImage *image, NSError *error, BOOL finished) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     annotationView.image = image;
                 });
             }];
+            return annotationView;
+        }else {
+            static NSString *pointReuseIndetifier = @"pointReuseIndetifier";
+            MAPinAnnotationView *annotationView = (MAPinAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:pointReuseIndetifier];
+            if (annotationView == nil)
+            {
+                annotationView = [[MAPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pointReuseIndetifier];
+            }
+            
+            annotationView.canShowCallout               = YES;
+            annotationView.draggable                    = YES;
+            annotationView.rightCalloutAccessoryView    = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+            return annotationView;
         }
-        return annotationView;
     }
     
     return nil;
