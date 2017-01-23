@@ -47,7 +47,7 @@ public class WXMapViewComponent extends WXComponent implements LocationSource, A
     private boolean indoorSwitch = false;
 
     private OnLocationChangedListener mListener;
-    private AMapLocationClient mlocationClient;
+    private AMapLocationClient mLocationClient;
     private AMapLocationClientOption mLocationOption;
 
     public WXMapViewComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
@@ -151,8 +151,8 @@ public class WXMapViewComponent extends WXComponent implements LocationSource, A
         mMapView.onDestroy();
         WXLogUtils.d("weex", "onActivityDestroy");
 
-        if(mlocationClient != null){
-            mlocationClient.onDestroy();
+        if(mLocationClient != null){
+            mLocationClient.onDestroy();
         }
     }
 
@@ -237,31 +237,31 @@ public class WXMapViewComponent extends WXComponent implements LocationSource, A
     @Override
     public void activate(OnLocationChangedListener listener) {
         mListener = listener;
-        if (mlocationClient == null) {
-            mlocationClient = new AMapLocationClient(getContext());
+        if (mLocationClient == null) {
+            mLocationClient = new AMapLocationClient(getContext());
             mLocationOption = new AMapLocationClientOption();
             //设置定位监听
-            mlocationClient.setLocationListener(this);
+            mLocationClient.setLocationListener(this);
             //设置为高精度定位模式
             mLocationOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);
             //设置定位参数
-            mlocationClient.setLocationOption(mLocationOption);
+            mLocationClient.setLocationOption(mLocationOption);
             // 此方法为每隔固定时间会发起一次定位请求，为了减少电量消耗或网络流量消耗，
             // 注意设置合适的定位时间的间隔（最小间隔支持为2000ms），并且在合适时间调用stopLocation()方法来取消定位请求
             // 在定位结束后，在合适的生命周期调用onDestroy()方法
             // 在单次定位情况下，定位无论成功与否，都无需调用stopLocation()方法移除请求，定位sdk内部会移除
-            mlocationClient.startLocation();
+            mLocationClient.startLocation();
         }
     }
 
     @Override
     public void deactivate() {
         mListener = null;
-        if (mlocationClient != null) {
-            mlocationClient.stopLocation();
-            mlocationClient.onDestroy();
+        if (mLocationClient != null) {
+            mLocationClient.stopLocation();
+            mLocationClient.onDestroy();
         }
-        mlocationClient = null;
+        mLocationClient = null;
     }
 
     @Override
