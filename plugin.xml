@@ -41,6 +41,15 @@
              </feature>
          </config-file>
          
+         <config-file target="WeexpluginConfig.xml" parent="/*">
+             <feature name="WXMapViewModule">
+                 <param name="category" value="module" />
+                 <param name="ios-package" value="WXMapViewModule" />
+                 <param name="api" value="Amap" />
+             </feature>
+         </config-file>
+         
+         
          <header-file src="ios/WXMapViewComponent.h" />
          <source-file src="ios/WXMapViewComponent.m" />
          
