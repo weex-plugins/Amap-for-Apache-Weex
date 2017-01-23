@@ -15,12 +15,14 @@ public class Constant {
 
     public static interface Name {
 
-        String SCALECONTROL = "scalecontrol";
-        String ZOOMCONTROL = "zoomcontrol";
+        String SCALECONTROL = "scale";
+        String ZOOM_ENABLE = "zoomEnable";
+        String ZOOM = "zoom";
         String COMPASS = "compass";
-        String MYLOCATION = "mylocation";
+        String GEOLOCATION = "geolocation";
         String GESTURE = "gesture";
         String INDOORSWITCH = "indoorswitch";
+        String CENTER = "center";
 
     }
 }

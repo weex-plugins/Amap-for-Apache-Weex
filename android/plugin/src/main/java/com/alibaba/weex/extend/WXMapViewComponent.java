@@ -14,6 +14,7 @@ import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
+import com.amap.api.maps.model.LatLng;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.dom.WXDomObject;
@@ -21,6 +22,9 @@ import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.utils.WXLogUtils;
+
+import org.json.JSONArray;
+import org.json.JSONException;
 
 /**
  * create by 2016/12/15
@@ -35,8 +39,8 @@ public class WXMapViewComponent extends WXComponent implements LocationSource, A
     private AMap mAMap;
     private UiSettings uiSettings;
 
-    private boolean scaleControl = true;
-    private boolean zoomControl = true;
+    private boolean isScaleEnable = true;
+    private boolean isZoomEnable = true;
     private boolean compass = true;
     private boolean myLocation = false;
     private int gesture = 0xF;
@@ -70,8 +74,8 @@ public class WXMapViewComponent extends WXComponent implements LocationSource, A
     private void setUpMap() {
         uiSettings = mAMap.getUiSettings();
 
-        uiSettings.setScaleControlsEnabled(scaleControl);
-        uiSettings.setZoomControlsEnabled(zoomControl);
+        uiSettings.setScaleControlsEnabled(isScaleEnable);
+        uiSettings.setZoomControlsEnabled(isZoomEnable);
         uiSettings.setCompassEnabled(compass);
         uiSettings.setIndoorSwitchEnabled(indoorSwitch);
 
@@ -153,17 +157,23 @@ public class WXMapViewComponent extends WXComponent implements LocationSource, A
     }
 
     @WXComponentProp(name=Constant.Name.SCALECONTROL)
-    public void setScaleControl(boolean scaleControl) {
-        WXLogUtils.d("WxMapView: scaleControl is set to " + scaleControl);
-        this.scaleControl = scaleControl;
-        uiSettings.setScaleControlsEnabled(scaleControl);
+    public void setScaleEnable(boolean scaleEnable) {
+        WXLogUtils.d("WxMapView: isScaleEnable is set to " + scaleEnable);
+        this.isScaleEnable = scaleEnable;
+        uiSettings.setScaleControlsEnabled(scaleEnable);
     }
 
-    @WXComponentProp(name=Constant.Name.ZOOMCONTROL)
-    public void setZoomControl(boolean zoomControl) {
-        WXLogUtils.d("WxMapView: zoomControl is set to " + zoomControl);
-        this.zoomControl = zoomControl;
-        uiSettings.setZoomControlsEnabled(zoomControl);
+    @WXComponentProp(name=Constant.Name.ZOOM_ENABLE)
+    public void setZoomEnable(boolean zoomEnable) {
+        WXLogUtils.d("WxMapView: isZoomEnable is set to " + zoomEnable);
+        this.isZoomEnable = zoomEnable;
+        uiSettings.setZoomControlsEnabled(zoomEnable);
+    }
+
+    @WXComponentProp(name=Constant.Name.ZOOM)
+    public void setZoom(int level) {
+        WXLogUtils.d("WxMapView: Zoom level is set to " + level);
+        mAMap.moveCamera(CameraUpdateFactory.zoomTo(level));
     }
 
     @WXComponentProp(name=Constant.Name.COMPASS)
@@ -173,11 +183,25 @@ public class WXMapViewComponent extends WXComponent implements LocationSource, A
         uiSettings.setCompassEnabled(compass);
     }
 
-    @WXComponentProp(name=Constant.Name.MYLOCATION)
+    @WXComponentProp(name=Constant.Name.GEOLOCATION)
     public void setMyLocation(boolean myLocation) {
         WXLogUtils.d("WxMapView: myLocation is set to " + myLocation);
         this.myLocation = myLocation;
         setMyLocationStatus(myLocation);
+    }
+
+    @WXComponentProp(name=Constant.Name.CENTER)
+    public void setCenter(String location) {
+        try {
+            JSONArray jsonArray = new JSONArray(location);
+            WXLogUtils.d("WxMapView: setCenter is set to " + jsonArray.optDouble(0) + "," + jsonArray.optDouble(1));
+            LatLng latLng = new LatLng(jsonArray.optDouble(1), jsonArray.optDouble(0));
+            mAMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        //setMyLocationStatus(myLocation);
     }
 
     @WXComponentProp(name=Constant.Name.GESTURE)
