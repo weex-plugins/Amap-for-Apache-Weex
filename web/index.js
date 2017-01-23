@@ -66,7 +66,7 @@ const attr = {
       this.map.setZoom(params.zoom);
     }
   },
-  points(val) {
+  marker(val) {
     if(Array.isArray(val)) { 
       markers = val;
       if(window.AMap) {
@@ -79,7 +79,7 @@ const attr = {
   },
   geolocation(val) {
      params.geolocation = val; 
-  },
+  }
   
 };
 
