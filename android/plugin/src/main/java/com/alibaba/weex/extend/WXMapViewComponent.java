@@ -38,12 +38,6 @@ import org.json.JSONObject;
 
 import java.util.Map;
 
-/**
- * create by 2016/12/15
- *
- * @author guibao.ggb
- * @email guibao.ggb@alibaba-inc.com
- */
 public class WXMapViewComponent extends WXComponent implements LocationSource, AMapLocationListener {
 
   private MapView mMapView;
@@ -63,7 +57,6 @@ public class WXMapViewComponent extends WXComponent implements LocationSource, A
 
   public WXMapViewComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
     super(instance, dom, parent, isLazy);
-
     registerActivityStateListener();
   }
 
@@ -142,21 +135,17 @@ public class WXMapViewComponent extends WXComponent implements LocationSource, A
   @Override
   public void onActivityPause() {
     mMapView.onPause();
-    WXLogUtils.d("weex", "onActivityPause");
     deactivate();
   }
 
   @Override
   public void onActivityResume() {
     mMapView.onResume();
-    WXLogUtils.d("weex", "onActivityResume");
   }
 
   @Override
   public void onActivityDestroy() {
     mMapView.onDestroy();
-    WXLogUtils.d("weex", "onActivityDestroy");
-
     if (mLocationClient != null) {
       mLocationClient.onDestroy();
     }
@@ -164,34 +153,29 @@ public class WXMapViewComponent extends WXComponent implements LocationSource, A
 
   @WXComponentProp(name = Constant.Name.SCALECONTROL)
   public void setScaleEnable(boolean scaleEnable) {
-    WXLogUtils.d("WxMapView: isScaleEnable is set to " + scaleEnable);
     this.isScaleEnable = scaleEnable;
     uiSettings.setScaleControlsEnabled(scaleEnable);
   }
 
   @WXComponentProp(name = Constant.Name.ZOOM_ENABLE)
   public void setZoomEnable(boolean zoomEnable) {
-    WXLogUtils.d("WxMapView: isZoomEnable is set to " + zoomEnable);
     this.isZoomEnable = zoomEnable;
     uiSettings.setZoomControlsEnabled(zoomEnable);
   }
 
   @WXComponentProp(name = Constant.Name.ZOOM)
   public void setZoom(int level) {
-    WXLogUtils.d("WxMapView: Zoom level is set to " + level);
     mAMap.moveCamera(CameraUpdateFactory.zoomTo(level));
   }
 
   @WXComponentProp(name = Constant.Name.COMPASS)
   public void setCompass(boolean compass) {
-    WXLogUtils.d("WxMapView: compass is set to " + compass);
     this.compass = compass;
     uiSettings.setCompassEnabled(compass);
   }
 
   @WXComponentProp(name = Constant.Name.GEOLOCATION)
   public void setMyLocation(boolean myLocation) {
-    WXLogUtils.d("WxMapView: myLocation is set to " + myLocation);
     this.myLocation = myLocation;
     setMyLocationStatus(myLocation);
   }
@@ -200,21 +184,17 @@ public class WXMapViewComponent extends WXComponent implements LocationSource, A
   public void setCenter(String location) {
     try {
       JSONArray jsonArray = new JSONArray(location);
-      WXLogUtils.d("WxMapView: setCenter is set to " + jsonArray.optDouble(0) + "," + jsonArray.optDouble(1));
       LatLng latLng = new LatLng(jsonArray.optDouble(1), jsonArray.optDouble(0));
       mAMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
     } catch (JSONException e) {
       e.printStackTrace();
     }
-
-    //setMyLocationStatus(myLocation);
   }
 
   @WXComponentProp(name = Constant.Name.MARKER)
   public void setMarker(String markers) {
     try {
       JSONArray jsonArray = new JSONArray(markers);
-      WXLogUtils.d("WxMapView: setMarker is set to " + jsonArray);
       for (int i = 0; i < jsonArray.length(); i++) {
         JSONObject jsonObject = jsonArray.optJSONObject(i);
         if (jsonObject != null) {
@@ -269,7 +249,6 @@ public class WXMapViewComponent extends WXComponent implements LocationSource, A
 
   @WXComponentProp(name = Constant.Name.GESTURE)
   public void setGesture(int gesture) {
-    WXLogUtils.d("WxMapView: gesture is set to " + gesture);
     this.gesture = gesture;
     updateGestureSetting();
   }
