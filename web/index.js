@@ -114,7 +114,7 @@ function init (Weex) {
   extend(Amap.prototype, { event });
 
   Weex.registerComponent('weex-amap', Amap);
-  amapModuleRegist();
+ // amapModuleRegist();
 }
 
 export default { init };
