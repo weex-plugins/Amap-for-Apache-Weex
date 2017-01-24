@@ -1,4 +1,4 @@
-package com.alibaba.weex.extend;
+package com.alibaba.weex.amap.module;
 
 import android.support.annotation.Nullable;
 
