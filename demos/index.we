@@ -61,7 +61,7 @@
 </style>
 
 <script>
-  const Amap = null;
+  var Amap = null;
   try {
     Amap = weex.requireModule('Amap');
   } catch(err) {
@@ -126,9 +126,11 @@
       
       setUserLocation() {
         let self = this;
+        console.log(Amap);
         if(!Amap) {
-          return this.pos = [null,null];
+          return this.pos = undefined;
         }
+        
         Amap.getUserLocation(this.$el('map2017').ref, (data) => {
           if(data.result == 'success') {
             this.pos = data.data.position;
