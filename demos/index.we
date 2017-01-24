@@ -126,11 +126,13 @@
       
       setUserLocation() {
         let self = this;
+        if(!Amap) {
+          return this.pos = [null,null];
+        }
         Amap.getUserLocation(this.$el('map2017').ref, (data) => {
           if(data.result == 'success') {
-            this.center = data.data.postion;
+            this.pos = data.data.position;
           }
-          
         });
       }
       
