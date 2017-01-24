@@ -47,6 +47,7 @@ android {
 //        }
         debug {
             testCoverageEnabled true
+            signingConfig signingConfigs.debug
         }
     }
     sourceSets {
