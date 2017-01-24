@@ -96,7 +96,18 @@
                  <param name="api" value="weex-amap" />
              </feature>
          </config-file>
+         <config-file target="AndroidManifest.xml" parent="/*">
+             <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+             <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+         </config-file>
+         <config-file target="AndroidManifest.xml" parent="/manifest/application">
+             <meta-data
+                 android:name="com.amap.api.v2.apikey"
+                 android:value="db6a973159cb0c2639ad02c617a786ae" />
 
+             <service android:name="com.amap.api.location.APSService" >
+             </service>
+         </config-file>
          <source-file
              src="android/plugin/src/main/java/com/alibaba/weex/amap/component/WXMapViewComponent.java"
             target-dir="src/com/alibaba/weex/amap/component" />
