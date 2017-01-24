@@ -11,11 +11,15 @@
     "amap",
     "mapview"
   ],
+  "scripts": {
+    "eslint": "eslint"
+  },
   "license": "Apache 2.0",
   "devDependencies": {
     "babel-eslint": "^7.1.1",
     "eslint": "^3.14.0",
     "eslint-config-airbnb": "^14.0.0",
+    "eslint-config-airbnb-base": "^11.0.1",
     "eslint-config-standard": "^6.2.1",
     "eslint-plugin-html": "^1.7.0",
     "eslint-plugin-import": "^2.2.0",
