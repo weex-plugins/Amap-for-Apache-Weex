@@ -45,17 +45,17 @@
         <param name="onload" value="true" />
         <param name="category" value="module" />
     </feature>
-    <!--<feature name="device">-->
-        <!--<param name="api" value="device" />-->
-        <!--<param name="android-package" value="com.alibaba.weex.extend.module.DeviceModule" />-->
-        <!--<param name="onload" value="true" />-->
-        <!--<param name="category" value="module" />-->
-    <!--</feature>-->
-    <feature name="weex-amap">
+    <feature name="WXMapViewComponent">
         <param name="api" value="weex-amap" />
-        <param name="android-package" value="com.alibaba.weex.extend.WXMapViewComponent" />
+        <param name="android-package" value="com.alibaba.weex.amap.component.WXMapViewComponent" />
         <param name="onload" value="true" />
         <param name="category" value="component" />
+    </feature>
+    <feature name="WXMapModule">
+        <param name="api" value="amap" />
+        <param name="android-package" value="com.alibaba.weex.amap.module.WXMapModule" />
+        <param name="onload" value="true" />
+        <param name="category" value="module" />
     </feature>
     <!--<feature name="WXGCanvasModule">-->
         <!--<param name="api" value="gcanvas" />-->
