@@ -44,7 +44,6 @@ const proto = {
   ready () {
     let self = this;
       if(window.AMap) {
-        console.log(this.mapwrap);
         this.map = new AMap.Map(this.mapwrap.id,params);
         AMap.plugin(['AMap.ToolBar','AMap.Geolocation'],() => {
           if(params.scale) {

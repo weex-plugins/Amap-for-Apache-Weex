@@ -58,6 +58,8 @@
 | geolocation  | boolean | true | 添加定位控件
 | sdkKey   | object | {ios:'xxx',android: 'xxx',h5: 'xxx'} | 指定开发者的 SDK 密匙 
 
+**建议你前往[高德开发者社区](http://lbs.amap.com/)申明你对应产品的Key，保证地图正常工作**
+
 #### 点标记marker的对象属性 
 
 | 属性        | 类型         | Demo  | 描述  |
@@ -73,9 +75,11 @@
 
 + completeFunc 定位成功后的回调函数，返回的数据:
 ```
-{
-  position: [],
-  title: '',
+{ 
+  data:{
+    position: []
+  },
+  result: 'success' 
 }
 ```
 
