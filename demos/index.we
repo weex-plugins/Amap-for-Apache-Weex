@@ -25,11 +25,12 @@
     flex:1;
   }
   .btngeo{
-    position: absolute;
+    flex:1;
+    position: relative;
     left: 20;
-    top: 20;
     width:40;
     height:40;
+    margin-top: - 40;
     background-color: #fff;
     border-radius: 2;
     border: 1px solid #ccc;
@@ -119,9 +120,11 @@
       
       setUserLocation() {
         let self = this;
-        Amap.getUserLocation(this.$el['map2017'].ref, () => {
-          console.log(data);
-          this.center = data.postion;
+        Amap.getUserLocation(this.$el('map2017').ref, (data) => {
+          if(data.result == 'success') {
+            this.center = data.postion;
+          }
+          
         });
       }
       
