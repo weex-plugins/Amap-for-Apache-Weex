@@ -174,6 +174,16 @@ static const void *iconImageKey = &iconImageKey;
     }
 }
 
+#pragma mark - publish method
+- (NSDictionary *)getUserLocation {
+    if(self.mapView.userLocation.updating && self.mapView.userLocation.location) {
+        NSArray *coordinate = @[[NSNumber numberWithDouble:self.mapView.userLocation.location.coordinate.longitude],[NSNumber numberWithDouble:self.mapView.userLocation.location.coordinate.latitude]];
+        NSDictionary *userDic = @{@"result":@"success",@"data":@{@"position":coordinate,@"title":@""}};
+        return userDic;
+    }
+    return @{@"result":@"false",@"data":@""};
+}
+
 #pragma mark - private method
 - (void)initPOIData {
     if (_annotations) {

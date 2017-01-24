@@ -12,6 +12,8 @@
 
 @interface WXMapViewComponent : WXComponent<MAMapViewDelegate>
 
+- (NSDictionary *)getUserLocation;
+
 @end
 
 
