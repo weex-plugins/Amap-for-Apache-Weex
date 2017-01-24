@@ -52,6 +52,8 @@
          
          <header-file src="ios/WXMapViewComponent.h" />
          <source-file src="ios/WXMapViewComponent.m" />
+         <header-file src="ios/WXMapViewModule.h" />
+         <source-file src="ios/WXMapViewModule.m" />
          
          <framework src="ImageIO.framework" weak="true" />
          <framework src="CoreLocation.framework" />
