@@ -17,7 +17,6 @@ module.exports = {
   
   addMarker(data, map) {
     let icon = null;
-    console.log(data);
     if(data.icon) {
       icon = new AMap.Icon({
         image : data.icon,

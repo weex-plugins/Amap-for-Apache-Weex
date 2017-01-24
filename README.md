@@ -52,19 +52,40 @@
 | 属性        | 类型         | Demo  | 描述  |
 | ------------- |:-------------:| -----:|----------:|
 | center     | array | [116.487, 40.00003] | 传入地理位置坐标[x,y] 默认为当前定位位置 |
-| zoom      | number      |  11 | 缩放级别 |
+| zoom      | number     |  11 | 缩放级别 |
 | zoomEnable | boolean  | true | 是否允许缩放
-| points |  array | [`{position:[116,12]}]` |  点标记物的属性
+| marker |  array | [`{position:[116,12]}]` |  点标记物的属性
 | geolocation  | boolean | true | 添加定位控件
+| sdkKey   | object | {ios:'xxx',android: 'xxx',h5: 'xxx'} | 指定开发者的 SDK 密匙 
 
+**建议你前往[高德开发者社区](http://lbs.amap.com/)申明你对应产品的Key，保证地图正常工作**
 
 #### 点标记marker的对象属性 
 
 | 属性        | 类型         | Demo  | 描述  |
 | ------------- |:-------------:| -----:|----------:|
 | position     | array | [116.487, 40.00003] | 传入地理位置坐标[x,y] 默认为当前定位位置 |
-| icon | string     |    some_icon_url | 图片地址 |
+| icon | string     |    some_icon_url | 图标的url地址 |
 | title | string   |   'this is a marker' | 坐标点的名称 |
+
+
+#### Amap 模块
+
+#####  getUserLocation(completeFunc,errorFunc)
+
++ completeFunc 定位成功后的回调函数，返回的数据:
+```
+{ 
+  data:{
+    position: []
+  },
+  result: 'success' 
+}
+```
+
+
+
+
 
 
 [Demo](https://weex-plugins.github.io/weex-plugin-amap/)
