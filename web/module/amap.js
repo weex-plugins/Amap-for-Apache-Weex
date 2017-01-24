@@ -1,18 +1,39 @@
 // AMap module
-const methods = {
+const Amap = {
   /** get user loaction by browser and IP
   * @param {function} callback 
   * @param {function} errorCallback
   **/
-  getUserLocation(mapRef,callback,errorCallback) {
-    var geo = AMap.Geolocation();
-    Amap.event.addEventListener(geo,'complete',callback);
-    Amap.event.addEventListener(geo,'error',callback);
+  getUserLocation(mapRef,callback) {
+    var self = this;
+    var geo = new AMap.Geolocation({
+      enableHighAccuracy: true,
+      timeout: 10000     
+    });
+    geo.getCurrentPosition(function(status, res) {
+      if(status !== 'error') {
+         self.sender.performCallback(callback, {
+          data: {
+            position: [res.position.getLng(),res.position.getLat()]
+          },
+          result: 'success'
+        });
+      } else {
+        console.warn(res.message);
+      }
+     
+    });
   }
-  
   
 };
 
-module.exports = function() {
-  weex.registerModule('Amap',methods);
+const meta = {
+  Amap: [{
+    name: 'getUserLocation',
+    args: ['string','function']
+  }]
+};
+
+module.exports = function (Weex) {
+  Weex.registerApiModule('Amap', Amap, meta);
 };

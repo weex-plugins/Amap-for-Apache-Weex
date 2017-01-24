@@ -60,11 +60,10 @@
 <script>
   var Amap = null;
   try {
-    Amap = weex.requireModule('Amap');
-  } catch(err) {
+    Amap = require('@weex-module/Amap');
+  } catch(err) { 
     console.log(err);
   }
-
   module.exports = {
     data: {
       keys: {
@@ -125,9 +124,8 @@
         let self = this;
         console.log(Amap);
         if(!Amap) {
-          return this.pos = undefined;
+          return this.pos = Math.random();;
         }
-        
         Amap.getUserLocation(this.$el('map2017').ref, (data) => {
           if(data.result == 'success') {
             this.pos = data.data.position;

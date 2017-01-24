@@ -1,7 +1,7 @@
 import markerManage  from './service/marker';
 import mapLoader from './service/map-loader';
 import vendor from './service/vendor';
-import amapModuleRegist from './module/amap';
+import amapModuleReg from './module/amap';
 
 const defaultAttr = {
   zoom: 13,
@@ -58,18 +58,27 @@ const proto = {
         this.mapInstance = this.map;
       }   
   }
-  
 };
 
 let markers = [];
-
 const attr = {
   center (val) {
     if(Array.isArray(val) && val.length==2){
-      params.center = val;   
+      params.center = val; 
+      if(window.AMap) {
+        this.map.setCenter(params.center);
+      }
     }
-    if(window.AMap) {
-      this.map.setCenter(params.center);
+    if(typeof val == 'number') {
+      var geo = new AMap.Geolocation({
+        enableHighAccuracy: true
+      });
+      var self = this;
+      geo.getCurrentPosition();
+      AMap.event.addListener(geo,'complete',function(data) {
+        params.center = [data.position.getLng(),data.position.getLat()];
+        self.map.setCenter(params.center);  
+      }); 
     }
   },
   zoom(val) {
@@ -114,7 +123,8 @@ function init (Weex) {
   extend(Amap.prototype, { event });
 
   Weex.registerComponent('weex-amap', Amap);
- // amapModuleRegist();
+  amapModuleReg(Weex);
+  
 }
 
 export default { init };
