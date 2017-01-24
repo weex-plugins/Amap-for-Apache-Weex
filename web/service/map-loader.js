@@ -1,7 +1,7 @@
 const DEFAULT_CONFIG = {
   key: '',
   v: '1.3',
-  url: 'http://webapi.amap.com/maps'
+  url: 'https://webapi.amap.com/maps'
 };
  
 const gengerateScriptUrl = function(obj) {
@@ -26,7 +26,22 @@ module.exports = {
       window.maploaded = true;
       callback();
     });
-    container.append(lib);  
+    document.head.appendChild(lib);  
+    this.loadTimeout(container);
+  },
+  
+  loadTimeout(wrap) {
+    setTimeout(() => {
+      if(!window.Amap) {
+        let el = document.createElement('button');
+        el.appendChild(document.createTextNode('重新加载'));
+        el.addEventListener('click', function () {
+          location.reload();
+        });
+        wrap.childNodes[0].remove();
+        wrap.appendChild(el);
+      }
+    }, 10000);
   }
 
 };

@@ -1,4 +1,4 @@
-package com.alibaba.weex.extend;
+package com.alibaba.weex.amap;
 
 /**
  * Created by aoxiao on 2017/1/4.
@@ -15,12 +15,15 @@ public class Constant {
 
     public static interface Name {
 
-        String SCALECONTROL = "scalecontrol";
-        String ZOOMCONTROL = "zoomcontrol";
+        String SCALECONTROL = "scale";
+        String ZOOM_ENABLE = "zoomEnable";
+        String ZOOM = "zoom";
         String COMPASS = "compass";
-        String MYLOCATION = "mylocation";
+        String GEOLOCATION = "geolocation";
         String GESTURE = "gesture";
         String INDOORSWITCH = "indoorswitch";
+        String CENTER = "center";
+        String MARKER = "marker";
 
     }
 }
