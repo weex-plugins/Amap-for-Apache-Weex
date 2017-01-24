@@ -57,6 +57,12 @@
         <param name="onload" value="true" />
         <param name="category" value="component" />
     </feature>
+    <feature name="Amap">
+        <param name="api" value="Amap" />
+        <param name="android-package" value="com.alibaba.weex.extend.WXMapModule" />
+        <param name="onload" value="true" />
+        <param name="category" value="module" />
+    </feature>
     <!--<feature name="WXGCanvasModule">-->
         <!--<param name="api" value="gcanvas" />-->
         <!--<param name="android-package" value="com.taobao.weex.ui.module.GcanvasModule" />-->
