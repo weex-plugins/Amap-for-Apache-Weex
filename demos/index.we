@@ -61,13 +61,14 @@
   var Amap = null;
   try {
     Amap = require('@weex-module/Amap');
-  } catch(err) { 
+  } catch(err) {
     console.log(err);
   }
+
   module.exports = {
     data: {
       keys: {
-        h5:'',
+        h5:'f4b99dcd51752142ec0f1bdcb9a8ec02',
         ios: '',
         android: ''
       },
@@ -109,7 +110,7 @@
         this.pointArr.push({
           position:coor,
           title:'坐标:' + coor.join(','),
-          icon: 'http://img1.vued.vanthink.cn/vueda7829f6ffa616b9d3b83413204d08ce1.png'  
+          icon: 'http://img1.vued.vanthink.cn/vueda3685df0bda6b16805e380e852d99701.png'  
         });
         this.pointArr = Array.from(this.pointArr);
       },
@@ -122,13 +123,14 @@
       
       setUserLocation() {
         let self = this;
-        console.log(Amap);
         if(!Amap) {
+          // fixed require module bug
           return this.pos = Math.random();;
         }
-        Amap.getUserLocation(this.$el('map2017').ref, (data) => {
+        Amap.getUserLocation(this.$el('map2017').ref, function (data) {
+          console.log(data);
           if(data.result == 'success') {
-            this.pos = data.data.position;
+            self.pos = data.data.position;
           }
         });
       }

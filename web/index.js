@@ -23,7 +23,7 @@ const proto = {
     this.mapwrap = document.createElement('div');
     this.mapwrap.id = vendor.gengerateRandomId('map');
     this.mapwrap.append(this.renderLoadingSpinner());
-    mapLoader.load({},this.mapwrap,() => this.ready());   
+   
     return this.mapwrap;
   },
   
@@ -58,9 +58,11 @@ const proto = {
         this.mapInstance = this.map;
       }   
   }
+  
 };
 
 let markers = [];
+
 const attr = {
   center (val) {
     if(Array.isArray(val) && val.length==2){
@@ -68,14 +70,16 @@ const attr = {
       if(window.AMap) {
         this.map.setCenter(params.center);
       }
+      
     }
+    
     if(typeof val == 'number') {
       var geo = new AMap.Geolocation({
         enableHighAccuracy: true
       });
       var self = this;
       geo.getCurrentPosition();
-      AMap.event.addListener(geo,'complete',function(data) {
+      AMap.event.AMap.event.addListener(geo,'complete',function(data) {
         params.center = [data.position.getLng(),data.position.getLat()];
         self.map.setCenter(params.center);  
       }); 
@@ -102,6 +106,15 @@ const attr = {
   },
   geolocation(val) {
      params.geolocation = val; 
+  },
+  sdkKey(val) {
+    let key = '';
+    if(val) { 
+      key = val.h5;
+    } 
+    mapLoader.load({
+      key: key
+    }, this.mapwrap,() => this.ready());  
   }
   
 };
@@ -124,7 +137,6 @@ function init (Weex) {
 
   Weex.registerComponent('weex-amap', Amap);
   amapModuleReg(Weex);
-  
 }
 
 export default { init };
