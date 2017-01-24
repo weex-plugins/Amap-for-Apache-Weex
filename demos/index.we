@@ -61,7 +61,13 @@
 </style>
 
 <script>
-  const Amap = weex.requireModule('Amap');
+  const Amap = null;
+  try {
+    Amap = weex.requireModule('Amap');
+  } catch(err) {
+    console.log(err);
+  }
+
   module.exports = {
     data: {
       keys: {
