@@ -60,7 +60,7 @@
 <script>
   var Amap = null;
   try {
-    Amap = require('@weex-module/weex-amap');
+    Amap = require('@weex-module/amap');
   } catch(err) { 
     console.log(err);
   }

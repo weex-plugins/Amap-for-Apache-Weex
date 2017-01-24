@@ -45,7 +45,7 @@
             <feature name="WXMapViewModule">
                 <param name="category" value="module"/>
                 <param name="ios-package" value="WXMapViewModule"/>
-                <param name="api" value="weex-amap"/>
+                <param name="api" value="amap"/>
             </feature>
         </config-file>
 
@@ -93,7 +93,7 @@
              <feature name="WXMapModule">
                  <param name="category" value="module" />
                  <param name="android-package" value="com.alibaba.weex.amap.module.WXMapModule" />
-                 <param name="api" value="weex-amap" />
+                 <param name="api" value="amap" />
              </feature>
          </config-file>
          <config-file target="AndroidManifest.xml" parent="/*">

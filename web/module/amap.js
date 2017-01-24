@@ -35,5 +35,5 @@ const meta = {
 };
 
 module.exports = function (Weex) {
-  Weex.registerApiModule('Amap', Amap, meta);
+  Weex.registerApiModule('amap', Amap, meta);
 };
