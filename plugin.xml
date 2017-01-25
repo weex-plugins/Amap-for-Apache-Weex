@@ -113,10 +113,6 @@
 
          </config-file>
          <config-file target="AndroidManifest.xml" parent="/manifest/application">
-             <meta-data
-                 android:name="com.amap.api.v2.apikey"
-                 android:value="db6a973159cb0c2639ad02c617a786ae" />
-
              <service android:name="com.amap.api.location.APSService" >
              </service>
          </config-file>
