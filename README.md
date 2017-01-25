@@ -44,6 +44,8 @@
 ```
 
 
+
+
 ### 快速开始
 
 编辑你的weex文件
@@ -87,40 +89,37 @@
 
 
 
+
 ### Demo
 
 ####H5 demo 
 直接点击[Demo](https://weex-plugins.github.io/weex-plugin-amap/)可以演示当前版本支持的功能
 
-####Android／iOS／H5
+####用weexpack运行demo(Android／iOS／H5)
 
-可以直接用weexpack命令([网址](https://github.com/weexteam/weex-pack))测试地图组件demo:
+参考weexpack命令([网址](https://github.com/weexteam/weex-pack))来测试地图组件demo:
 
 1.安装weexpack
 
 npm install -g weexpack
 
-2.创建工程aaa
+2.创建工程，如aaa
 
 weexpack create aaa
 
-3.创建平台
+3.创建运行平台
 
 cd aaa & weexpack platform add ios (/android)
 
 4.添加地图插件
 
-weexpack plugin add weex-plugins/weex-plugin-amap (插件的本地目录)
+weexpack plugin add /users/abcd/Code/weex-plugins/weex-plugin-amap (这后面是地图插件的本地目录)
 
 5.编译和运行
 
-weexpack run ios (/android)
+对安卓和iOS用命令：weexpack run ios (/android)
 
-
-
-
-
-
+对H5用如下命令：weexpack build web & weexpack run web
 
 
 
