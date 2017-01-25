@@ -3,7 +3,46 @@
 <img width="320" src="https://img.alicdn.com/tps/TB1m1l.PXXXXXczXFXXXXXXXXXX-800-600.png" />
 
 
-一款高德地图weex插件，支持定位，缩放等地图常用操作
+一款高德地图weex插件，当前版本支持定位，缩放等地图常用操作，如下API。
+
+### API
+
+#### weex-amap 属性
+
+| 属性        | 类型         | Demo  | 描述  |
+| ------------- |:-------------:| -----:|----------:|
+| center     | array | [116.487, 40.00003] | 传入地理位置坐标[x,y] 默认为当前定位位置 |
+| zoom      | number     |  11 | 缩放级别 |
+| zoomEnable | boolean  | true | 是否允许缩放
+| marker |  array | [`{position:[116,12]}]` |  点标记物的属性
+| geolocation  | boolean | true | 添加定位控件
+| sdkKey   | object | {ios:'xxx',android: 'xxx',h5: 'xxx'} | 指定开发者的 SDK 密匙 
+
+**建议你前往[高德开发者社区](http://lbs.amap.com/)申明你对应产品的Key，保证地图正常工作**
+
+#### 点标记marker的对象属性 
+
+| 属性        | 类型         | Demo  | 描述  |
+| ------------- |:-------------:| -----:|----------:|
+| position     | array | [116.487, 40.00003] | 传入地理位置坐标[x,y] 默认为当前定位位置 |
+| icon | string     |    some_icon_url | 图标的url地址 |
+| title | string   |   'this is a marker' | 坐标点的名称 |
+
+
+#### Amap 模块
+
+#####  getUserLocation(completeFunc,errorFunc)
+
++ completeFunc 定位成功后的回调函数，返回的数据:
+```
+{ 
+  data:{
+    position: []
+  },
+  result: 'success' 
+}
+```
+
 
 ### 快速开始
 
@@ -45,50 +84,40 @@
 </script>
 
 ```
-### API
-
-#### weex-amap 属性
-
-| 属性        | 类型         | Demo  | 描述  |
-| ------------- |:-------------:| -----:|----------:|
-| center     | array | [116.487, 40.00003] | 传入地理位置坐标[x,y] 默认为当前定位位置 |
-| zoom      | number     |  11 | 缩放级别 |
-| zoomEnable | boolean  | true | 是否允许缩放
-| marker |  array | [`{position:[116,12]}]` |  点标记物的属性
-| geolocation  | boolean | true | 添加定位控件
-| sdkKey   | object | {ios:'xxx',android: 'xxx',h5: 'xxx'} | 指定开发者的 SDK 密匙 
-
-**建议你前往[高德开发者社区](http://lbs.amap.com/)申明你对应产品的Key，保证地图正常工作**
-
-#### 点标记marker的对象属性 
-
-| 属性        | 类型         | Demo  | 描述  |
-| ------------- |:-------------:| -----:|----------:|
-| position     | array | [116.487, 40.00003] | 传入地理位置坐标[x,y] 默认为当前定位位置 |
-| icon | string     |    some_icon_url | 图标的url地址 |
-| title | string   |   'this is a marker' | 坐标点的名称 |
-
-
-#### Amap 模块
-
-#####  getUserLocation(completeFunc,errorFunc)
-
-+ completeFunc 定位成功后的回调函数，返回的数据:
-```
-{ 
-  data:{
-    position: []
-  },
-  result: 'success' 
-}
-```
 
 
 
+### Demo
+
+####H5 demo 
+直接点击[Demo](https://weex-plugins.github.io/weex-plugin-amap/)可以演示当前版本支持的功能
+
+####Android／iOS／H5
+
+可以直接用weexpack命令([网址](https://github.com/weexteam/weex-pack))测试地图组件demo:
+
+1.安装weexpack
+
+npm install -g weexpack
+
+2.创建工程aaa
+
+weexpack create aaa
+
+3.创建平台
+
+cd aaa & weexpack platform add ios (/android)
+
+4.添加地图插件
+
+weexpack plugin add weex-plugins/weex-plugin-amap (插件的本地目录)
+
+5.编译和运行
+
+weexpack run ios (/android)
 
 
 
-[Demo](https://weex-plugins.github.io/weex-plugin-amap/)
 
 
 
