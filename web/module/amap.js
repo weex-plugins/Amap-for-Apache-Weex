@@ -1,5 +1,5 @@
 // AMap module
-const Amap = {
+const amap = {
   /** get user loaction by browser and IP
   * @param {function} callback 
   * @param {function} errorCallback
@@ -28,12 +28,12 @@ const Amap = {
 };
 
 const meta = {
-  Amap: [{
+  amap: [{
     name: 'getUserLocation',
     args: ['string','function']
   }]
 };
 
 module.exports = function (Weex) {
-  Weex.registerApiModule('Amap', Amap, meta);
+  Weex.registerApiModule('amap', amap, meta);
 };

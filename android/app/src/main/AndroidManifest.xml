@@ -26,6 +26,9 @@
             tools:overrideLibrary="com.taobao.android.dexposed"
             android:theme="@style/AppTheme">
         <uses-library android:name="android.test.runner"/>
+        <meta-data
+            android:name="com.amap.api.v2.apikey"
+            android:value="db6a973159cb0c2639ad02c617a786ae" />
         <activity
                 android:name=".SplashActivity"
                 android:configChanges="orientation|keyboardHidden|screenSize"
