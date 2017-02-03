@@ -117,9 +117,12 @@ weexpack plugin add /users/abcd/Code/weex-plugins/weex-plugin-amap (这后面是
 
 5.编译和运行
 
-对安卓和iOS用命令：weexpack run ios (/android)
-
 对H5用如下命令：weexpack build web & weexpack run web
+
+对安卓和iOS用命令：weexpack run ios (/android) 可在模拟器或者device上运行
+ios demo 如下所示
+
+<img src="http://img.alicdn.com/tps/TB1wSRvPpXXXXcOapXXXXXXXXXX-429-536.gif">
 
 
 
