@@ -4,8 +4,11 @@
     <weex-amap class="map" id="map2017" scale="true" sdk-key={{keys}} geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}} marker={{pointArr}} >
     </weex-amap>
     <div class="btn-wrap">
+      <text class="tips">随机改变中心点</text>
       <div onclick="changeCenter" class="btnbox"><text class="btn" >set Center</text></div>
+      <text class="tips">随机添加标记点</text>
       <div onclick="addPoints" class="btnbox"><text class="btn" >add points</text></div>
+      <text class="tips">进行当前定位</text>
       <div onclick="setUserLocation" class="btnbox"><text class="btn" >set location </text></div>
     </div>
   </div>
@@ -44,6 +47,11 @@
     display: inline-block;
     width: 300;
   }
+  .tips{
+    padding: 10;
+    color:#666;
+    font-size: 16;
+  }
   .btn{
     margin: 10;
     padding: 10;
@@ -60,8 +68,8 @@
 <script>
   var Amap = null;
   try {
-    Amap = require('@weex-module/amap');
-  } catch(err) { 
+    Amap = require('@weex-module/Amap');
+  } catch(err) {
     console.log(err);
   }
 
