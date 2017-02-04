@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h3>Weex-plugin-amap demo</h3>
-    <weex-amap class="map" id="map2017" scale="true" sdk-key={{keys}} geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}} marker={{pointArr}} >
+    <weex-amap class="map" zoomchange="{{zoomHandle}}" id="map2017" scale="true" sdk-key={{keys}} geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}} marker={{pointArr}} >
     </weex-amap>
     <div class="btn-wrap">
       <text class="tips">随机改变中心点</text>
@@ -72,7 +72,7 @@
   } catch(err) {
     console.log(err);
   }
-
+  var modal = require('@weex-module/modal');
   module.exports = {
     data: {
       keys: {
@@ -86,6 +86,11 @@
         {
           position:[116.3944071,39.9278548],
           title: '成都',
+          events: {
+            click: function() {
+              modal.alert(this.title);
+            }  
+          }
         },
         {
           position: [116.4848977,40.0004496],
@@ -111,6 +116,10 @@
         if(this.zoom >= 3) {
           this.zoom --; 
         }
+      },
+      
+      zoomHandle() {
+        cosnole.log('zoom changed!');
       },
       
       addPoints() {
