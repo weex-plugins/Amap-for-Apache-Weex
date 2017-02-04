@@ -26,11 +26,14 @@ module.exports = {
       icon: icon,
       map: map,
     });
+    this.registerEvents(data.events, marker);
     markers[this.__getMid(data)] = marker;
   },
-  registerEvents(events) {
+  registerEvents(events, marker) {
     if (typeof events === 'object') {
-          
+      for (const key in events) {
+        AMap.event.addListener(marker, key, events[key]);
+      }
     }
   },
   removeMarker(data) {

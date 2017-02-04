@@ -12,9 +12,7 @@ const params = {
   geolocation: false,
   resizeEnable: true
 };
-const events = {
-  zoomchange: function () {}
-};
+const events = ['zoomchange'];
 let markers = [];
 // prototype methods.
 const proto = {
@@ -55,8 +53,10 @@ const proto = {
     }
   },
   initEvents() {
-    Object.entries(events).forEach(([eventName, func]) => {
-      AMap.event.addListener(this.map, eventName, func);
+    events.forEach((eventName) => {
+      AMap.event.addListener(this.map, eventName, () => {
+        this.dispatchEvent(eventName);
+      });
     });
   }
 };
@@ -112,10 +112,12 @@ const attr = {
       key: key
     }, this.mapwrap, () => this.ready());
   },
-  // events
-  zoomchange(val) {
-    if (typeof val === 'function') {
-      events.zoomchange = val;
+};
+
+const event = {
+  zoomchange: {
+    extra() {
+      return {isSuccess: true};
     }
   }
 };
@@ -133,6 +135,7 @@ function init(Weex) {
   extend(Amap.prototype, {
     style: extend(Object.create(Component.prototype.style), {})
   });
+  extend(Amap.prototype, { event });
   Weex.registerComponent('weex-amap', Amap);
   amapModuleReg(Weex);
 }
