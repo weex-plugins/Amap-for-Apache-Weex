@@ -4,12 +4,12 @@
     <weex-amap class="map" zoomchange="{{zoomHandle}}" id="map2017" scale="true" sdk-key={{keys}} geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}} marker={{pointArr}} >
     </weex-amap>
     <div class="btn-wrap">
-      <text class="tips">随机改变中心点</text>
-      <div onclick="changeCenter" class="btnbox"><text class="btn" >set Center</text></div>
-      <text class="tips">随机添加标记点</text>
-      <div onclick="addPoints" class="btnbox"><text class="btn" >add points</text></div>
-      <text class="tips">进行当前定位</text>
-      <div onclick="setUserLocation" class="btnbox"><text class="btn" >set location </text></div>
+
+      <div onclick="changeCenter" class="btnbox"><text class="btn" >set Center</text></div>      <text class="tips">随机改变中心点</text>
+
+      <div onclick="addPoints" class="btnbox"><text class="btn" >add points</text></div>      <text class="tips">随机添加标记点</text>
+
+      <div onclick="setUserLocation" class="btnbox"><text class="btn" >set location </text></div>      <text class="tips">进行当前定位</text>
     </div>
   </div>
 </template>
