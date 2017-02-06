@@ -46,6 +46,7 @@ static const void *iconImageKey = &iconImageKey;
     CGFloat _zoomLevel;
     BOOL _showScale;
     BOOL _showGeolocation;
+    BOOL _zoomChanged;
 }
 
 - (id<WXImgLoaderProtocol>)imageLoader
@@ -75,6 +76,9 @@ static const void *iconImageKey = &iconImageKey;
         _showGeolocation = [attributes[@"geolocation"] boolValue];
         if (attributes[@"sdkKey"]) {
             [self setAPIKey:[attributes[@"sdkKey"] objectForKey:@"ios"] ? : @""];
+        }
+        if ([events containsObject:@"zoomchange"]) {
+            _zoomChanged = YES;
         }
     }
     
@@ -127,6 +131,7 @@ static const void *iconImageKey = &iconImageKey;
     if (attributes[@"marker"]) {
         [self setMarker:attributes[@"marker"]];
     }
+    
 }
 
 - (void)addEvent:(NSString *)eventName
@@ -201,9 +206,6 @@ static const void *iconImageKey = &iconImageKey;
 #pragma mark -
 /*!
  @brief 根据anntation生成对应的View
- @param mapView 地图View
- @param annotation 指定的标注
- @return 生成的标注View
  */
 - (MAAnnotationView*)mapView:(MAMapView *)mapView viewForAnnotation:(id <MAAnnotation>)annotation {
     if ([annotation isKindOfClass:[MAPointAnnotation class]])
@@ -242,6 +244,22 @@ static const void *iconImageKey = &iconImageKey;
     }
     
     return nil;
+}
+
+/**
+ * @brief 地图将要发生缩放时调用此接口
+ */
+- (void)mapView:(MAMapView *)mapView mapWillZoomByUser:(BOOL)wasUserAction {
+    
+}
+
+/**
+ * @brief 地图缩放结束后调用此接口
+ */
+- (void)mapView:(MAMapView *)mapView mapDidZoomByUser:(BOOL)wasUserAction {
+    if (_zoomChanged) {
+        [self fireEvent:@"zoomchange" params:[NSDictionary dictionary]];
+    }
 }
 
 @end
