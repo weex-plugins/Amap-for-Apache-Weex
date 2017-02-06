@@ -60,6 +60,8 @@
 
         <header-file src="ios/WXMapViewComponent.h"/>
         <source-file src="ios/WXMapViewComponent.m"/>
+        <header-file src="ios/WXMapViewMarkerComponent.h"/>
+        <source-file src="ios/WXMapViewMarkerComponent.m"/>
         <header-file src="ios/WXMapViewModule.h"/>
         <source-file src="ios/WXMapViewModule.m"/>
 
