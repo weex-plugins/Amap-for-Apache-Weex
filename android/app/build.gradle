@@ -11,7 +11,7 @@ android {
         versionCode 5
         versionName "0.5.2.5"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-        ndk{
+        ndk {
             abiFilters "x86"
             abiFilters "armeabi"
         }
@@ -40,11 +40,11 @@ android {
         }
     }
     buildTypes {
-//        release {
+        release {
 //            signingConfig signingConfigs.release
 //            minifyEnabled false
 //            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
-//        }
+        }
         debug {
             testCoverageEnabled true
             signingConfig signingConfigs.debug

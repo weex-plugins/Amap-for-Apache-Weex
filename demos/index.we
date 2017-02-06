@@ -1,12 +1,19 @@
 <template>
   <div class="container">
     <h3>Weex-plugin-amap demo</h3>
-    <weex-amap class="map" id="map2017" scale="true" sdk-key={{keys}} geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}} marker={{pointArr}} >
+    <weex-amap class="map" onzoomchange="{{zoomHandle}}" zoomchange="{{zoomHandle}}" id="map2017" scale="true" sdk-key={{keys}} geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}} marker={{pointArr}} >
     </weex-amap>
     <div class="btn-wrap">
       <div onclick="changeCenter" class="btnbox"><text class="btn" >set Center</text></div>
+      <text class="tips">随机改变中心点</text>
+    </div>
+    <div class="btn-wrap">
       <div onclick="addPoints" class="btnbox"><text class="btn" >add points</text></div>
+      <text class="tips">随机添加标记点</text>
+    </div>
+    <div class="btn-wrap">
       <div onclick="setUserLocation" class="btnbox"><text class="btn" >set location </text></div>
+      <text class="tips">进行当前定位</text>
     </div>
   </div>
 </template>
@@ -38,11 +45,18 @@
     height: 30;
   }
   .btn-wrap{
-    flex:1;
+    display:flex;
+    flex-direction:row;
+    justify-content: center;
   }
   .btnbox{
-    display: inline-block;
-    width: 300;
+    flex:1;
+  }
+  .tips{
+    flex:1;
+    padding: 10;
+    color:#666;
+    font-size: 16;
   }
   .btn{
     margin: 10;
@@ -61,10 +75,10 @@
   var Amap = null;
   try {
     Amap = require('@weex-module/amap');
-  } catch(err) { 
+  } catch(err) {
     console.log(err);
   }
-
+  var modal = require('@weex-module/modal');
   module.exports = {
     data: {
       keys: {
@@ -77,7 +91,12 @@
       pointArr: [
         {
           position:[116.3944071,39.9278548],
-          title: '成都',
+          title: '北京市',
+          events: {
+            click: function() {
+              modal.alert('北京市区');
+            }  
+          }
         },
         {
           position: [116.4848977,40.0004496],
@@ -103,6 +122,12 @@
         if(this.zoom >= 3) {
           this.zoom --; 
         }
+      },
+      
+      zoomHandle() {
+        modal.alert({
+          message: 'zoom changed!'
+        });
       },
       
       addPoints() {

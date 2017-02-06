@@ -2,5 +2,15 @@
     "extends": "airbnb-base",
     "plugins": [
         "import"
-    ]
+    ],
+    "globals":{
+      "AMap": 1
+    },
+    "rules": {
+        "func-names": 0,
+        "comma-dangle": 0,
+        "object-shorthand": 0,
+        "no-underscore-dangle": 0,
+        "prefer-template": 0
+    }
 }
