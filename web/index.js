@@ -12,7 +12,10 @@ const params = {
   geolocation: false,
   resizeEnable: true
 };
-const events = ['zoomchange'];
+const events = [
+  'zoomchange',
+  'dragend'
+];
 let markers = [];
 // prototype methods.
 const proto = {
@@ -117,7 +120,12 @@ const attr = {
 const event = {
   zoomchange: {
     extra() {
-      return {isSuccess: true};
+      return { isSuccess: true };
+    }
+  },
+  dragend: {
+    extra() {
+      return { isSuccess: true };
     }
   }
 };

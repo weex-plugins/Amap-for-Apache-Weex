@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <h3>Weex-plugin-amap demo</h3>
-    <weex-amap class="map" onzoomchange="{{zoomHandle}}" zoomchange="{{zoomHandle}}" id="map2017" scale="true" sdk-key={{keys}} geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}} marker={{pointArr}} >
+    <weex-amap class="map" ondragend="{{dragHandle}}"  zoomchange="{{zoomHandle}}" id="map2017" scale="true" sdk-key={{keys}} geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}} marker={{pointArr}} >
+      <weex-amap-marker position="{{pos}}" onclick="{{markerClick}}"></weex-amap-marker>
     </weex-amap>
     <div class="btn-wrap">
       <div onclick="changeCenter" class="btnbox"><text class="btn" >set Center</text></div>
@@ -127,6 +128,18 @@
       zoomHandle() {
         modal.alert({
           message: 'zoom changed!'
+        });
+      },
+      
+      dragHandle() {
+        modal.alert({
+          message: 'drag end!'
+        });
+      },
+      
+      markerClick() {
+        modal.alert({
+          message: 'marker clicked!'
         });
       },
       

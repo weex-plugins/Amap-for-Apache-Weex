@@ -2,7 +2,7 @@
   <div class="container">
     <div class="map">
       <weex-amap :scale="true" :geolocation="true" :zoom="5" :center="pos" >
-        
+        <weex-amap-marker onclick=""></weex-amap-marker>
       </weex-amap>
     </div>
     <div onclick="addPoints"><text class="btn">add points</text></div>
