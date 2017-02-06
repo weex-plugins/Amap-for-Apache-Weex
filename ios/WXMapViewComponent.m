@@ -7,6 +7,7 @@
 //
 
 #import "WXMapViewComponent.h"
+#import "WXMapViewMarkerComponent.h"
 #import "WXImgLoaderImpl.h"
 #import <objc/runtime.h>
 
@@ -47,6 +48,7 @@ static const void *iconImageKey = &iconImageKey;
     BOOL _showScale;
     BOOL _showGeolocation;
     BOOL _zoomChanged;
+    BOOL _isDragend;
 }
 
 - (id<WXImgLoaderProtocol>)imageLoader
@@ -79,6 +81,9 @@ static const void *iconImageKey = &iconImageKey;
         }
         if ([events containsObject:@"zoomchange"]) {
             _zoomChanged = YES;
+        }
+        if ([events containsObject:@"dragend"]) {
+            _isDragend = YES;
         }
     }
     
@@ -186,7 +191,7 @@ static const void *iconImageKey = &iconImageKey;
         NSDictionary *userDic = @{@"result":@"success",@"data":@{@"position":coordinate,@"title":@""}};
         return userDic;
     }
-    return @{@"result":@"false",@"data":@""};
+    return @{@"resuldt":@"false",@"data":@""};
 }
 
 #pragma mark - private method
@@ -259,6 +264,42 @@ static const void *iconImageKey = &iconImageKey;
 - (void)mapView:(MAMapView *)mapView mapDidZoomByUser:(BOOL)wasUserAction {
     if (_zoomChanged) {
         [self fireEvent:@"zoomchange" params:[NSDictionary dictionary]];
+    }
+}
+
+/**
+ * @brief 当选中一个annotation views时，调用此接口
+ * @param mapView 地图View
+ * @param view 选中的annotation views
+ */
+- (void)mapView:(MAMapView *)mapView didSelectAnnotationView:(MAAnnotationView *)view {
+    for (WXComponent *component in self.subcomponents) {
+        if ([component isKindOfClass:[WXMapViewMarkerComponent class]]) {
+            WXMapViewMarkerComponent *marker = (WXMapViewMarkerComponent *)component;
+            if (marker.clickEvent) {
+                [marker fireEvent:marker.clickEvent params:[NSDictionary dictionary]];
+            }
+        }
+    }
+}
+
+/**
+ * @brief 当取消选中一个annotation views时，调用此接口
+ * @param mapView 地图View
+ * @param view 取消选中的annotation views
+ */
+- (void)mapView:(MAMapView *)mapView didDeselectAnnotationView:(MAAnnotationView *)view {
+    
+}
+
+/**
+ * @brief 地图移动结束后调用此接口
+ * @param mapView       地图view
+ * @param wasUserAction 标识是否是用户动作
+ */
+- (void)mapView:(MAMapView *)mapView mapDidMoveByUser:(BOOL)wasUserAction {
+    if (_isDragend) {
+        [self fireEvent:@"dragend" params:[NSDictionary dictionary]];
     }
 }
 

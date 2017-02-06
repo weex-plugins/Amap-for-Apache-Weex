@@ -40,6 +40,14 @@
                 <param name="api" value="weex-amap"/>
             </feature>
         </config-file>
+        
+        <config-file parent="/*" target="WeexpluginConfig.xml">
+            <feature name="WXMapViewMarkerComponent">
+                <param name="category" value="component" />
+                <param name="ios-package" value="WXMapViewMarkerComponent" />
+                <param name="api" value="weex-amap-marker" />
+            </feature>
+        </config-file>
 
         <config-file parent="/*" target="WeexpluginConfig.xml">
             <feature name="WXMapViewModule">
