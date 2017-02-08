@@ -13,7 +13,7 @@
       <text class="tips">随机添加标记点</text>
     </div>
     <div class="btn-wrap">
-      <div onclick="removePoints" class="btnbox"><text class="btn" >add points</text></div>
+      <div onclick="removePoints" class="btnbox"><text class="btn" >remove points</text></div>
       <text class="tips">随机移除标记点</text>
     </div>
     <div class="btn-wrap">
