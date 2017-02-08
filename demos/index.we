@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <h3>Weex-plugin-amap demo</h3>
-    <weex-amap class="map" ondragend="{{dragHandle}}"  zoomchange="{{zoomHandle}}" id="map2017" scale="true" sdk-key={{keys}} geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}} marker={{pointArr}} >
+    <weex-amap class="map" ondragend="{{dragHandle}}"  onzoomchange="{{zoomHandle}}" id="map2017" scale="true" sdk-key={{keys}} geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}} marker={{pointArr}} >
       <weex-amap-marker position="{{pos}}" onclick="{{markerClick}}"></weex-amap-marker>
     </weex-amap>
     <div class="btn-wrap">
@@ -102,7 +102,7 @@
         {
           position: [116.4848977,40.0004496],
           title: '故宫',
-          icon: 'http://img1.vued.vanthink.cn/vuede9952ac37558a5d32a70c553986bd958.png'
+          icon: 'http://img1.vued.vanthink.cn/vued2113eaa062abbaee0441d16a7848d23e.gif'
         }
       ],
       map: {},
