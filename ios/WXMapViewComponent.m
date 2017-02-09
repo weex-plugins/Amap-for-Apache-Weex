@@ -316,8 +316,10 @@ static const void *refKey = &refKey;
  * @param view 选中的annotation views
  */
 - (void)mapView:(MAMapView *)mapView didSelectAnnotationView:(MAAnnotationView *)view {
+    MAPointAnnotation *annotation = view.annotation;
     for (WXComponent *component in self.subcomponents) {
-        if ([component isKindOfClass:[WXMapViewMarkerComponent class]]) {
+        if ([component isKindOfClass:[WXMapViewMarkerComponent class]] &&
+            [component.ref isEqualToString:annotation.ref]) {
             WXMapViewMarkerComponent *marker = (WXMapViewMarkerComponent *)component;
             if (marker.clickEvent) {
                 [marker fireEvent:marker.clickEvent params:[NSDictionary dictionary]];
