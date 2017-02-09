@@ -14,10 +14,12 @@
 @interface MAPointAnnotation(imageAnnotation)
 
 @property(nonatomic, copy) NSString *iconImage;
+@property(nonatomic, copy) NSString *ref;
 
 @end
 
 static const void *iconImageKey = &iconImageKey;
+static const void *refKey = &refKey;
 
 @implementation MAPointAnnotation (imageAnnotation)
 
@@ -29,6 +31,14 @@ static const void *iconImageKey = &iconImageKey;
 
 - (NSString *)iconImage {
     return objc_getAssociatedObject(self, iconImageKey);
+}
+
+- (void)setRef:(NSString *)ref {
+    objc_setAssociatedObject(self, refKey, ref, OBJC_ASSOCIATION_COPY_NONATOMIC);
+}
+
+- (NSString *)ref {
+    return objc_getAssociatedObject(self, refKey);
 }
 
 @end
@@ -95,7 +105,7 @@ static const void *iconImageKey = &iconImageKey;
     UIWindow *window = [UIApplication sharedApplication].keyWindow;
     CGSize windowSize = window.rootViewController.view.frame.size;
     self.mapView = [[MAMapView alloc] initWithFrame:CGRectMake(0, 0, windowSize.width, windowSize.height)];
-    self.mapView.showsUserLocation = YES;
+    self.mapView.showsUserLocation = _showGeolocation;
     self.mapView.delegate = self;
     
     return self.mapView;
@@ -133,10 +143,6 @@ static const void *iconImageKey = &iconImageKey;
         [self setZoomLevel:[attributes[@"zoom"] floatValue]];
     }
     
-    if (attributes[@"marker"]) {
-        [self setMarker:attributes[@"marker"]];
-    }
-    
 }
 
 - (void)addEvent:(NSString *)eventName
@@ -150,6 +156,32 @@ static const void *iconImageKey = &iconImageKey;
 }
 
 #pragma mark - component interface
+- (void)addMarker:(WXMapViewMarkerComponent *)marker {
+    [self initPOIData];
+    MAPointAnnotation *a1 = [[MAPointAnnotation alloc] init];
+    CLLocationCoordinate2D coordinate;
+    coordinate.latitude = [marker.location[1] doubleValue];
+    coordinate.longitude = [marker.location[0] doubleValue];
+    a1.coordinate = coordinate;
+    a1.title      = [NSString stringWithFormat:@"%@", marker.title];
+    a1.iconImage = marker.icon ? : nil;
+    a1.ref = marker.ref;
+    [_annotations addObject:a1];
+    [self.mapView addAnnotation:a1];
+}
+
+- (void)removeMarker:(WXMapViewMarkerComponent *)marker {
+    NSArray *tempAnnotations = [NSArray arrayWithArray:_annotations];
+    [tempAnnotations enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        MAPointAnnotation *annotation = (MAPointAnnotation *)obj;
+        if ([annotation.ref isEqualToString:marker.ref]) {
+            [self.mapView removeAnnotation:annotation];
+            *stop = YES;
+            [_annotations removeObject:obj];
+        }
+    }];
+}
+
 - (void)setAPIKey:(NSString *)appKey {
     [AMapServices sharedServices].apiKey = appKey;
 }
@@ -165,24 +197,6 @@ static const void *iconImageKey = &iconImageKey;
     [self.mapView setZoomLevel:zoom animated:YES];
 }
 
-- (void)setMarker:(NSArray *)points {
-    [self initPOIData];
-    for (int i = 0; i < points.count; ++i)
-    {
-        NSDictionary *annotations = points[i];
-        NSArray *coordinates = annotations[@"position"];
-        MAPointAnnotation *a1 = [[MAPointAnnotation alloc] init];
-        CLLocationCoordinate2D coordinate;
-        coordinate.latitude = [coordinates[1] doubleValue];
-        coordinate.longitude = [coordinates[0] doubleValue];
-        a1.coordinate = coordinate;
-        a1.title      = [NSString stringWithFormat:@"%@", annotations[@"title"]];
-        a1.iconImage = annotations[@"icon"] ? : nil;
-        [_annotations addObject:a1];
-        [self.mapView addAnnotations:_annotations];
-        [self.mapView showAnnotations:_annotations edgePadding:UIEdgeInsetsMake(20, 20, 20, 80) animated:NO];
-    }
-}
 
 #pragma mark - publish method
 - (NSDictionary *)getUserLocation {
@@ -196,9 +210,7 @@ static const void *iconImageKey = &iconImageKey;
 
 #pragma mark - private method
 - (void)initPOIData {
-    if (_annotations) {
-        [_annotations removeAllObjects];
-    }else {
+    if (!_annotations) {
         _annotations = [NSMutableArray arrayWithCapacity:5];
     }
 }
