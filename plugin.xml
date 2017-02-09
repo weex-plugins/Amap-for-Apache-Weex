@@ -19,14 +19,14 @@
 -->
 
 <plugin xmlns="http://apache.org/weexpack/ns/plugins/1.0"
-    id="weex-plugin-amap"
+    id="weex-amap"
     version="1.0.0">
-    <name>weex-plugin-amap</name>
+    <name>weex-amap</name>
     <description>weex mapview component</description>
     <license>Apache 2.0</license>
     <keywords>weex,map</keywords>
-    <repo>https://github.com/weexteam/weex-plugins</repo>
-    <issue>https://github.com/weexteam/weex-plugins/issues</issue>
+    <repo>https://github.com/weex-plugins/weex-plugin-amap</repo>
+    <issue>https://github.com/weex-plugins/weex-plugin-amap/issues</issue>
     <dependency id="weex-adapter-image" version="^1.0.0" />
 
 
