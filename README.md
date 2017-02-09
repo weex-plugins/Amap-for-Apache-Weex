@@ -3,78 +3,7 @@
 <img width="320" src="https://img.alicdn.com/tps/TB1m1l.PXXXXXczXFXXXXXXXXXX-800-600.png" />
 
 
-一款高德地图weex插件，当前版本支持定位，缩放等地图常用操作，如下API。
-
-### API
-
-#### weex-amap 属性
-
-| 属性        | 类型         | Demo  | 描述  |
-| ------------- |:-------------:| -----:|----------:|
-| center     | array | [116.487, 40.00003] | 传入地理位置坐标[x,y] 默认为当前定位位置 |
-| zoom      | number     |  11 | 缩放级别 |
-| zoomEnable | boolean  | true | 是否允许缩放
-| marker |  array | [`{position:[116,12]}]` |  点标记物的属性
-| geolocation  | boolean | true | 添加定位控件
-| sdkKey   | object | {ios:'xxx',android: 'xxx',h5: 'xxx'} | 指定开发者的 SDK 密匙 
-
-**建议你前往[高德开发者社区](http://lbs.amap.com/)申明你对应产品的Key，保证地图正常工作**
-
-#### weex-amap-marker 属性 
-
-| 属性        | 类型         | Demo  | 描述  |
-| ------------- |:-------------:| -----:|----------:|
-| position     | array | [116.487, 40.00003] | 传入地理位置坐标[x,y] 默认为当前定位位置 |
-| icon | string     |    some_icon_url | 图标的url地址 |
-| title | string   |   'this is a marker' | 坐标点的名称 |
-
-
-#### Amap 模块
-
-#####  getUserLocation(completeFunc,errorFunc)
-
-+ completeFunc 定位成功后的回调函数，返回的数据:
-```
-{ 
-  data:{
-    position: []
-  },
-  result: 'success' 
-}
-```
-##### 使用Amap模块
-
-``` html 
-<template>
-  <weex-amap class="map" id="map2017" center="{{pos}}" ></weex-amap>
-  <div class="btn-wrap">
-    <div onclick="setUserLocation" class="btnbox"><text class="btn" >set location </text></div>
-    <text class="tips">进行当前定位</text>
-  </div>
-</template>
-
-<script>
-  const Amap = require('@weex-module/amap');
-  module.exports = {
-    data: {
-      pos:[116.487, 40.00003]
-    },
-    
-    methods: {
-      setUserLocation() {
-        const self = this;
-        Amap.getUserLocation(this.$el('map2017').ref, function (data) {
-          if(data.result == 'success') {
-            self.pos = data.data.position;
-          }
-        });  
-    }
-  };
-  
-</script>
-```
-
-
+一款高德地图weex插件，当前版本支持定位，缩放等地图常用操作。
 
 ### 快速开始
 
@@ -123,7 +52,86 @@
 ```
 
 
+### API
 
+#### weex-amap 属性
+
+| 属性        | 类型         | Demo  | 描述  |
+| ------------- |:-------------:| -----:|----------:|
+| center     | array | [116.487, 40.00003] | 传入地理位置坐标[x,y] 默认为当前定位位置 |
+| zoom      | number     |  11 | 缩放级别 |
+| zoomEnable | boolean  | true | 是否允许缩放
+| marker |  array | [`{position:[116,12]}]` |  点标记物的属性
+| geolocation  | boolean | true | 添加定位控件
+| sdkKey   | object | {ios:'xxx',android: 'xxx',h5: 'xxx'} | 指定开发者的 SDK 密匙 
+**建议你前往[高德开发者社区](http://lbs.amap.com/)申明你对应产品的Key，保证地图正常工作**
+
+#### weex-amap 事件
+|事件    |     描述   |
+| ------------- |----------:|
+|zoomchange | 用户缩放改变  | 
+|dragend | 用户拖拽完成  | 
+
+
+
+#### weex-amap-marker 属性 
+
+| 属性        | 类型         | Demo  | 描述  |
+| ------------- |:-------------:| -----:|----------:|
+| position     | array | [116.487, 40.00003] | 传入地理位置坐标[x,y] 默认为当前定位位置 |
+| icon | string     |    some_icon_url | 图标的url地址 |
+| title | string   |   'this is a marker' | 坐标点的名称 |
+
+#### weex-amap-marker 事件
+|事件    |     描述   |
+| ------------- |----------:|
+|click | 用户点击标记物 | 
+
+
+#### Amap 模块
+
+#####  getUserLocation(completeFunc,errorFunc)
+
++ completeFunc 定位成功后的回调函数，返回的数据:
+```
+{ 
+  data:{
+    position: []
+  },
+  result: 'success' 
+}
+```
+##### 使用Amap模块
+
+``` html 
+<template>
+  <weex-amap class="map" id="map2017" center="{{pos}}" ></weex-amap>
+  <div class="btn-wrap">
+    <div onclick="setUserLocation" class="btnbox"><text class="btn" >set location </text></div>
+    <text class="tips">进行当前定位</text>
+  </div>
+</template>
+
+<script>
+  const Amap = require('@weex-module/amap');
+  module.exports = {
+    data: {
+      pos:[116.487, 40.00003]
+    },
+    
+    methods: {
+      setUserLocation() {
+        const self = this;
+        Amap.getUserLocation(this.$el('map2017').ref, function (data) {
+          if(data.result == 'success') {
+            self.pos = data.data.position;
+          }
+        });  
+    }
+  };
+  
+</script>
+```
 
 ### Demo
 
@@ -161,9 +169,6 @@ weexpack plugin add /users/abcd/Code/weex-plugins/weex-plugin-amap (这后面是
 ios demo 如下所示
 
 <img src="http://img.alicdn.com/tps/TB1wSRvPpXXXXcOapXXXXXXXXXX-429-536.gif">
-
-
-
 
 
 
