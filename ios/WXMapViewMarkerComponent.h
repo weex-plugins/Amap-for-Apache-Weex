@@ -10,6 +10,10 @@
 
 @interface WXMapViewMarkerComponent : WXComponent
 
-@property(nonatomic, copy) NSString *clickEvent;
+@property (nonatomic, copy) NSString *icon;
+@property (nonatomic, copy) NSString *title;
+@property (nonatomic, strong) NSArray *location;
+
+@property (nonatomic, copy) NSString *clickEvent;
 
 @end

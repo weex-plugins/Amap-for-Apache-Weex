@@ -7,12 +7,17 @@
 //
 
 #import <WeexSDK/WeexSDK.h>
+#import "WXMapViewMarkerComponent.h"
 #import <MAMapKit/MAMapKit.h>
 #import <AMapFoundationKit/AMapFoundationKit.h>
 
 @interface WXMapViewComponent : WXComponent<MAMapViewDelegate>
 
 - (NSDictionary *)getUserLocation;
+
+- (void)addMarker:(WXMapViewMarkerComponent *)marker;
+
+- (void)removeMarker:(WXMapViewMarkerComponent *)marker;
 
 @end
 
