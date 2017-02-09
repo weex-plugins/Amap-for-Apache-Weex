@@ -17,9 +17,14 @@
       <text class="tips">随机移除标记点</text>
     </div>
     <div class="btn-wrap">
+      <div onclick="changeMarker" class="btnbox"><text class="btn" >change marker props </text></div>
+      <text class="tips">修改标记属性</text>
+    </div>
+    <div class="btn-wrap">
       <div onclick="setUserLocation" class="btnbox"><text class="btn" >set location </text></div>
       <text class="tips">进行当前定位</text>
     </div>
+    
   </div>
 </template>
 
@@ -105,8 +110,8 @@
         },
         {
           position: [116.4848977,40.0004496],
-          title: '故宫',
-          icon: 'http://img1.vued.vanthink.cn/vued2113eaa062abbaee0441d16a7848d23e.gif'
+          title: '汽车',
+          icon: 'http://img1.vued.vanthink.cn/vued5921b582b32c4effc54735f42bf824b8.gif'
         }
       ],
       map: {},
@@ -162,7 +167,18 @@
         this.pointArr = Array.from(this.pointArr);
         console.log(this.mapInstance);
       },
-      
+      changeMarker() {
+        const coor = [115.9 + Math.random()*1,39.5 + Math.random()*0.5;
+        const point = {
+          position:coor,
+          title:'坐标:' + coor.join(','),
+          icon: 'http://img1.vued.vanthink.cn/vueda3685df0bda6b16805e380e852d99701.png'  
+        };
+        console.log(point);
+        if(this.pointArr.length > 0) {
+          this.pointArr[0] = point ;
+        } 
+      },
       setUserLocation() {
         let self = this;
         if(!Amap) {

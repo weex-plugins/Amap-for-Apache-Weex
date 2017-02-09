@@ -1,17 +1,29 @@
 /** map instance manager
 * 20170204
 **/
+let callbackStack = [];
 module.exports = {
   initMap(id, map) {
     if (!this.__maps) {
       this.__maps = {};
     }
-    this.__maps.set(id, map);
+    this.__maps[id] = map;
+    callbackStack.forEach((cb) => {
+      cb(map);
+    });
+    callbackStack = [];
   },
   getMap(id) {
-    if (!id) {
-      return Object.keys(this.__maps)[0];
+    if (!this.__maps) {
+      return null;
     }
+    if (!id) {
+      id = Object.keys(this.__maps)[0];
+    }
+    console.log(this.__maps);
     return this.__maps[id];
+  },
+  addReadyCallback(callback) {
+    callbackStack.push(callback);
   }
 };
