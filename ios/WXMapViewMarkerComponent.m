@@ -53,6 +53,26 @@
         _viewLoaded = YES;
     }
 }
+- (void)updateAttributes:(NSDictionary *)attributes
+{
+    WXMapViewComponent *mapComponent = (WXMapViewComponent *)self.supercomponent;
+    if (attributes[@"title"]) {
+        _title = attributes[@"title"];
+        [mapComponent updateTitleMarker:self];
+    }
+    
+    if (attributes[@"icon"]) {
+        _icon = attributes[@"icon"];
+        [mapComponent updateIconMarker:self];
+    }
+    
+    if (attributes[@"position"]) {
+        _location = attributes[@"position"];
+        [mapComponent updateLocationMarker:self];
+        
+    }
+    
+}
 
 - (void)_removeFromSupercomponent
 {

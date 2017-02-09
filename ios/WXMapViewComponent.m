@@ -53,7 +53,7 @@ static const void *refKey = &refKey;
 @implementation WXMapViewComponent
 {
     CLLocationCoordinate2D _centerCoordinate;
-    NSMutableArray *_annotations;
+    NSMutableDictionary *_annotations;
     CGFloat _zoomLevel;
     BOOL _showScale;
     BOOL _showGeolocation;
@@ -159,19 +159,45 @@ static const void *refKey = &refKey;
 - (void)addMarker:(WXMapViewMarkerComponent *)marker {
     [self initPOIData];
     MAPointAnnotation *a1 = [[MAPointAnnotation alloc] init];
+    [self convertMarker:marker onAnnotation:a1];
+    [_annotations setObject:a1 forKey:marker.ref];
+    [self.mapView addAnnotation:a1];
+}
+
+- (void)convertMarker:(WXMapViewMarkerComponent *)marker onAnnotation:(MAPointAnnotation *)annotation {
+    CLLocationCoordinate2D coordinate;
+    coordinate.latitude = [marker.location[1] doubleValue];
+    coordinate.longitude = [marker.location[0] doubleValue];
+    annotation.coordinate = coordinate;
+    annotation.title      = [NSString stringWithFormat:@"%@", marker.title];
+    annotation.iconImage = marker.icon ? : nil;
+    annotation.ref = marker.ref;
+}
+
+- (void)updateTitleMarker:(WXMapViewMarkerComponent *)marker {
+    MAPointAnnotation *a1 = _annotations[marker.ref];
+    a1.title = [NSString stringWithFormat:@"%@", marker.title];
+    [self.mapView addAnnotation:a1];
+}
+
+- (void)updateIconMarker:(WXMapViewMarkerComponent *)marker {
+    MAPointAnnotation *a1 = _annotations[marker.ref];
+    a1.iconImage = marker.icon ? : nil;
+    [self.mapView addAnnotation:a1];
+}
+
+- (void)updateLocationMarker:(WXMapViewMarkerComponent *)marker {
+    MAPointAnnotation *a1 = _annotations[marker.ref];
     CLLocationCoordinate2D coordinate;
     coordinate.latitude = [marker.location[1] doubleValue];
     coordinate.longitude = [marker.location[0] doubleValue];
     a1.coordinate = coordinate;
-    a1.title      = [NSString stringWithFormat:@"%@", marker.title];
-    a1.iconImage = marker.icon ? : nil;
-    a1.ref = marker.ref;
-    [_annotations addObject:a1];
     [self.mapView addAnnotation:a1];
 }
 
+
 - (void)removeMarker:(WXMapViewMarkerComponent *)marker {
-    NSArray *tempAnnotations = [NSArray arrayWithArray:_annotations];
+    /*NSArray *tempAnnotations = [NSArray arrayWithArray:_annotations];
     [tempAnnotations enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
         MAPointAnnotation *annotation = (MAPointAnnotation *)obj;
         if ([annotation.ref isEqualToString:marker.ref]) {
@@ -179,7 +205,12 @@ static const void *refKey = &refKey;
             *stop = YES;
             [_annotations removeObject:obj];
         }
-    }];
+    }];*/
+    
+    if (_annotations[marker.ref]) {
+        [self.mapView removeAnnotation:_annotations[marker.ref]];
+        [_annotations removeObjectForKey:marker.ref];
+    }
 }
 
 - (void)setAPIKey:(NSString *)appKey {
@@ -211,7 +242,7 @@ static const void *refKey = &refKey;
 #pragma mark - private method
 - (void)initPOIData {
     if (!_annotations) {
-        _annotations = [NSMutableArray arrayWithCapacity:5];
+        _annotations = [NSMutableDictionary dictionaryWithCapacity:5];
     }
 }
 
@@ -285,8 +316,10 @@ static const void *refKey = &refKey;
  * @param view 选中的annotation views
  */
 - (void)mapView:(MAMapView *)mapView didSelectAnnotationView:(MAAnnotationView *)view {
+    MAPointAnnotation *annotation = view.annotation;
     for (WXComponent *component in self.subcomponents) {
-        if ([component isKindOfClass:[WXMapViewMarkerComponent class]]) {
+        if ([component isKindOfClass:[WXMapViewMarkerComponent class]] &&
+            [component.ref isEqualToString:annotation.ref]) {
             WXMapViewMarkerComponent *marker = (WXMapViewMarkerComponent *)component;
             if (marker.clickEvent) {
                 [marker fireEvent:marker.clickEvent params:[NSDictionary dictionary]];

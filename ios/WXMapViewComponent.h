@@ -17,7 +17,14 @@
 
 - (void)addMarker:(WXMapViewMarkerComponent *)marker;
 
+- (void)updateTitleMarker:(WXMapViewMarkerComponent *)marker;
+
+- (void)updateIconMarker:(WXMapViewMarkerComponent *)marker;
+
+- (void)updateLocationMarker:(WXMapViewMarkerComponent *)marker;
+
 - (void)removeMarker:(WXMapViewMarkerComponent *)marker;
+
 
 @end
 
