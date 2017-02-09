@@ -110,8 +110,8 @@
         },
         {
           position: [116.4848977,40.0004496],
-          title: '汽车',
-          icon: 'http://img1.vued.vanthink.cn/vued5921b582b32c4effc54735f42bf824b8.gif'
+          title: '火箭',
+          icon: 'http://img1.vued.vanthink.cn/vued6db28fd538a0446a3ab2fa2694d1ba57.gif'
         }
       ],
       map: {},
@@ -168,7 +168,7 @@
         console.log(this.mapInstance);
       },
       changeMarker() {
-        const coor = [115.9 + Math.random()*1,39.5 + Math.random()*0.5;
+        const coor = [115.9 + Math.random()*1,39.5 + Math.random()*0.5];
         const point = {
           position:coor,
           title:'坐标:' + coor.join(','),
