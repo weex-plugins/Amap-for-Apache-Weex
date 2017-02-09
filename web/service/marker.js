@@ -21,7 +21,6 @@ module.exports = {
         this.setMarker(data, mapIns);
       });
     }
-    console.log(map);
     return this.setMarker(data, map);
   },
   setMarker(data, map) {
@@ -38,7 +37,6 @@ module.exports = {
       icon: icon,
       map: map,
     });
-    console.log(data);
     markers[this.__getMid(data)] = marker;
     this.registerEvents(data.events, marker);
   },

@@ -29,6 +29,8 @@ const proto = {
 
 const attr = {
   position(val) {
+    console.log(val);
+    console.log(this);
     if (Array.isArray(val) && val.length === 2) {
       params.position = val;
     }

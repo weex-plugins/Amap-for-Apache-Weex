@@ -174,9 +174,8 @@
           title:'坐标:' + coor.join(','),
           icon: 'http://img1.vued.vanthink.cn/vueda3685df0bda6b16805e380e852d99701.png'  
         };
-        console.log(point);
         if(this.pointArr.length > 0) {
-          this.pointArr[0] = point ;
+          this.pointArr.$set(0, point);
         } 
       },
       setUserLocation() {
