@@ -42,7 +42,37 @@
   result: 'success' 
 }
 ```
+##### 使用Amap模块
 
+``` html 
+<template>
+  <weex-amap class="map" id="map2017" center="{{pos}}" ></weex-amap>
+  <div class="btn-wrap">
+    <div onclick="setUserLocation" class="btnbox"><text class="btn" >set location </text></div>
+    <text class="tips">进行当前定位</text>
+  </div>
+</template>
+
+<script>
+  const Amap = require('@weex-module/amap');
+  module.exports = {
+    data: {
+      pos:[116.487, 40.00003]
+    },
+    
+    methods: {
+      setUserLocation() {
+        const self = this;
+        Amap.getUserLocation(this.$el('map2017').ref, function (data) {
+          if(data.result == 'success') {
+            self.pos = data.data.position;
+          }
+        });  
+    }
+  };
+  
+</script>
+```
 
 
 
@@ -53,7 +83,9 @@
 ``` we
 <template>
   <div class="container">
-      <weex-amap class="map" id="map2017" scale="true" geolocation="true" center={{pos}} points={{pointArr}} ></weex-amap>
+      <weex-amap class="map" id="map2017" scale="true" geolocation="true" center="{{pos}}" >
+        <weex-amap-marker position="{{point.position}}" title="{{point.title}}"></weex-amap-marker>
+      </weex-amap>
   </div>
 </template>
 
@@ -75,7 +107,10 @@
   module.exports = {
     data: {
       pos:[116.487, 40.00003],
-      pointArr: [[100,31],[101,31],[102,31]]
+      point: {
+        position: [112,36],
+        title: 'this is a marker'
+      }
     },
     
     created () {

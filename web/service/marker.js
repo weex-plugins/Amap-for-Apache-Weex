@@ -1,5 +1,6 @@
 // a lib to manage all marker
 import amapManager from './map-manager';
+import vendor from './vendor';
 
 const markers = {};
 module.exports = {
@@ -42,8 +43,15 @@ module.exports = {
   },
   removeMaker(data) {
     const marker = this.findMarker(data);
-    console.log(marker);
-    marker.setMap(null);  
+    marker.setMap(null);
+  },
+  updateMarker(data, attr, val) {
+    const marker = this.findMarker(data);
+    if (!marker) {
+      return false;
+    }
+    const method = vendor.setFirstLetterToUppercase(attr);
+    marker['set' + method](val);
   },
   registerEvents(events, marker) {
     if (typeof events === 'object') {

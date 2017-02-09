@@ -20,7 +20,6 @@ module.exports = {
     if (!id) {
       id = Object.keys(this.__maps)[0];
     }
-    console.log(this.__maps);
     return this.__maps[id];
   },
   addReadyCallback(callback) {

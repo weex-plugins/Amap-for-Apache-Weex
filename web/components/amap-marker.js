@@ -24,6 +24,15 @@ const proto = {
       map: window.Amap
     });
     return node;
+  },
+  updateAttrs(attrs) {
+    const keys = Object.keys(attrs);
+    const data = {
+      ref: this.data.ref
+    };
+    keys.forEach((k) => {
+      markerManager.updateMarker(data, k, attrs[k]);
+    });
   }
 };
 
