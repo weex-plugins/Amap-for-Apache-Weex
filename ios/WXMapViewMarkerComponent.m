@@ -8,7 +8,6 @@
 
 #import "WXMapViewMarkerComponent.h"
 #import "WXMapViewComponent.h"
-#import "WXComponent_internal.h"
 
 @implementation WXMapViewMarkerComponent
 {
@@ -74,9 +73,9 @@
     
 }
 
-- (void)_removeFromSupercomponent
+- (void)removeFromSuperview;
 {
-    [super _removeFromSupercomponent];
+    [super removeFromSuperview];
     [(WXMapViewComponent *)self.supercomponent removeMarker:self];
 }
 
