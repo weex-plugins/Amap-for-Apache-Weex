@@ -58,12 +58,12 @@
         </config-file>
 
 
-        <header-file src="ios/WXMapViewComponent.h"/>
-        <source-file src="ios/WXMapViewComponent.m"/>
-        <header-file src="ios/WXMapViewMarkerComponent.h"/>
-        <source-file src="ios/WXMapViewMarkerComponent.m"/>
-        <header-file src="ios/WXMapViewModule.h"/>
-        <source-file src="ios/WXMapViewModule.m"/>
+        <header-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapViewComponent.h"/>
+        <source-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapViewComponent.m"/>
+        <header-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapViewMarkerComponent.h"/>
+        <source-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapViewMarkerComponent.m"/>
+        <header-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapViewModule.h"/>
+        <source-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapViewModule.m"/>
 
         <framework src="ImageIO.framework" weak="true"/>
         <framework src="CoreLocation.framework"/>

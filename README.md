@@ -168,7 +168,7 @@ weexpack plugin add /users/abcd/Code/weex-plugins/weex-plugin-amap (这后面是
 
 ios demo 如下所示
 
-<img src="http://img.alicdn.com/tps/TB1wSRvPpXXXXcOapXXXXXXXXXX-429-536.gif">
+<img src="https://img.alicdn.com/tps/TB1lJ51PpXXXXX5aFXXXXXXXXXX-429-687.gif">
 
 
 
