@@ -2,7 +2,7 @@
   <div class="container">
     <h3>Weex-plugin-amap demo</h3>
     <weex-amap class="map" ondragend="{{dragHandle}}"  onzoomchange="{{zoomHandle}}" id="map2017" scale="true" sdk-key={{keys}} geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}}>
-      <weex-amap-marker location="{{point.position}}" title="{{point.title}}" icon="{{point.icon}}" repeat="point in pointArr"  onclick="{{markerClick}}"></weex-amap-marker>
+      <weex-amap-marker position="{{point.position}}" title="{{point.title}}" icon="{{point.icon}}" repeat="point in pointArr"  onclick="{{markerClick}}"></weex-amap-marker>
     </weex-amap>
     <div class="btn-wrap">
       <div onclick="changeCenter" class="btnbox"><text class="btn" >set Center</text></div>

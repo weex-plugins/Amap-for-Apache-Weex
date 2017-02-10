@@ -30,6 +30,5 @@ public class Constant {
         String POSITION = "position";
         String ICON = "icon";
         String TITLE = "title";
-        String REPEAT = "repeat";
     }
 }
