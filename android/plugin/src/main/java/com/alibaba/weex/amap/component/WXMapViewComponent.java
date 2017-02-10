@@ -20,6 +20,7 @@ import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
+import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.WXSDKManager;
@@ -37,9 +38,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.Map;
 
-public class WXMapViewComponent extends WXComponent implements LocationSource, AMapLocationListener {
+public class WXMapViewComponent extends WXVContainer<MapView> implements LocationSource,
+    AMapLocationListener {
 
   private MapView mMapView;
   private AMap mAMap;
@@ -55,6 +58,26 @@ public class WXMapViewComponent extends WXComponent implements LocationSource, A
   private OnLocationChangedListener mListener;
   private AMapLocationClient mLocationClient;
   private AMapLocationClientOption mLocationOption;
+  AMap.OnMarkerClickListener markerClickListener = new AMap.OnMarkerClickListener() {
+    // marker 对象被点击时回调的接口
+    // 返回 true 则表示接口已响应事件，否则返回false
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+      if (marker != null) {
+        for (int i = 0; i < getChildCount(); i++) {
+          if (getChild(i) instanceof WxMapMarkerComponent) {
+            WxMapMarkerComponent child = (WxMapMarkerComponent)getChild(i);
+            if (child.getMarker() != null && child.getMarker().getId() == marker.getId()) {
+              child.onClick();
+            }
+          }
+        }
+      }
+      return false;
+    }
+  };
+
 
   public WXMapViewComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
     super(instance, dom, parent, isLazy);
@@ -62,7 +85,7 @@ public class WXMapViewComponent extends WXComponent implements LocationSource, A
   }
 
   @Override
-  protected View initComponentHostView(@NonNull Context context) {
+  protected MapView initComponentHostView(@NonNull Context context) {
     mMapView = new MapView(context);
     mMapView.onCreate(null);
     initMap();
@@ -72,6 +95,8 @@ public class WXMapViewComponent extends WXComponent implements LocationSource, A
   private void initMap() {
     if (mAMap == null) {
       mAMap = mMapView.getMap();
+      // 绑定 Marker 被点击事件
+      mAMap.setOnMarkerClickListener(markerClickListener);
       setUpMap();
     }
   }
@@ -83,6 +108,7 @@ public class WXMapViewComponent extends WXComponent implements LocationSource, A
     uiSettings.setZoomControlsEnabled(isZoomEnable);
     uiSettings.setCompassEnabled(compass);
     uiSettings.setIndoorSwitchEnabled(indoorSwitch);
+
 
     setMyLocationStatus(myLocation);
     updateGestureSetting();
@@ -192,61 +218,61 @@ public class WXMapViewComponent extends WXComponent implements LocationSource, A
     }
   }
 
-  @WXComponentProp(name = Constant.Name.MARKER)
-  public void setMarker(String markers) {
-    try {
-      JSONArray jsonArray = new JSONArray(markers);
-      for (int i = 0; i < jsonArray.length(); i++) {
-        JSONObject jsonObject = jsonArray.optJSONObject(i);
-        if (jsonObject != null) {
-          JSONArray position = jsonObject.optJSONArray("position");
-          String title = jsonObject.optString("title");
-          String icon = jsonObject.optString("icon");
-          if (position != null) {
-            LatLng latLng = new LatLng(position.optDouble(1), position.optDouble(0));
-            final MarkerOptions markerOptions = new MarkerOptions();
-            //设置Marker可拖动
-            markerOptions.draggable(true);
-            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-            markerOptions.setFlat(true);
-            if (latLng != null) {
-              markerOptions.position(latLng);
-            }
-            if (!TextUtils.isEmpty(title)) {
-              markerOptions.title(title);
-            }
-            if (!TextUtils.isEmpty(icon)) {
-              IWXImgLoaderAdapter adapter = WXSDKManager.getInstance().getIWXImgLoaderAdapter();
-              ImageView imageView = new ImageView(getContext());
-              imageView.setLayoutParams(new ViewGroup.LayoutParams(1, 1));
-              imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-              if (adapter != null) {
-                WXImageStrategy wxImageStrategy = new WXImageStrategy();
-                wxImageStrategy.setImageListener(new WXImageStrategy.ImageListener() {
-                  @Override
-                  public void onImageFinish(String url, ImageView imageView, boolean result, Map extra) {
-                    imageView.setLayoutParams(
-                        new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-                    markerOptions.icon(BitmapDescriptorFactory.fromView(imageView));
-                    mAMap.addMarker(markerOptions);
-                  }
-                });
-                wxImageStrategy.placeHolder = icon;
-                adapter.setImage(icon, imageView, WXImageQuality.NORMAL, wxImageStrategy);
-
-              }
-            } else {
-              mAMap.addMarker(markerOptions);
-            }
-          }
-        }
-      }
-    } catch (JSONException e) {
-      e.printStackTrace();
-    }
-  }
+//  @WXComponentProp(name = Constant.Name.MARKER)
+//  public void setMarker(String markers) {
+//    try {
+//      JSONArray jsonArray = new JSONArray(markers);
+//      for (int i = 0; i < jsonArray.length(); i++) {
+//        JSONObject jsonObject = jsonArray.optJSONObject(i);
+//        if (jsonObject != null) {
+//          JSONArray position = jsonObject.optJSONArray("position");
+//          String title = jsonObject.optString("title");
+//          String icon = jsonObject.optString("icon");
+//          if (position != null) {
+//            LatLng latLng = new LatLng(position.optDouble(1), position.optDouble(0));
+//            final MarkerOptions markerOptions = new MarkerOptions();
+//            //设置Marker可拖动
+//            markerOptions.draggable(true);
+//            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+//            markerOptions.setFlat(true);
+//            if (latLng != null) {
+//              markerOptions.position(latLng);
+//            }
+//            if (!TextUtils.isEmpty(title)) {
+//              markerOptions.title(title);
+//            }
+//            if (!TextUtils.isEmpty(icon)) {
+//              IWXImgLoaderAdapter adapter = WXSDKManager.getInstance().getIWXImgLoaderAdapter();
+//              ImageView imageView = new ImageView(getContext());
+//              imageView.setLayoutParams(new ViewGroup.LayoutParams(1, 1));
+//              imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
+//              if (adapter != null) {
+//                WXImageStrategy wxImageStrategy = new WXImageStrategy();
+//                wxImageStrategy.setImageListener(new WXImageStrategy.ImageListener() {
+//                  @Override
+//                  public void onImageFinish(String url, ImageView imageView, boolean result, Map extra) {
+//                    imageView.setLayoutParams(
+//                        new ViewGroup.LayoutParams(
+//                            ViewGroup.LayoutParams.WRAP_CONTENT,
+//                            ViewGroup.LayoutParams.WRAP_CONTENT));
+//                    markerOptions.icon(BitmapDescriptorFactory.fromView(imageView));
+//                    mAMap.addMarker(markerOptions);
+//                  }
+//                });
+//                wxImageStrategy.placeHolder = icon;
+//                adapter.setImage(icon, imageView, WXImageQuality.NORMAL, wxImageStrategy);
+//
+//              }
+//            } else {
+//              mAMap.addMarker(markerOptions);
+//            }
+//          }
+//        }
+//      }
+//    } catch (JSONException e) {
+//      e.printStackTrace();
+//    }
+//  }
 
   @WXComponentProp(name = Constant.Name.GESTURE)
   public void setGesture(int gesture) {

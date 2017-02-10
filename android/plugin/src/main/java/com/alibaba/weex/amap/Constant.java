@@ -15,6 +15,7 @@ public class Constant {
 
     public static interface Name {
 
+        // mapview
         String SCALECONTROL = "scale";
         String ZOOM_ENABLE = "zoomEnable";
         String ZOOM = "zoom";
@@ -23,7 +24,12 @@ public class Constant {
         String GESTURE = "gesture";
         String INDOORSWITCH = "indoorswitch";
         String CENTER = "center";
-        String MARKER = "marker";
 
+        // marker
+        String MARKER = "marker";
+        String POSITION = "position";
+        String ICON = "icon";
+        String TITLE = "title";
+        String REPEAT = "repeat";
     }
 }
