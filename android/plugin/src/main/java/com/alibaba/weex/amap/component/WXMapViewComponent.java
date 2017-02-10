@@ -2,11 +2,10 @@ package com.alibaba.weex.amap.component;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.text.TextUtils;
 import android.util.Log;
+import android.view.DragEvent;
+import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
 
 import com.alibaba.weex.amap.Constant;
 import com.amap.api.location.AMapLocation;
@@ -18,28 +17,18 @@ import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.UiSettings;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
+import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
-import com.amap.api.maps.model.MarkerOptions;
 import com.taobao.weex.WXSDKInstance;
-import com.taobao.weex.WXSDKManager;
-import com.taobao.weex.adapter.IWXImgLoaderAdapter;
 import com.taobao.weex.annotation.JSMethod;
-import com.taobao.weex.common.WXImageStrategy;
 import com.taobao.weex.dom.WXDomObject;
-import com.taobao.weex.dom.WXImageQuality;
-import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.utils.WXLogUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.List;
-import java.util.Map;
 
 public class WXMapViewComponent extends WXVContainer<MapView> implements LocationSource,
     AMapLocationListener {
@@ -52,31 +41,15 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
   private boolean isZoomEnable = true;
   private boolean compass = true;
   private boolean myLocation = false;
+  private float mZoomLevel;
   private int gesture = 0xF;
   private boolean indoorSwitch = false;
 
   private OnLocationChangedListener mListener;
-  private AMapLocationClient mLocationClient;
-  private AMapLocationClientOption mLocationOption;
-  AMap.OnMarkerClickListener markerClickListener = new AMap.OnMarkerClickListener() {
-    // marker 对象被点击时回调的接口
-    // 返回 true 则表示接口已响应事件，否则返回false
-    @Override
-    public boolean onMarkerClick(Marker marker) {
 
-      if (marker != null) {
-        for (int i = 0; i < getChildCount(); i++) {
-          if (getChild(i) instanceof WxMapMarkerComponent) {
-            WxMapMarkerComponent child = (WxMapMarkerComponent)getChild(i);
-            if (child.getMarker() != null && child.getMarker().getId() == marker.getId()) {
-              child.onClick();
-            }
-          }
-        }
-      }
-      return false;
-    }
-  };
+  private AMapLocationClient mLocationClient;
+
+  private AMapLocationClientOption mLocationOption;
 
 
   public WXMapViewComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
@@ -88,6 +61,15 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
   protected MapView initComponentHostView(@NonNull Context context) {
     mMapView = new MapView(context);
     mMapView.onCreate(null);
+
+    mMapView.setOnDragListener(new View.OnDragListener() {
+      @Override
+      public boolean onDrag(View v, DragEvent event) {
+        getInstance().fireEvent(getRef(), Constant.EVENT.DRAG_CHANGE);
+        return false;
+      }
+    });
+
     initMap();
     return mMapView;
   }
@@ -95,8 +77,69 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
   private void initMap() {
     if (mAMap == null) {
       mAMap = mMapView.getMap();
+
+      mAMap.setOnMapLoadedListener(new AMap.OnMapLoadedListener() {
+        @Override
+        public void onMapLoaded() {
+          mZoomLevel = mAMap.getCameraPosition().zoom;
+        }
+      });
+
       // 绑定 Marker 被点击事件
-      mAMap.setOnMarkerClickListener(markerClickListener);
+      mAMap.setOnMarkerClickListener(new AMap.OnMarkerClickListener() {
+        // marker 对象被点击时回调的接口
+        // 返回 true 则表示接口已响应事件，否则返回false
+        @Override
+        public boolean onMarkerClick(Marker marker) {
+
+          if (marker != null) {
+            for (int i = 0; i < getChildCount(); i++) {
+              if (getChild(i) instanceof WxMapMarkerComponent) {
+                WxMapMarkerComponent child = (WxMapMarkerComponent) getChild(i);
+                if (child.getMarker() != null && child.getMarker().getId() == marker.getId()) {
+                  child.onClick();
+                }
+              }
+            }
+          }
+          return false;
+        }
+      });
+      mAMap.setOnCameraChangeListener(new AMap.OnCameraChangeListener() {
+
+        private boolean mZoomChanged;
+
+        @Override
+        public void onCameraChange(CameraPosition cameraPosition) {
+          mZoomChanged = mZoomLevel != cameraPosition.zoom;
+          mZoomLevel = cameraPosition.zoom;
+        }
+
+        @Override
+        public void onCameraChangeFinish(CameraPosition cameraPosition) {
+          if (mZoomChanged) {
+            getInstance().fireEvent(getRef(), Constant.EVENT.ZOOM_CHANGE);
+          }
+        }
+      });
+
+      mAMap.setOnMapTouchListener(new AMap.OnMapTouchListener() {
+        boolean dragged = false;
+
+        @Override
+        public void onTouch(MotionEvent motionEvent) {
+
+          switch (motionEvent.getAction()) {
+            case MotionEvent.ACTION_MOVE:
+              dragged = true;
+              break;
+            case MotionEvent.ACTION_UP:
+              if (dragged) getInstance().fireEvent(getRef(), Constant.EVENT.DRAG_CHANGE);
+              dragged = false;
+              break;
+          }
+        }
+      });
       setUpMap();
     }
   }

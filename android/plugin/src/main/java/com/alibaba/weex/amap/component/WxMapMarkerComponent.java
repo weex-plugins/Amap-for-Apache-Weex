@@ -181,7 +181,6 @@ public class WxMapMarkerComponent extends WXComponent<View> {
         protected void onPostExecute(Uri result) {
           if (result != null && new File(result.getPath()).exists()) {
             if (isGif(result.getPath())) {
-              Log.v("setMarkerIcon" , "this icon is a gif file");
               GifDecoder gifDecoder = new GifDecoder();
               FileInputStream imgFile = null;
               try {
@@ -192,7 +191,6 @@ public class WxMapMarkerComponent extends WXComponent<View> {
                 for (int i = 1; i < gifDecoder.getFrameCount(); i++) {
                   Bitmap bitmap = gifDecoder.getFrame(i);
                   if (bitmap != null && !bitmap.isRecycled()) {
-                    Log.v("setMarkerIcon" , "this icon is a gif file " + i);
                     bitmapDescriptors.add(BitmapDescriptorFactory.fromBitmap(bitmap));
                   }
                 }
@@ -316,24 +314,24 @@ public class WxMapMarkerComponent extends WXComponent<View> {
     return null;
   }
 
-  private String getMd5(String str) {
-    try {
-      MessageDigest md5 = MessageDigest.getInstance("MD5");
-      byte[] bs = md5.digest(str.getBytes());
-      StringBuilder sb = new StringBuilder(40);
-      for(byte x:bs) {
-        if((x & 0xff)>>4 == 0) {
-          sb.append("0").append(Integer.toHexString(x & 0xff));
-        } else {
-          sb.append(Integer.toHexString(x & 0xff));
-        }
-      }
-      return sb.toString();
-    } catch (NoSuchAlgorithmException e) {
-      e.printStackTrace();
-    }
-    return null;
-  }
+//  private String getMd5(String str) {
+//    try {
+//      MessageDigest md5 = MessageDigest.getInstance("MD5");
+//      byte[] bs = md5.digest(str.getBytes());
+//      StringBuilder sb = new StringBuilder(40);
+//      for(byte x:bs) {
+//        if((x & 0xff)>>4 == 0) {
+//          sb.append("0").append(Integer.toHexString(x & 0xff));
+//        } else {
+//          sb.append(Integer.toHexString(x & 0xff));
+//        }
+//      }
+//      return sb.toString();
+//    } catch (NoSuchAlgorithmException e) {
+//      e.printStackTrace();
+//    }
+//    return null;
+//  }
 
   public static boolean isGif(String file) {
     FileInputStream imgFile = null;

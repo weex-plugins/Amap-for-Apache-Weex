@@ -234,13 +234,13 @@ public class GifDecoder {
 
       BitmapFactory.Options options = new BitmapFactory.Options();
       options.inMutable = true;
-      options.inPreferredConfig = Bitmap.Config.RGB_565;
+      options.inPreferredConfig = Bitmap.Config.ARGB_8888;
       Bitmap newBitmap = BitmapFactory.decodeStream(new BufferedInputStream(new ByteArrayInputStream(outputStream.toByteArray())));
       if (newBitmap != null) {
         if (mLastImage == null) {
           return newBitmap;
         } else {
-          Bitmap bitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.RGB_565);
+          Bitmap bitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
           Canvas canvas = new Canvas(bitmap);
           canvas.drawBitmap(mLastImage, 0, 0, null);
           canvas.drawBitmap(newBitmap, 0, 0, null);
