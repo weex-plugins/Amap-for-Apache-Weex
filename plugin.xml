@@ -134,8 +134,8 @@
              target-dir="src/com/alibaba/weex/amap/module" />
 
 
-         <source-file src="android/plugin/src/main/java/com/alibaba/weex/amap/Constant.java"
-            target-dir="src/com/alibaba/weex/amap" />
+         <source-file src="android/plugin/src/main/java/com/alibaba/weex/amap/util/Constant.java"
+            target-dir="src/com/alibaba/weex/amap/util" />
 
          <framework src="com.amap.api:map3d-native:latest.integration" />
          <framework src="com.amap.api:map3d:latest.integration" />
