@@ -82,8 +82,8 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
 
           if (marker != null) {
             for (int i = 0; i < getChildCount(); i++) {
-              if (getChild(i) instanceof WxMapMarkerComponent) {
-                WxMapMarkerComponent child = (WxMapMarkerComponent) getChild(i);
+              if (getChild(i) instanceof WXMapMarkerComponent) {
+                WXMapMarkerComponent child = (WXMapMarkerComponent) getChild(i);
                 if (child.getMarker() != null && child.getMarker().getId() == marker.getId()) {
                   child.onClick();
                 }

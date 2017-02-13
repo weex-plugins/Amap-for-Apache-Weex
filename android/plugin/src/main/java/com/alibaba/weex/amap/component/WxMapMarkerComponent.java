@@ -44,19 +44,19 @@ import java.util.ArrayList;
  * Created by budao on 2017/2/9.
  */
 
-public class WxMapMarkerComponent extends WXComponent<View> {
+public class WXMapMarkerComponent extends WXComponent<View> {
   private Marker mMarker;
   private MapView mMapView;
 
-  public WxMapMarkerComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, String instanceId, boolean isLazy) {
+  public WXMapMarkerComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, String instanceId, boolean isLazy) {
     super(instance, dom, parent, instanceId, isLazy);
   }
 
-  public WxMapMarkerComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
+  public WXMapMarkerComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
     super(instance, dom, parent, isLazy);
   }
 
-  public WxMapMarkerComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
+  public WXMapMarkerComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
     super(instance, dom, parent);
 
   }
