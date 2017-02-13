@@ -3,11 +3,9 @@ package com.alibaba.weex.amap.component;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.MotionEvent;
-import android.view.View;
 
-import com.alibaba.weex.amap.Constant;
+import com.alibaba.weex.amap.util.Constant;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -35,22 +33,18 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
 
   private MapView mMapView;
   private AMap mAMap;
-  private UiSettings uiSettings;
+  private UiSettings mUiSettings;
 
   private boolean isScaleEnable = true;
   private boolean isZoomEnable = true;
-  private boolean compass = true;
-  private boolean myLocation = false;
+  private boolean isCompassEnable = true;
+  private boolean isMyLocationEnable = false;
   private float mZoomLevel;
-  private int gesture = 0xF;
-  private boolean indoorSwitch = false;
-
-  private OnLocationChangedListener mListener;
-
+  private int mGesture = 0xF;
+  private boolean isIndoorSwitchEnable = false;
+  private OnLocationChangedListener mLocationChangedListener;
   private AMapLocationClient mLocationClient;
-
   private AMapLocationClientOption mLocationOption;
-
 
   public WXMapViewComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
     super(instance, dom, parent, isLazy);
@@ -61,15 +55,6 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
   protected MapView initComponentHostView(@NonNull Context context) {
     mMapView = new MapView(context);
     mMapView.onCreate(null);
-
-    mMapView.setOnDragListener(new View.OnDragListener() {
-      @Override
-      public boolean onDrag(View v, DragEvent event) {
-        getInstance().fireEvent(getRef(), Constant.EVENT.DRAG_CHANGE);
-        return false;
-      }
-    });
-
     initMap();
     return mMapView;
   }
@@ -145,45 +130,45 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
   }
 
   private void setUpMap() {
-    uiSettings = mAMap.getUiSettings();
+    mUiSettings = mAMap.getUiSettings();
 
-    uiSettings.setScaleControlsEnabled(isScaleEnable);
-    uiSettings.setZoomControlsEnabled(isZoomEnable);
-    uiSettings.setCompassEnabled(compass);
-    uiSettings.setIndoorSwitchEnabled(indoorSwitch);
+    mUiSettings.setScaleControlsEnabled(isScaleEnable);
+    mUiSettings.setZoomControlsEnabled(isZoomEnable);
+    mUiSettings.setCompassEnabled(isCompassEnable);
+    mUiSettings.setIndoorSwitchEnabled(isIndoorSwitchEnable);
 
 
-    setMyLocationStatus(myLocation);
+    setMyLocationStatus(isMyLocationEnable);
     updateGestureSetting();
 
   }
 
   private void updateGestureSetting() {
-    if ((gesture & 0xF) == 0xF) {
-      uiSettings.setAllGesturesEnabled(true);
+    if ((mGesture & 0xF) == 0xF) {
+      mUiSettings.setAllGesturesEnabled(true);
     } else {
-      if ((gesture & Constant.Value.SCROLLGESTURE) == Constant.Value.SCROLLGESTURE) {
-        uiSettings.setScrollGesturesEnabled(true);
+      if ((mGesture & Constant.Value.SCROLLGESTURE) == Constant.Value.SCROLLGESTURE) {
+        mUiSettings.setScrollGesturesEnabled(true);
       } else {
-        uiSettings.setScrollGesturesEnabled(false);
+        mUiSettings.setScrollGesturesEnabled(false);
       }
 
-      if ((gesture & Constant.Value.ZOOMGESTURE) == Constant.Value.ZOOMGESTURE) {
-        uiSettings.setZoomGesturesEnabled(true);
+      if ((mGesture & Constant.Value.ZOOMGESTURE) == Constant.Value.ZOOMGESTURE) {
+        mUiSettings.setZoomGesturesEnabled(true);
       } else {
-        uiSettings.setZoomGesturesEnabled(false);
+        mUiSettings.setZoomGesturesEnabled(false);
       }
 
-      if ((gesture & Constant.Value.TILTGESTURE) == Constant.Value.TILTGESTURE) {
-        uiSettings.setTiltGesturesEnabled(true);
+      if ((mGesture & Constant.Value.TILTGESTURE) == Constant.Value.TILTGESTURE) {
+        mUiSettings.setTiltGesturesEnabled(true);
       } else {
-        uiSettings.setTiltGesturesEnabled(false);
+        mUiSettings.setTiltGesturesEnabled(false);
       }
 
-      if ((gesture & Constant.Value.ROTATEGESTURE) == Constant.Value.ROTATEGESTURE) {
-        uiSettings.setRotateGesturesEnabled(true);
+      if ((mGesture & Constant.Value.ROTATEGESTURE) == Constant.Value.ROTATEGESTURE) {
+        mUiSettings.setRotateGesturesEnabled(true);
       } else {
-        uiSettings.setRotateGesturesEnabled(false);
+        mUiSettings.setRotateGesturesEnabled(false);
       }
     }
   }
@@ -191,8 +176,8 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
   @JSMethod
   public void setMyLocationButtonEnabled(boolean enabled) {
 
-    if (uiSettings != null) {
-      uiSettings.setMyLocationButtonEnabled(enabled);
+    if (mUiSettings != null) {
+      mUiSettings.setMyLocationButtonEnabled(enabled);
 
     }
   }
@@ -224,13 +209,13 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
   @WXComponentProp(name = Constant.Name.SCALECONTROL)
   public void setScaleEnable(boolean scaleEnable) {
     this.isScaleEnable = scaleEnable;
-    uiSettings.setScaleControlsEnabled(scaleEnable);
+    mUiSettings.setScaleControlsEnabled(scaleEnable);
   }
 
   @WXComponentProp(name = Constant.Name.ZOOM_ENABLE)
   public void setZoomEnable(boolean zoomEnable) {
     this.isZoomEnable = zoomEnable;
-    uiSettings.setZoomControlsEnabled(zoomEnable);
+    mUiSettings.setZoomControlsEnabled(zoomEnable);
   }
 
   @WXComponentProp(name = Constant.Name.ZOOM)
@@ -240,14 +225,14 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
 
   @WXComponentProp(name = Constant.Name.COMPASS)
   public void setCompass(boolean compass) {
-    this.compass = compass;
-    uiSettings.setCompassEnabled(compass);
+    this.isCompassEnable = compass;
+    mUiSettings.setCompassEnabled(compass);
   }
 
   @WXComponentProp(name = Constant.Name.GEOLOCATION)
-  public void setMyLocation(boolean myLocation) {
-    this.myLocation = myLocation;
-    setMyLocationStatus(myLocation);
+  public void setMyLocationEnable(boolean myLocationEnable) {
+    this.isMyLocationEnable = myLocationEnable;
+    setMyLocationStatus(myLocationEnable);
   }
 
   @WXComponentProp(name = Constant.Name.CENTER)
@@ -319,21 +304,21 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
 
   @WXComponentProp(name = Constant.Name.GESTURE)
   public void setGesture(int gesture) {
-    this.gesture = gesture;
+    this.mGesture = gesture;
     updateGestureSetting();
   }
 
   @WXComponentProp(name = Constant.Name.INDOORSWITCH)
-  public void setIndoorSwitch(boolean indoorSwitch) {
-    this.indoorSwitch = indoorSwitch;
-    uiSettings.setIndoorSwitchEnabled(indoorSwitch);
+  public void setIndoorSwitchEnable(boolean indoorSwitchEnable) {
+    this.isIndoorSwitchEnable = indoorSwitchEnable;
+    mUiSettings.setIndoorSwitchEnabled(indoorSwitchEnable);
   }
 
   public void setMyLocationStatus(boolean isActive) {
 
     if (isActive) {
       mAMap.setLocationSource(this);// 设置定位监听
-      uiSettings.setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
+      mUiSettings.setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
       mAMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
       // 设置定位的类型为定位模式 ，可以由定位、跟随或地图根据面向方向旋转几种
       mAMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
@@ -341,13 +326,13 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
       deactivate();
       mAMap.setLocationSource(null);
       mAMap.setMyLocationEnabled(false);
-      uiSettings.setMyLocationButtonEnabled(false);
+      mUiSettings.setMyLocationButtonEnabled(false);
     }
   }
 
   @Override
   public void activate(OnLocationChangedListener listener) {
-    mListener = listener;
+    mLocationChangedListener = listener;
     if (mLocationClient == null) {
       mLocationClient = new AMapLocationClient(getContext());
       mLocationOption = new AMapLocationClientOption();
@@ -367,7 +352,7 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
 
   @Override
   public void deactivate() {
-    mListener = null;
+    mLocationChangedListener = null;
     if (mLocationClient != null) {
       mLocationClient.stopLocation();
       mLocationClient.onDestroy();
@@ -377,10 +362,10 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
 
   @Override
   public void onLocationChanged(AMapLocation amapLocation) {
-    if (mListener != null && amapLocation != null) {
+    if (mLocationChangedListener != null && amapLocation != null) {
       if (amapLocation != null
           && amapLocation.getErrorCode() == 0) {
-        mListener.onLocationChanged(amapLocation);// 显示系统小蓝点
+        mLocationChangedListener.onLocationChanged(amapLocation);// 显示系统小蓝点
         // mAMap.moveCamera(CameraUpdateFactory.zoomTo(18));
       } else {
         String errText = "定位失败," + amapLocation.getErrorCode() + ": " + amapLocation.getErrorInfo();

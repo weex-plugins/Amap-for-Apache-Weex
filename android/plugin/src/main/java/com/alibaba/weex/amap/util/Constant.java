@@ -1,4 +1,4 @@
-package com.alibaba.weex.amap;
+package com.alibaba.weex.amap.util;
 
 /**
  * Created by aoxiao on 2017/1/4.

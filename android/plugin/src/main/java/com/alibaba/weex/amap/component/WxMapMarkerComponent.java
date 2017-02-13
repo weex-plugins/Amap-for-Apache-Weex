@@ -6,11 +6,11 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 
-import com.alibaba.weex.amap.Constant;
-import com.amap.api.maps.AMap;
+import com.alibaba.weex.amap.util.Constant;
+import com.alibaba.weex.amap.util.GifDecoder;
+import com.alibaba.weex.amap.util.Utils;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
@@ -38,8 +38,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 
 /**
@@ -49,7 +47,6 @@ import java.util.ArrayList;
 public class WxMapMarkerComponent extends WXComponent<View> {
   private Marker mMarker;
   private MapView mMapView;
-  private AMap mAMap;
 
   public WxMapMarkerComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, String instanceId, boolean isLazy) {
     super(instance, dom, parent, instanceId, isLazy);
@@ -68,7 +65,6 @@ public class WxMapMarkerComponent extends WXComponent<View> {
   protected View initComponentHostView(@NonNull Context context) {
     if (getParent() != null && getParent() instanceof WXMapViewComponent) {
       mMapView = ((WXMapViewComponent) getParent()).getHostView();
-      mAMap = mMapView.getMap();
       String title = (String) getDomObject().getAttrs().get(Constant.Name.TITLE);
       String icon = (String) getDomObject().getAttrs().get(Constant.Name.ICON);
       String position = getDomObject().getAttrs().get(Constant.Name.POSITION).toString();
@@ -78,41 +74,11 @@ public class WxMapMarkerComponent extends WXComponent<View> {
     return new View(context);
   }
 
-//  public void updateProperties(Map<String, Object> props) {
-//    if (props == null) {
-//      return;
-//    }
-//
-//    for(String key : props.keySet()) {
-//      Object param = props.get(key);
-//      String value = WXUtils.getString(param, null);
-//      if (TextUtils.isEmpty(value)) {
-//        param = convertEmptyProperty(key);
-//      }
-//      if(!setProperty(key, param)){
-//        Invoker invoker = mHolder.getPropertyInvoker(key);
-//        if (invoker != null) {
-//          try {
-//            Type[] paramClazzs = invoker.getParameterTypes();
-//            if (paramClazzs.length != 1) {
-//              WXLogUtils.e("[WXComponent] setX method only one parameter：" + invoker);
-//              return;
-//            }
-//            param = WXReflectionUtils.parseArgument(paramClazzs[0],props.get(key));
-//            invoker.invoke(this, param);
-//          } catch (Exception e) {
-//            WXLogUtils.e("[WXComponent] updateProperties :" + "class:" + getClass() + "method:" + invoker.toString() + " function " + WXLogUtils.getStackTrace(e));
-//          }
-//        }
-//      }
-//    }
-//  }
-
   @Override
   protected boolean setProperty(String key, Object param) {
     switch (key) {
       case Constants.Name.POSITION:
-        String position = WXUtils.getString(param,null);
+        String position = WXUtils.getString(param, null);
         if (position != null)
           setPosition(position);
         return true;
@@ -157,7 +123,7 @@ public class WxMapMarkerComponent extends WXComponent<View> {
     markerOptions.draggable(true);
     // 将Marker设置为贴地显示，可以双指下拉地图查看效果
     markerOptions.setFlat(true);
-    mMarker = mAMap.addMarker(markerOptions);
+    mMarker = mMapView.getMap().addMarker(markerOptions);
     setMarkerTitle(title);
     setMarkerPosition(position);
     setMarkerIcon(icon);
@@ -170,7 +136,7 @@ public class WxMapMarkerComponent extends WXComponent<View> {
         @Override
         protected Uri doInBackground(Void... params) {
           try {
-            return getImageUri(icon, getContext().getExternalCacheDir());
+            return fetchIcon(icon, getContext().getExternalCacheDir());
           } catch (Exception e) {
             e.printStackTrace();
           }
@@ -180,7 +146,7 @@ public class WxMapMarkerComponent extends WXComponent<View> {
         @Override
         protected void onPostExecute(Uri result) {
           if (result != null && new File(result.getPath()).exists()) {
-            if (isGif(result.getPath())) {
+            if (Utils.isGif(result.getPath())) {
               GifDecoder gifDecoder = new GifDecoder();
               FileInputStream imgFile = null;
               try {
@@ -257,7 +223,7 @@ public class WxMapMarkerComponent extends WXComponent<View> {
     mMarker.setTitle(title);
   }
 
-  private Uri getImageUri(String path, File cache) {
+  private Uri fetchIcon(String path, File cache) {
     String name = Uri.encode(path);
     File file = new File(cache, name);
     // 如果图片存在本地缓存目录，则不去服务器下载
@@ -312,46 +278,5 @@ public class WxMapMarkerComponent extends WXComponent<View> {
 
     }
     return null;
-  }
-
-//  private String getMd5(String str) {
-//    try {
-//      MessageDigest md5 = MessageDigest.getInstance("MD5");
-//      byte[] bs = md5.digest(str.getBytes());
-//      StringBuilder sb = new StringBuilder(40);
-//      for(byte x:bs) {
-//        if((x & 0xff)>>4 == 0) {
-//          sb.append("0").append(Integer.toHexString(x & 0xff));
-//        } else {
-//          sb.append(Integer.toHexString(x & 0xff));
-//        }
-//      }
-//      return sb.toString();
-//    } catch (NoSuchAlgorithmException e) {
-//      e.printStackTrace();
-//    }
-//    return null;
-//  }
-
-  public static boolean isGif(String file) {
-    FileInputStream imgFile = null;
-    try {
-      imgFile = new FileInputStream(file);
-      byte[] header = new byte[3];
-      int length = imgFile.read(header);
-      return length == 3 && header[0] == (byte) 'G' && header[1] == (byte) 'I' && header[2] == (byte) 'F';
-    } catch (Exception e) {
-      // ignore
-    } finally {
-      if (imgFile != null) {
-        try {
-          imgFile.close();
-        } catch (IOException e) {
-          e.printStackTrace();
-        }
-      }
-    }
-
-    return false;
   }
 }
