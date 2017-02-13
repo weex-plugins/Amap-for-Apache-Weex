@@ -100,6 +100,13 @@
              </feature>
          </config-file>
          <config-file target="config.xml" parent="/*">
+             <feature name="WXMapMarkerComponent">
+                 <param name="category" value="component" />
+                 <param name="android-package" value="com.alibaba.weex.amap.component.WXMapMarkerComponent" />
+                 <param name="api" value="weex-amap-marker" />
+             </feature>
+         </config-file>
+         <config-file target="config.xml" parent="/*">
              <feature name="WXMapModule">
                  <param name="category" value="module" />
                  <param name="android-package" value="com.alibaba.weex.amap.module.WXMapModule" />
@@ -129,6 +136,9 @@
          <source-file
              src="android/plugin/src/main/java/com/alibaba/weex/amap/component/WXMapViewComponent.java"
             target-dir="src/com/alibaba/weex/amap/component" />
+         <source-file
+             src="android/plugin/src/main/java/com/alibaba/weex/amap/component/WXMapMarkerComponent.java"
+             target-dir="src/com/alibaba/weex/amap/component" />
          <source-file
              src="android/plugin/src/main/java/com/alibaba/weex/amap/module/WXMapModule.java"
              target-dir="src/com/alibaba/weex/amap/module" />
