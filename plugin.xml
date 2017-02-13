@@ -142,9 +142,14 @@
          <source-file
              src="android/plugin/src/main/java/com/alibaba/weex/amap/module/WXMapModule.java"
              target-dir="src/com/alibaba/weex/amap/module" />
-
-
-         <source-file src="android/plugin/src/main/java/com/alibaba/weex/amap/util/Constant.java"
+         <source-file
+             src="android/plugin/src/main/java/com/alibaba/weex/amap/util/Utils.java"
+             target-dir="src/com/alibaba/weex/amap/util" />
+         <source-file
+             src="android/plugin/src/main/java/com/alibaba/weex/amap/util/GifDecoder.java"
+             target-dir="src/com/alibaba/weex/amap/util" />
+         <source-file
+             src="android/plugin/src/main/java/com/alibaba/weex/amap/util/Constant.java"
             target-dir="src/com/alibaba/weex/amap/util" />
 
          <framework src="com.amap.api:map3d-native:latest.integration" />
