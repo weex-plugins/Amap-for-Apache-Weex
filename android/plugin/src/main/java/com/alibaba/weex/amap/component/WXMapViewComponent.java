@@ -2,6 +2,7 @@ package com.alibaba.weex.amap.component;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 
@@ -14,6 +15,7 @@ import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapView;
+import com.amap.api.maps.MapsInitializer;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
@@ -27,6 +29,7 @@ import com.taobao.weex.utils.WXLogUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 
 public class WXMapViewComponent extends WXVContainer<MapView> implements LocationSource,
     AMapLocationListener {
@@ -204,6 +207,20 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
     if (mLocationClient != null) {
       mLocationClient.onDestroy();
     }
+  }
+
+  @WXComponentProp(name = Constant.Name.KEYS)
+  public void setApiKey(String keys) {
+    try {
+      JSONObject object = new JSONObject(keys);
+      String key = object.optString("android");
+      if (TextUtils.isEmpty(key)) {
+        MapsInitializer.setApiKey(object.optString("android"));
+      }
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+
   }
 
   @WXComponentProp(name = Constant.Name.SCALECONTROL)
