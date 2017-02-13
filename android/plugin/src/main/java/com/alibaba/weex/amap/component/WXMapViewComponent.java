@@ -214,8 +214,10 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
     try {
       JSONObject object = new JSONObject(keys);
       String key = object.optString("android");
-      if (TextUtils.isEmpty(key)) {
-        MapsInitializer.setApiKey(object.optString("android"));
+      if (!TextUtils.isEmpty(key)) {
+        MapsInitializer.setApiKey(key);
+        AMapLocationClient.setApiKey(key);
+        //ServiceSettings.getInstance().setApiKey(key);
       }
     } catch (JSONException e) {
       e.printStackTrace();
