@@ -1,0 +1,3 @@
+[submodule "android/dev"]
+	path = android/dev
+	url = https://github.com/littleseven/weex-app-template
