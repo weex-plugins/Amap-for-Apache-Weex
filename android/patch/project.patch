@@ -1,9 +1,9 @@
 diff --git a/app/build.gradle b/app/build.gradle
-index f9fe6ed..19a7b0e 100755
+index b902bfe..555d003 100755
 --- a/app/build.gradle
 +++ b/app/build.gradle
 @@ -85,7 +85,7 @@ dependencies {
-     compile 'com.taobao.android:weex_sdk:0.9.4'
+     compile 'com.taobao.android:weex_sdk:0.10.1.1'
      compile project(':appframework')
      compile project(':weexplugin')
 -//    compile project(':plugin')
