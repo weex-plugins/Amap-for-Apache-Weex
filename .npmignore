@@ -1,4 +1,6 @@
 noude_moudles
 android/patch
 android/dev
-apply_android_dev.sh
+android_dev.sh
+android/plugin/build
+*.iml
