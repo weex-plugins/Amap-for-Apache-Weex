@@ -1,5 +1,5 @@
 # 如何开发
-如果想要开发amap，首先要准备好开发环境。 命令行运行
+如果想要开发amap，首先要准备好开发环境。 在android目录下运行
 ```
  sh android_dev.sh
 ```
@@ -12,7 +12,7 @@
 ## 插件开发的两个基本部分
 
 ### 组件或者模块开发
-这里是纯功能的开发，与普通的weex组件或者模块扩展无异，测试时需要在weexplugin的src/main/res/xml/config.xml中正确的配置才能成功加载，只需要在不涉及插件打包和发布。
+这里是纯功能的开发，与普通的weex组件或者模块扩展无异，测试时需要在weexplugin的src/main/res/xml/config.xml中正确的配置才能成功加载。
 
 ### 配置文件
 这里主要是修改插件根目录下的plugin.xml和.npmignore。其中
