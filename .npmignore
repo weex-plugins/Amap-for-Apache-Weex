@@ -1,4 +1,4 @@
 noude_moudles
-android/app
-android/appframework
-android/weexplugin
+android/patch
+android/dev
+apply_android_dev.sh

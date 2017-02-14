@@ -1,0 +1,52 @@
+diff --git a/app/build.gradle b/app/build.gradle
+index f9fe6ed..19a7b0e 100755
+--- a/app/build.gradle
++++ b/app/build.gradle
+@@ -85,7 +85,7 @@ dependencies {
+     compile 'com.taobao.android:weex_sdk:0.9.4'
+     compile project(':appframework')
+     compile project(':weexplugin')
+-//    compile project(':plugin')
++    compile project(':plugin')
+     compile 'com.google.code.findbugs:jsr305:2.0.1'
+     compile 'com.squareup.okhttp:okhttp:2.3.0'
+     compile 'com.squareup.okhttp:okhttp-ws:2.3.0'
+diff --git a/settings.gradle b/settings.gradle
+index 827f265..d91d926 100755
+--- a/settings.gradle
++++ b/settings.gradle
+@@ -1,8 +1,8 @@
+ include ':app'
+ include ':weexplugin'
+ include ":appframework"
+-//include ":plugin"
+-//project(":plugin").projectDir=new File("../plugin")
++include ":plugin"
++project(":plugin").projectDir=new File("../plugin")
+ 
+ //include ":inspector"
+ //project(":inspector").projectDir=new File("../inspector")
+diff --git a/weexplugin/src/main/res/xml/config.xml b/weexplugin/src/main/res/xml/config.xml
+index df0560c..4c8cd86 100644
+--- a/weexplugin/src/main/res/xml/config.xml
++++ b/weexplugin/src/main/res/xml/config.xml
+@@ -39,4 +39,19 @@
+         <param name="android-package" value="com.alibaba.weex.extend.module.DeviceModule"/>
+         <param name="category" value="module"/>
+     </feature>
++    <feature name="WXMapViewComponent">
++        <param name="api" value="weex-amap" />
++        <param name="android-package" value="com.alibaba.weex.amap.component.WXMapViewComponent" />
++        <param name="category" value="component" />
++    </feature>
++    <feature name="WxMapMarkerComponent">
++        <param name="api" value="weex-amap-marker" />
++        <param name="android-package" value="com.alibaba.weex.amap.component.WxMapMarkerComponent" />
++        <param name="category" value="component" />
++    </feature>
++    <feature name="WXMapModule">
++        <param name="api" value="amap" />
++        <param name="android-package" value="com.alibaba.weex.amap.module.WXMapModule" />
++        <param name="category" value="module" />
++    </feature>
+ </widget>

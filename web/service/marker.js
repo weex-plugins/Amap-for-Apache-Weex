@@ -1,4 +1,7 @@
 // a lib to manage all marker
+import amapManager from './map-manager';
+import vendor from './vendor';
+
 const markers = {};
 module.exports = {
   changeMarker(arr, map) {
@@ -12,7 +15,16 @@ module.exports = {
       }
     }
   },
-  addMarker(data, map) {
+  addMarker(data) {
+    const map = amapManager.getMap();
+    if (!map) {
+      return amapManager.addReadyCallback((mapIns) => {
+        this.setMarker(data, mapIns);
+      });
+    }
+    return this.setMarker(data, map);
+  },
+  setMarker(data, map) {
     let icon = null;
     if (data.icon) {
       icon = new AMap.Icon({
@@ -26,8 +38,20 @@ module.exports = {
       icon: icon,
       map: map,
     });
-    this.registerEvents(data.events, marker);
     markers[this.__getMid(data)] = marker;
+    this.registerEvents(data.events, marker);
+  },
+  removeMaker(data) {
+    const marker = this.findMarker(data);
+    marker.setMap(null);
+  },
+  updateMarker(data, attr, val) {
+    const marker = this.findMarker(data);
+    if (!marker) {
+      return false;
+    }
+    const method = vendor.setFirstLetterToUppercase(attr);
+    marker['set' + method](val);
   },
   registerEvents(events, marker) {
     if (typeof events === 'object') {
@@ -48,7 +72,7 @@ module.exports = {
     return markers[mid];
   },
   __getMid(data) {
-    return 'mid-' + data.position.join('-');
+    return 'mid-' + data.ref || data.position.join('-');
   },
   __isMaker(obj) {
     return typeof obj === 'object' && obj.CLASS_NAME === 'AMap.Marker';

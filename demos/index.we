@@ -1,7 +1,8 @@
 <template>
   <div class="container">
     <h3>Weex-plugin-amap demo</h3>
-    <weex-amap class="map" onzoomchange="{{zoomHandle}}" zoomchange="{{zoomHandle}}" id="map2017" scale="true" sdk-key={{keys}} geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}} marker={{pointArr}} >
+    <weex-amap class="map" ondragend="{{dragHandle}}"  onzoomchange="{{zoomHandle}}" id="map2017" scale="true" sdk-key={{keys}} geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}}>
+      <weex-amap-marker position="{{point.position}}" title="{{point.title}}" icon="{{point.icon}}" repeat="point in pointArr"  onclick="{{markerClick}}"></weex-amap-marker>
     </weex-amap>
     <div class="btn-wrap">
       <div onclick="changeCenter" class="btnbox"><text class="btn" >set Center</text></div>
@@ -12,9 +13,18 @@
       <text class="tips">随机添加标记点</text>
     </div>
     <div class="btn-wrap">
+      <div onclick="removePoints" class="btnbox"><text class="btn" >remove points</text></div>
+      <text class="tips">随机移除标记点</text>
+    </div>
+    <div class="btn-wrap">
+      <div onclick="changeMarker" class="btnbox"><text class="btn" >change marker props </text></div>
+      <text class="tips">修改标记属性</text>
+    </div>
+    <div class="btn-wrap">
       <div onclick="setUserLocation" class="btnbox"><text class="btn" >set location </text></div>
       <text class="tips">进行当前定位</text>
     </div>
+    
   </div>
 </template>
 
@@ -84,7 +94,7 @@
       keys: {
         h5:'f4b99dcd51752142ec0f1bdcb9a8ec02',
         ios: '',
-        android: ''
+        android: 'db6a973159cb0c2639ad02c617a786ae'
       },
       pos: [116.487, 40.00003],
       zoom: 9, 
@@ -100,8 +110,8 @@
         },
         {
           position: [116.4848977,40.0004496],
-          title: '故宫',
-          icon: 'http://img1.vued.vanthink.cn/vuede9952ac37558a5d32a70c553986bd958.png'
+          title: '火箭',
+          icon: 'http://img1.vued.vanthink.cn/vued6db28fd538a0446a3ab2fa2694d1ba57.gif'
         }
       ],
       map: {},
@@ -130,6 +140,18 @@
         });
       },
       
+      dragHandle() {
+        modal.alert({
+          message: 'drag end!'
+        });
+      },
+      
+      markerClick() {
+        modal.alert({
+          message: 'marker clicked!'
+        });
+      },
+      
       addPoints() {
         const coor = [115.9 + Math.random()*1,39.5 + Math.random()*0.5];
         this.pointArr.push({
@@ -145,7 +167,17 @@
         this.pointArr = Array.from(this.pointArr);
         console.log(this.mapInstance);
       },
-      
+      changeMarker() {
+        const coor = [115.9 + Math.random()*1,39.5 + Math.random()*0.5];
+        const point = {
+          position:coor,
+          title:'坐标:' + coor.join(','),
+          icon: 'http://img1.vued.vanthink.cn/vueda3685df0bda6b16805e380e852d99701.png'  
+        };
+        if(this.pointArr.length > 0) {
+          this.pointArr.$set(0, point);
+        } 
+      },
       setUserLocation() {
         let self = this;
         if(!Amap) {

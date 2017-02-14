@@ -19,14 +19,14 @@
 -->
 
 <plugin xmlns="http://apache.org/weexpack/ns/plugins/1.0"
-    id="weex-plugin-amap"
+    id="weex-amap"
     version="1.0.0">
-    <name>weex-plugin-amap</name>
+    <name>weex-amap</name>
     <description>weex mapview component</description>
     <license>Apache 2.0</license>
     <keywords>weex,map</keywords>
-    <repo>https://github.com/weexteam/weex-plugins</repo>
-    <issue>https://github.com/weexteam/weex-plugins/issues</issue>
+    <repo>https://github.com/weex-plugins/weex-plugin-amap</repo>
+    <issue>https://github.com/weex-plugins/weex-plugin-amap/issues</issue>
     <dependency id="weex-adapter-image" version="^1.0.0" />
 
 
@@ -40,6 +40,14 @@
                 <param name="api" value="weex-amap"/>
             </feature>
         </config-file>
+        
+        <config-file parent="/*" target="WeexpluginConfig.xml">
+            <feature name="WXMapViewMarkerComponent">
+                <param name="category" value="component" />
+                <param name="ios-package" value="WXMapViewMarkerComponent" />
+                <param name="api" value="weex-amap-marker" />
+            </feature>
+        </config-file>
 
         <config-file parent="/*" target="WeexpluginConfig.xml">
             <feature name="WXMapViewModule">
@@ -50,10 +58,12 @@
         </config-file>
 
 
-        <header-file src="ios/WXMapViewComponent.h"/>
-        <source-file src="ios/WXMapViewComponent.m"/>
-        <header-file src="ios/WXMapViewModule.h"/>
-        <source-file src="ios/WXMapViewModule.m"/>
+        <header-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapViewComponent.h"/>
+        <source-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapViewComponent.m"/>
+        <header-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapViewMarkerComponent.h"/>
+        <source-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapViewMarkerComponent.m"/>
+        <header-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapViewModule.h"/>
+        <source-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapViewModule.m"/>
 
         <framework src="ImageIO.framework" weak="true"/>
         <framework src="CoreLocation.framework"/>
@@ -90,6 +100,13 @@
              </feature>
          </config-file>
          <config-file target="config.xml" parent="/*">
+             <feature name="WXMapMarkerComponent">
+                 <param name="category" value="component" />
+                 <param name="android-package" value="com.alibaba.weex.amap.component.WXMapMarkerComponent" />
+                 <param name="api" value="weex-amap-marker" />
+             </feature>
+         </config-file>
+         <config-file target="config.xml" parent="/*">
              <feature name="WXMapModule">
                  <param name="category" value="module" />
                  <param name="android-package" value="com.alibaba.weex.amap.module.WXMapModule" />
@@ -120,12 +137,20 @@
              src="android/plugin/src/main/java/com/alibaba/weex/amap/component/WXMapViewComponent.java"
             target-dir="src/com/alibaba/weex/amap/component" />
          <source-file
+             src="android/plugin/src/main/java/com/alibaba/weex/amap/component/WXMapMarkerComponent.java"
+             target-dir="src/com/alibaba/weex/amap/component" />
+         <source-file
              src="android/plugin/src/main/java/com/alibaba/weex/amap/module/WXMapModule.java"
              target-dir="src/com/alibaba/weex/amap/module" />
-
-
-         <source-file src="android/plugin/src/main/java/com/alibaba/weex/amap/Constant.java"
-            target-dir="src/com/alibaba/weex/amap" />
+         <source-file
+             src="android/plugin/src/main/java/com/alibaba/weex/amap/util/Utils.java"
+             target-dir="src/com/alibaba/weex/amap/util" />
+         <source-file
+             src="android/plugin/src/main/java/com/alibaba/weex/amap/util/GifDecoder.java"
+             target-dir="src/com/alibaba/weex/amap/util" />
+         <source-file
+             src="android/plugin/src/main/java/com/alibaba/weex/amap/util/Constant.java"
+            target-dir="src/com/alibaba/weex/amap/util" />
 
          <framework src="com.amap.api:map3d-native:latest.integration" />
          <framework src="com.amap.api:map3d:latest.integration" />
