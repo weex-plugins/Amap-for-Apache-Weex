@@ -146,13 +146,13 @@
 
 npm install -g weexpack
 
-2.创建工程，如aaa
+2.创建工程，如MyApp
 
-weexpack create aaa
+weexpack create MyApp
 
 3.创建运行平台
 
-cd aaa & weexpack platform add ios (/android)
+cd MyApp & weexpack platform add ios (/android)
 
 4.添加地图插件
 
@@ -160,7 +160,7 @@ weexpack plugin add /users/abcd/Code/weex-plugins/weex-plugin-amap (这后面是
 
 5.编译和运行demo
 
-把demo文件（所有在目录plugins/weex-plugin-amap/demos/下的文件）拷贝到项目工程aaa/src下，然后：
+把demo文件（所有在目录plugins/weex-plugin-amap/demos/下的文件）拷贝到项目工程MyApp/src下，然后：
 
 对H5用如下命令：weexpack build web & weexpack run web
 
