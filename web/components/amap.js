@@ -11,7 +11,8 @@ const params = {
   toolbar: true,
   scale: false,
   geolocation: false,
-  resizeEnable: true
+  resizeEnable: true,
+  search: false
 };
 const events = [
   'zoomchange',
@@ -50,6 +51,11 @@ const proto = {
           self.map.addControl(new AMap.Geolocation());
         }
       });
+      if (params.search) {
+        AMap.service('AMap.PlaceSearch', () => {
+          this.placeSearch = new AMap.PlaceSearch();
+        });
+      }
       this.initEvents();
       amapManager.initMap(this.mapwrap.id, this.map);
     }
@@ -109,6 +115,12 @@ const attr = {
       key: key
     }, this.mapwrap, () => this.ready());
   },
+  search(val) {
+    params.search = val;
+    if (window.AMap) {
+        
+    }
+  }
 };
 
 const event = {
