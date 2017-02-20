@@ -1,0 +1,225 @@
+<template>
+  <div class="container">
+    
+    <div class="title">
+      <text>Demos of WEEX-PLUGIN-AMAP</text>
+    </div>
+    <div class="logo-wrap">
+      <image class="logo" src="https://gw.alicdn.com/tps/TB1m1l.PXXXXXczXFXXXXXXXXXX-800-600.png"></image>
+    </div>
+    
+    
+    
+    
+    <weex-amap class="map" ondragend="{{dragHandle}}"  onzoomchange="{{zoomHandle}}" id="map2017" scale="true" sdk-key={{keys}} geolocation="true" map-instance={{map}} zoom={{zoom}} center={{pos}}>
+      <weex-amap-marker position="{{point.position}}" title="{{point.title}}" icon="{{point.icon}}" repeat="point in pointArr"  onclick="{{markerClick}}"></weex-amap-marker>
+    </weex-amap>
+    <div class="btn-wrap">
+      <div onclick="changeCenter" class="btnbox"><text class="btn" >set Center</text></div>
+      <text class="tips">随机改变中心点</text>
+    </div>
+    <div class="btn-wrap">
+      <div onclick="addPoints" class="btnbox"><text class="btn" >add points</text></div>
+      <text class="tips">随机添加标记点</text>
+    </div>
+    <div class="btn-wrap">
+      <div onclick="removePoints" class="btnbox"><text class="btn" >remove points</text></div>
+      <text class="tips">随机移除标记点</text>
+    </div>
+    <div class="btn-wrap">
+      <div onclick="changeMarker" class="btnbox"><text class="btn" >change marker props </text></div>
+      <text class="tips">修改标记属性</text>
+    </div>
+    <div class="btn-wrap">
+      <div onclick="setUserLocation" class="btnbox"><text class="btn" >set location </text></div>
+      <text class="tips">进行当前定位</text>
+    </div>
+    
+  </div>
+</template>
+
+<style>
+  .container{
+    position: relative;
+    flex:1;
+  }
+  .title {
+    font-size: 28px;
+    padding: 20;
+    align-items: center;
+  }
+  .logo-wrap{
+    align-items: center;
+  }
+  .logo{
+    width: 240;
+    height: 180;
+  }
+  
+  .map{
+    position: relative;
+    background-color: #fff;
+    flex:1;
+  }
+  .btngeo{
+    flex:1;
+    position: relative;
+    left: 20;
+    width:60;
+    height:60;
+    margin-top: - 60;
+    background-color: #fff;
+    border-radius: 2;
+    border: 1px solid #ccc;
+    text-align:center;
+  }
+  .imggeo{
+    width: 30;
+    height: 30;
+  }
+  .btn-wrap{
+    display:flex;
+    flex-direction:row;
+    justify-content: center;
+  }
+  .btnbox{
+    flex:1;
+  }
+  .tips{
+    flex:1;
+    padding: 10;
+    color:#666;
+    font-size: 16;
+  }
+  .btn{
+    margin: 10;
+    padding: 10;
+    width:240;
+    background-color: #1ba1e2;
+    border-radius: 10;
+    color: #fff; 
+    text-align:center;
+    cursor: pointer;
+    font-size: 10;
+  }
+</style>
+
+<script>
+  var Amap = null;
+  try {
+    Amap = require('@weex-module/amap');
+  } catch(err) {
+    console.log(err);
+  }
+  var modal = require('@weex-module/modal');
+  module.exports = {
+    data: {
+      keys: {
+        h5:'f4b99dcd51752142ec0f1bdcb9a8ec02',
+        ios: '',
+        android: 'db6a973159cb0c2639ad02c617a786ae'
+      },
+      pos: [116.487, 40.00003],
+      zoom: 9, 
+      pointArr: [
+        {
+          position:[116.3944071,39.9278548],
+          title: '北京市',
+          events: {
+            click: function() {
+              modal.alert('北京市区');
+            }  
+          }
+        },
+        {
+          position: [116.4848977,40.0004496],
+          title: '火箭',
+          icon: 'http://img1.vued.vanthink.cn/vued6db28fd538a0446a3ab2fa2694d1ba57.gif'
+        }
+      ],
+      map: {},
+    },
+    
+    methods: {
+      changeCenter() {
+        this.pos = [116.4 + Math.random()*0.5,40.25 + Math.random()*0.25];
+      },
+      
+      increaseZoom() {
+        if(this.zoom <= 16) {
+          this.zoom ++; 
+        }
+      },
+      
+      decreaseZoom() {
+        if(this.zoom >= 3) {
+          this.zoom --; 
+        }
+      },
+      
+      zoomHandle() {
+        modal.alert({
+          message: 'zoom changed!'
+        });
+      },
+      
+      dragHandle() {
+        modal.alert({
+          message: 'drag end!'
+        });
+      },
+      
+      markerClick() {
+        modal.alert({
+          message: 'marker clicked!'
+        });
+      },
+      
+      addPoints() {
+        const coor = [115.9 + Math.random()*1,39.5 + Math.random()*0.5];
+        this.pointArr.push({
+          position:coor,
+          title:'坐标:' + coor.join(','),
+          icon: 'http://img1.vued.vanthink.cn/vueda3685df0bda6b16805e380e852d99701.png'  
+        });
+        this.pointArr = Array.from(this.pointArr);
+      },
+      
+      removePoints() {
+        this.pointArr.pop();
+        this.pointArr = Array.from(this.pointArr);
+        console.log(this.mapInstance);
+      },
+      changeMarker() {
+        const coor = [115.9 + Math.random()*1,39.5 + Math.random()*0.5];
+        const point = {
+          position:coor,
+          title:'坐标:' + coor.join(','),
+          icon: 'http://img1.vued.vanthink.cn/vueda3685df0bda6b16805e380e852d99701.png'  
+        };
+        if(this.pointArr.length > 0) {
+          this.pointArr.$set(0, point);
+        } 
+      },
+      setUserLocation() {
+        let self = this;
+        if(!Amap) {
+          // fixed require module bug
+          return this.pos = Math.random();;
+        }
+        Amap.getUserLocation(this.$el('map2017').ref, function (data) {
+          console.log(data);
+          if(data.result == 'success') {
+            self.pos = data.data.position;
+          }
+        });
+      }
+      
+    },
+    
+    created () {
+     // console.log(this.$vm('map2017'));
+    },
+    
+  }
+</script>
