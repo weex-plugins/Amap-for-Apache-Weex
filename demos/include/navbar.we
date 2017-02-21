@@ -45,10 +45,11 @@
   }
 </style>
 <script>
+  const navigator = require('@weex-module/navigator');
   module.exports = {
     methods: {
       goHome() {
-        this.$openURL('/web/index.html?page=/dist/index.js');
+        navigator.pop();
       }
     }   
   }

@@ -68,12 +68,11 @@
     padding-bottom: 10;
     border-radius: 30; 
     font-size: 24px;
-    
   }
 </style>
 
 <script>
-  require('weex-components');
+  const navigator = require('@weex-module/navigator');
   module.exports = {
     data: {
       title: '',
@@ -81,7 +80,9 @@
     },
     methods: {
       redirect: function() {
-        this.$openURL(this.url);
+        navigator.push({
+          url: this.url
+        });
       }
     }
   }
