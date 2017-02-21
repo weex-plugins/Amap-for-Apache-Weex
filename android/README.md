@@ -1,9 +1,15 @@
 # 如何开发
-如果想要开发amap，首先要准备好开发环境。 在android目录下运行
+如果想要开发amap，首先要准备好开发环境。 如果一开始clone仓库时缺少 --recursive 选项
+
+$ git clone --recursive https://github.com/weex-plugins/weex-amap.git
+
+则submodule并未同步下来，请在android目录下运行
 
 $ git submodule init
 
 $ git submodule update
+
+接下来，执行如下脚本，以patch的方式设置好工程依赖
 
 $ sh android_dev.sh
 
