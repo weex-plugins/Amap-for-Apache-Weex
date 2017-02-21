@@ -145,7 +145,7 @@
               message: res.data
             });
           }
-        });
+        }, this.$el('map2017').ref);
       }
     }
   }
