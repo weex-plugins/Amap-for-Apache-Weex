@@ -4,7 +4,7 @@
     <weex-amap class="map" id="map2017" sdk-key={{keys}}  map-instance={{map}} zoom={{zoom}} center={{pos}}>
     </weex-amap>
     <div class="map-control">
-      <text class="title">Props: weex-amap</text> 
+      <text class="title">Props: center</text> 
       <text class="tips">center属性表示地图中心点坐标值，你可以设置它来改变地图的位置，比如洁面显示的[116.487, 40.00003]为中心的地图</text>
       <div onclick="changeCenter" class="btnbox"><text class="btn" >Set Center</text></div>
     </div>

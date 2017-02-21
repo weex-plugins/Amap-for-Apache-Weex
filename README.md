@@ -133,6 +133,11 @@
 </script>
 ```
 
+#### search()
+
+
+#### searhNearBy()
+
 ### Demo
 
 ####H5 demo 

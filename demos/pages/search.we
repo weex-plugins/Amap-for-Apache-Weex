@@ -1,12 +1,13 @@
 <template>
   <div class="container">
-    <navbar title="设置地图中心"></navbar>
-    <weex-amap class="map" id="map2017" sdk-key={{keys}}  map-instance={{map}} zoom={{zoom}} center={{pos}}>
+    <navbar title="地图搜索"></navbar>
+    <weex-amap class="map" id="map2017" sdk-key="{{keys}}" zoom="{{zoom}}" center="{{pos}}">
     </weex-amap>
-    <div class="map-control">
-      <text class="title">Props: weex-amap</text> 
-      <text class="tips">center属性表示地图中心点坐标值，你可以设置它来改变地图的位置，比如洁面显示的[116.487, 40.00003]为中心的地图</text>
-      <div onclick="changeCenter" class="btnbox"><text class="btn" >Set Center</text></div>
+    <div class="map-search">
+      <input class="input" />
+      <div class="btn-search">
+        <image style="width:60;height:60;" src="http://img1.vued.vanthink.cn/vuedea56601586fafc6cb665126938506b35.png"></image>
+      </div>
     </div>
   </div>
 </template>
@@ -15,13 +16,42 @@
   .container{
     position: relative;
     flex:1;
+    flex-direction: column;
     background-color: #fff;
+  }
+  .map-search{
+    flex-direction: row;
+    align-items: center;
+    position: absolute;
+    top: 108;
+    left:20;
+    right: 20;
+    height: 88;
+    padding-left: 10;
+    background-color: #fff;
+    border-radius: 5;
+    border-bottom-width: 2;
+    border-right-width: 1;
+    border-color: rgba(0,0,0,.2);
+  }
+  
+  .input{
+    flex: 1;
+    background-color: #fff;
+    height: 80;
+    margin-top: 4;
+  }
+  .btn-search{
+    justify-content: center;
+    align-self: flex-end;
+    width: 88;
+    height: 88;
   }
   .map{
     flex: 1;
     position: relative;
     background-color: #fff;
-    min-height: 800;
+    min-height: 1400;
     border-bottom-width: 10;
     border-bottom-color: #fff;
   }

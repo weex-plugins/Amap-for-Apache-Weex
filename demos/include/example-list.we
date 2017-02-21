@@ -10,13 +10,12 @@
   require('weex-components');
   module.exports = {
     data: {
-      root: '', // examples, examples/syntax, test ...
-      items: [
-        {name: 'hello', title: 'Hello World', url: ''}
-      ]
+      root: '',
+      items: []
     },
     created: function() {
       var bundleUrl = this.$getConfig().bundleUrl;
+      console.log(bundleUrl);
       console.log('hit', bundleUrl);
       var dirs = this.root.split('/');
       dirs.forEach(function(dir, index) {
@@ -37,14 +36,14 @@
         nativeBase = bundleUrl.substring(0, bundleUrl.lastIndexOf('/') + 1);
       }
       else {
-        var host = 'localhost:12580';
+        var host = 'http://' + location.host + ':' + location.port;
         var matches = /\/\/([^\/]+?)\//.exec(this.$getConfig().bundleUrl);
         if (matches && matches.length >= 2) {
           host = matches[1];
         }
-        nativeBase = '//' + host + '/' + root + '/build/' + subRoot;
+        nativeBase = '//' + host + '/';
       }
-      var h5Base = './index.html?page=./' + root + '/build/' + subRoot;
+      var h5Base = './weex.html?page=';
       // in Native
       var base = nativeBase;
       if (typeof window === 'object') {
@@ -56,6 +55,7 @@
         var item = this.items[i];
         if (!item.url) {
           item.url = base + item.name + '.js';
+          console.log(item.url);
         }
       }
       // see log in Android Logcat

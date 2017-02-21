@@ -1,12 +1,12 @@
 <template>
   <div class="container">
-    <navbar title="设置地图中心"></navbar>
-    <weex-amap class="map" id="map2017" sdk-key={{keys}}  map-instance={{map}} zoom={{zoom}} center={{pos}}>
+    <navbar title="设置地图缩放"></navbar>
+    <weex-amap class="map" id="map2017" sdk-key="{{keys}}" zoomchange="{{zoomHandle}}" zoom={{zoom}} center={{pos}}>
     </weex-amap>
     <div class="map-control">
-      <text class="title">Props: weex-amap</text> 
-      <text class="tips">center属性表示地图中心点坐标值，你可以设置它来改变地图的位置，比如洁面显示的[116.487, 40.00003]为中心的地图</text>
-      <div onclick="changeCenter" class="btnbox"><text class="btn" >Set Center</text></div>
+      <text class="title">Props: zoom</text> 
+      <text class="tips">zoom 表示地图显示的缩放级别；zoomchange可以绑定缩放完后的事件；zoom-enable表示地图是否允许缩放</text>
+      <div onclick="changeZoom" class="btnbox"><text class="btn" >设置地图缩放级别</text></div>
     </div>
   </div>
 </template>
@@ -79,9 +79,14 @@
     },
     
     methods: {
-      changeCenter() {
-        this.pos = [116.4 + Math.random()*0.5,40.25 + Math.random()*0.25];
-      }
+      changeZoom() {
+        this.zoom = Math.floor(Math.random() * 13);
+      },
+      zoomHandle() {
+        modal.alert({
+          message: 'zoom changed!'
+        });
+      },
     }
   }
 </script>

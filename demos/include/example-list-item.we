@@ -20,7 +20,8 @@
     margin: 40;
     margin-top: 20;
     background-color: #fff;
-    box-shadow: 0 2 4 rgba(0,0,0,.1);
+    border-bottom-width: 2;
+    border-color: rgba(0,0,0,.2);
   }
   .item-bannar{
     height: 300;
