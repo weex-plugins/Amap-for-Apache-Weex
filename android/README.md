@@ -1,11 +1,9 @@
 # 如何开发
 如果想要开发amap，首先要准备好开发环境。 在android目录下运行
 
-
-```
-git submodule init
-git submodule update
- sh android_dev.sh
+$ git submodule init
+$ git submodule update
+$ sh android_dev.sh
 ```
 该命令行执行完毕后进入dev目录，使用Android Studio打开settings.gradle导入android工程。导入完毕后可以看到主要有以下几个工程。
 
