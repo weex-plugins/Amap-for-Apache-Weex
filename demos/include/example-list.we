@@ -43,7 +43,7 @@
         }
         nativeBase = '//' + host + '/';
       }
-      var h5Base = './weex.html?page=';
+      var h5Base = './index.html?page=';
       // in Native
       var base = nativeBase;
       if (typeof window === 'object') {
@@ -54,7 +54,7 @@
       for (var i in this.items) {
         var item = this.items[i];
         if (!item.url) {
-          item.url = base + item.name + '.js';
+          item.url = base + '/dist/' + item.name + '.js';
           console.log(item.url);
         }
       }

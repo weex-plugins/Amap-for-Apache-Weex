@@ -1,11 +1,12 @@
 <template>
   <div class="container">
     <navbar title="地图搜索"></navbar>
-    <weex-amap class="map" id="map2017" sdk-key="{{keys}}" zoom="{{zoom}}" center="{{pos}}">
+    <weex-amap class="map" id="map2017" search="{{search}}" sdk-key="{{keys}}" zoom="{{zoom}}" center="{{pos}}">
+      <weex-amap-marker position="{{marker.position}}" title="{{marker.title}}" repeat="marker in markers"></weex-amap-marker>
     </weex-amap>
     <div class="map-search">
-      <input class="input" />
-      <div class="btn-search">
+      <input class="input" onchange="change" placeholder="Search Places..."/>
+      <div class="btn-search" onclick="searchEvent">
         <image style="width:60;height:60;" src="http://img1.vued.vanthink.cn/vuedea56601586fafc6cb665126938506b35.png"></image>
       </div>
     </div>
@@ -38,8 +39,9 @@
   .input{
     flex: 1;
     background-color: #fff;
-    height: 80;
-    margin-top: 4;
+    height: 70;
+    margin-top: 9;
+    font-size: 30;
   }
   .btn-search{
     justify-content: center;
@@ -51,7 +53,7 @@
     flex: 1;
     position: relative;
     background-color: #fff;
-    min-height: 1400;
+    min-height: 400;
     border-bottom-width: 10;
     border-bottom-color: #fff;
   }
@@ -104,13 +106,46 @@
         ios: '',
         android: 'db6a973159cb0c2639ad02c617a786ae'
       },
-      pos: [116.487, 40.00003],
-      zoom: 9,
+      pos: [104.093731,30.675117],
+      zoom: 11,
+      search: {
+        city: '成都'
+      },
+      place: '',
+      markers: [],
     },
     
     methods: {
-      changeCenter() {
-        this.pos = [116.4 + Math.random()*0.5,40.25 + Math.random()*0.25];
+      change(event) {
+        this.place = event.value;
+      },
+      searchEvent() {
+        if(!this.place) {
+          modal.alert({
+            message: 'empty word'
+          });
+          return;
+        }
+        Amap.search(this.place, (res) => {
+          if(res.result == 'success') {
+            let newarr = [];
+            if(res.data.info === 'OK' ) {
+              const arr = res.data.poiList.pois;
+              
+              arr.forEach((item) => {
+                newarr.push({
+                  title: item.name,
+                  position: [item.location.L, item.location.I]  
+                });
+              });
+            }
+            //this.markers = newarr;
+          } else {
+            modal.alert({
+              message: res.data
+            });
+          }
+        });
       }
     }
   }

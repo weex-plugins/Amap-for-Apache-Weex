@@ -7,6 +7,7 @@
       <text class="title">Methods: getUserLocation</text> 
       <text class="tips">getUserLocation 你可以通过调用该方法来进行用户当前位置的定位</text>
       <div onclick="setUserLocation" class="btnbox"><text class="btn" >定位到当前位置</text></div>
+      <text class="tips">用户的当前坐标为: {{pos}}</text>
     </div>
   </div>
 </template>

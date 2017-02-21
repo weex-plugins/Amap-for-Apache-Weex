@@ -12,7 +12,7 @@ const params = {
   scale: false,
   geolocation: false,
   resizeEnable: true,
-  search: false
+  search: {}
 };
 const events = [
   'zoomchange',
@@ -51,11 +51,13 @@ const proto = {
           self.map.addControl(new AMap.Geolocation());
         }
       });
-      if (params.search) {
-        AMap.service('AMap.PlaceSearch', () => {
-          this.placeSearch = new AMap.PlaceSearch();
+      AMap.service('AMap.PlaceSearch', () => {
+        this.map.placeSearch = new AMap.PlaceSearch({
+          city: params.search.city,
+          type: params.search.type,
+          map: this.map
         });
-      }
+      });
       this.initEvents();
       amapManager.initMap(this.mapwrap.id, this.map);
     }
@@ -117,8 +119,18 @@ const attr = {
   },
   search(val) {
     params.search = val;
+    console.log(val);
     if (window.AMap) {
-        
+      if (val.city) {
+        this.placeSearch.setCity(val.city);
+      }
+      if (val.type) {
+        this.placeSearch.setCity(val.type);
+      }
+      if (val.keyword) {
+        console.log(this.placeSearch);
+        this.placeSearch.search(val.keyword);
+      }
     }
   }
 };

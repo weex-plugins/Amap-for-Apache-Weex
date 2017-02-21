@@ -1,6 +1,6 @@
 <template>
   <div class="navbar">
-    <div class="btn-back" onclick="{{backEvent}}">
+    <div class="btn-back" onclick="goHome">
       <image class="btn-arrow-left" src="http://img1.vued.vanthink.cn/vued9c8e7e738ff94abee23eb69d7f1401e9.png"></image>
       <text class="btn-text">返回</text>
     </div>
@@ -10,7 +10,7 @@
 <style>
   .navbar{
     position: relative;
-    flex:1;
+    display:flex;
     flex-direction: row;
     height: 88;
     background-color: #fff;
@@ -19,6 +19,7 @@
     border-bottom-color: #ddd;
   }
   .btn-back{
+    z-index:10;
     flex-direction: row;
     align-items: center;
     width: 180;
@@ -45,9 +46,9 @@
 </style>
 <script>
   module.exports = {
-    mehtods: {
-      backEvent() {
-        this.$openURL('./weex.html?page=index.js');
+    methods: {
+      goHome() {
+        this.$openURL('/web/index.html?page=/dist/index.js');
       }
     }   
   }

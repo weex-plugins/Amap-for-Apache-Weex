@@ -1,5 +1,8 @@
 <template>
   <div class="container">
+    <div class="bg">
+      <image class="map-bg" src="http://img1.vued.vanthink.cn/vued606f6ce9ac598cf0c23e0653f4cd7d54.png" ></image>
+    </div>
     <div class="map">
       <image class="logo" src="http://img1.vued.vanthink.cn/vuedf325648b3361db3cf5fdfc55510167f3.png"></image>
       <text class="title">WEEX-AMAP DEMOS</text>
@@ -13,8 +16,17 @@
     position: relative;
     flex:1;
     background-color: #b5d6ea;
-    background-image: url(http://img1.vued.vanthink.cn/vued606f6ce9ac598cf0c23e0653f4cd7d54.png);
-    background-repeat: no-repeat;
+  }
+  .bg{
+    position:absolute;
+    left:0;
+    right:0;
+    top:0;
+    background-color: #b4d6eb;
+  }
+  .map-bg{
+    flex: 1;
+    height: 1130;
   }
   .title {
     color: #1995f9;
@@ -32,7 +44,6 @@
     margin-top: 40;
   }
   .map{
-    flex: 1;
     height: 300;
     align-items: center;
   }

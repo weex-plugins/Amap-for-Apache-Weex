@@ -1,12 +1,15 @@
 <template>
   <div class="container">
     <navbar title="设置地图缩放"></navbar>
-    <weex-amap class="map" id="map2017" sdk-key="{{keys}}" zoomchange="{{zoomHandle}}" zoom={{zoom}} center={{pos}}>
+    <weex-amap class="map" id="map2017" sdk-key="{{keys}}" onzoomchange="zoomHandle" zoom={{zoom}} center={{pos}}>
     </weex-amap>
     <div class="map-control">
       <text class="title">Props: zoom</text> 
       <text class="tips">zoom 表示地图显示的缩放级别；zoomchange可以绑定缩放完后的事件；zoom-enable表示地图是否允许缩放</text>
-      <div onclick="changeZoom" class="btnbox"><text class="btn" >设置地图缩放级别</text></div>
+      <div class="btn-group">
+        <div onclick="increseZoom" if="{{this.zoom<13}}" class="btnbox"><text class="btn" >放大</text></div>
+        <div onclick="decreseZoom" if="{{this.zoom>3}}" class="btnbox"><text class="btn btn-reverse" >缩小</text></div>
+      </div>
     </div>
   </div>
 </template>
@@ -46,6 +49,13 @@
     color:#666;
     font-size: 20px;
   }
+  .btn-group{
+    display: flex;
+    flex-direction: row;
+  }
+  .btnbox{
+     flex:1;
+  }
   .btn{
     margin: 20;
     padding: 20;
@@ -55,6 +65,13 @@
     text-align:center;
     cursor: pointer;
     font-size: 28px;
+  }
+  .btn-reverse{
+    background-color: #fff;
+    color: #444;
+    border-width: 2;
+    border-color: #ccc;
+    
   }
 </style>
 
@@ -79,8 +96,15 @@
     },
     
     methods: {
-      changeZoom() {
-        this.zoom = Math.floor(Math.random() * 13);
+      increseZoom() {
+        if(this.zoom < 13) {
+          this.zoom ++;
+        }
+      },
+      decreseZoom() {
+        if(this.zoom > 3) {
+          this.zoom --;
+        }
       },
       zoomHandle() {
         modal.alert({
