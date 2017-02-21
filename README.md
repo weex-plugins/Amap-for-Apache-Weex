@@ -63,7 +63,10 @@
 | zoomEnable | boolean  | true | 是否允许缩放
 | marker |  array | [`{position:[116,12]}]` |  点标记物的属性
 | geolocation  | boolean | true | 添加定位控件
+| search   | object | {city:'北京',type: '餐饮'} | 初始化搜索的参数，比如城市,类型
 | sdkKey   | object | {ios:'xxx',android: 'xxx',h5: 'xxx'} | 指定开发者的 SDK 密匙 
+
+
 **建议你前往[高德开发者社区](http://lbs.amap.com/)申明你对应产品的Key，保证地图正常工作**
 
 #### weex-amap 事件
@@ -90,8 +93,8 @@
 
 #### Amap 模块
 
-#####  getUserLocation(completeFunc,errorFunc)
-
+#####  getUserLocation(mapref,completeFunc)
++ mapref 当前地图容器的ref值
 + completeFunc 定位成功后的回调函数，返回的数据:
 ```
 { 
@@ -101,6 +104,29 @@
   result: 'success' 
 }
 ```
+#### search(place, completeFunc, mapRef)
+
++ place 表示搜索的关键词
+
++ completeFunc 搜索执行后的回调
+
++ mapRef 当前地图容器的ref值
+
+
+#### searhNearBy(place, position, distance, completeFunc, mapRef)
+
++ place 表示搜索的关键词
+
++ position  搜索中心经纬度 [123.234, 36.45]
+
++ distance 搜索距离 比如: 5000
+
++ completeFunc 搜索执行后的回调
+
++ mapRef 当前地图容器的ref值
+
+
+
 ##### 使用Amap模块
 
 ``` html 
@@ -133,10 +159,7 @@
 </script>
 ```
 
-#### search()
 
-
-#### searhNearBy()
 
 ### Demo
 
