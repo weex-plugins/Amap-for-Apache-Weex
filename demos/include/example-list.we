@@ -36,8 +36,8 @@
         nativeBase = bundleUrl.substring(0, bundleUrl.lastIndexOf('/') + 1);
       }
       else {
-        var host = 'http://' + location.host + ':' + location.port;
-        var matches = /\/\/([^\/]+?)\//.exec(this.$getConfig().bundleUrl);
+        var host = '';
+        var matches = /\/\/([^\/]+?)\//.exec(bundleUrl);
         if (matches && matches.length >= 2) {
           host = matches[1];
         }
@@ -48,13 +48,13 @@
       var base = nativeBase;
       if (typeof window === 'object') {
         // in Browser or WebView
-        base = h5Base;
+        base = h5Base + '/dist/';
       }
 
       for (var i in this.items) {
         var item = this.items[i];
         if (!item.url) {
-          item.url = base + '/dist/' + item.name + '.js';
+          item.url = base + item.name + '.js';
           console.log(item.url);
         }
       }
