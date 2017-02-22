@@ -10,6 +10,24 @@
         <image style="width:60;height:60;" src="http://img1.vued.vanthink.cn/vuedea56601586fafc6cb665126938506b35.png"></image>
       </div>
     </div>
+    <div class="map-bttom-bar">
+      <div class="btn-sm" onclick="changeType('电影')">
+        <text if="{{type!='电影'}}" class="btn-sm-text">电影</text>
+        <text if="{{type =='电影'}}" class="btn-sm-text active">电影</text>
+      </div>
+      <div class="btn-sm" onclick="changeType('ATM')">
+        <text if="{{type!='ATM'}}" class="btn-sm-text">ATM</text>
+        <text if="{{type =='ATM'}}" class="btn-sm-text active">ATM</text>
+      </div>
+      <div class="btn-sm" onclick="changeType('快餐')">
+        <text if="{{type!='快餐'}}" class="btn-sm-text">快餐</text>
+        <text if="{{type =='快餐'}}" class="btn-sm-text active">快餐</text>
+      </div>
+      <div class="btn-sm" onclick="changeType('酒店')">
+        <text if="{{type!='酒店'}}" class="btn-sm-text">酒店</text>
+        <text if="{{type =='酒店'}}" class="btn-sm-text active">酒店</text>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -57,36 +75,31 @@
     border-bottom-width: 10;
     border-bottom-color: #fff;
   }
-  .map-control{
-    padding-top: 20;
-    min-height: 600;
+  .map-bttom-bar{
+    flex-direction: row;
+    align-items: center;
+    z-index: 200;
+    position:absolute;
+    bottom: 0;
+    left:0;
+    right:0;
+    height: 88;
+    line-height: 88;
+    background-color: #fff;
+    border-top-width: 1;
+    border-top-color: rgba(0,0,0,.15);
   }
-  .title{
-    margin-left: 20;
-    padding-left: 20;
-    padding-top: 10;
-    padding-bottom: 10;
-    font-size: 36px;
-    border-left-width: 6;
-    border-left-color: #0f89f5;
-    color: #222;
-    text-align: left;
+  .btn-sm{
+    flex: 1;
+    justify-content: center;
+    align-items: center;
   }
-  .tips{
-    margin: 20;
-    padding: 10;
-    color:#666;
-    font-size: 20px;
+  .btn-sm-text{
+    color: #777;
+    font-size: 28;
   }
-  .btn{
-    margin: 20;
-    padding: 20;
-    background-color: #1ba1e2;
-    border-radius: 5;
-    color: #fff; 
-    text-align:center;
-    cursor: pointer;
-    font-size: 28px;
+  .active{
+    color: #1ba1e2;
   }
 </style>
 
@@ -103,16 +116,17 @@
     data: {
       keys: {
         h5:'f4b99dcd51752142ec0f1bdcb9a8ec02',
-        ios: 'c551f83e1e5b19af89c74096f1c0f007',
+        ios: '',
         android: 'db6a973159cb0c2639ad02c617a786ae'
       },
       pos: [104.093731,30.675117],
-      zoom: 11,
+      zoom: 13,
       search: {
         city: '成都'
       },
       place: '',
       markers: [],
+      type: '',
     },
     
     methods: {
@@ -145,7 +159,30 @@
               message: res.data
             });
           }
-        }, this.$el('map2017').ref);
+        });
+      },
+      changeType(q) {
+        this.type = q;
+        Amap.searchNearBy(this.type, this.pos, 1000, (res) => {
+          if(res.result == 'success') {
+            let newarr = [];
+            if(res.data.info === 'OK' ) {
+              const arr = res.data.poiList.pois;
+              
+              arr.forEach((item) => {
+                newarr.push({
+                  title: item.name,
+                  position: [item.location.L, item.location.I]  
+                });
+              });
+            }
+            //this.markers = newarr;
+          } else {
+            modal.alert({
+              message: res.data
+            });
+          }
+        });
       }
     }
   }
