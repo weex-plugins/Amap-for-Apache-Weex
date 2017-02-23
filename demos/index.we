@@ -47,9 +47,6 @@
     height: 300;
     align-items: center;
   }
-  
-  
- 
 </style>
 
 <script>

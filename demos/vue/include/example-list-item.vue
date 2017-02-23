@@ -1,6 +1,6 @@
 <template>
-  <div class="item" onclick="redirect">
-    <image class="item-bannar" src="{{imgsrc}}"></image>
+  <div class="item" @click="redirect">
+    <image class="item-bannar" :src="imgsrc"></image>
     <div class="item-desc">
       <div class="inner">
         <text class="keyword">{{keyword}}</text>
@@ -9,7 +9,6 @@
       <div class="btn-wrap">
         <text class="btn">查看详情</text>
       </div>
-      
     </div>
   </div>
 </template>
@@ -72,8 +71,12 @@
 </style>
 
 <script>
-  const navigator = require('@weex-module/navigator');
+  const navigator = requireModule('navigator');
   module.exports = {
+    data: {
+      title: '',
+      url: ''
+    },
     methods: {
       redirect: function() {
         navigator.push({
