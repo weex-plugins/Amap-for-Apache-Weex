@@ -46,7 +46,7 @@
         }
         nativeBase = 'http://' + host + '/';
       }
-      var h5Base = './index.html?page=';
+      var h5Base = './weex.html?page=';
       // in Native
       var base = nativeBase;
       if (typeof navigator!=='undefined'&& (navigator.appCodeName === 'Mozilla' || navigator.product === 'Gecko') ) {

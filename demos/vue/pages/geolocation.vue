@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <navbar title="使用地图定位"></navbar>
-    <weex-amap class="map" id="map2017" :sdk-key="keys" :zoom="zoom" :center="pos">
+    <weex-amap class="map" ref="map2017" :sdk-key="keys" :zoom="zoom" :center="pos">
     </weex-amap>
     <div class="map-control">
-      <text class="title">Methods: getUserLocation</text> 
+      <text class="name">Methods: getUserLocation</text> 
       <text class="tips">getUserLocation 你可以通过调用该方法来进行用户当前位置的定位</text>
       <div @click="setUserLocation" class="btnbox"><text class="btn" >定位到当前位置</text></div>
       <text class="tips">用户的当前坐标为: {{pos}}</text>
@@ -30,7 +30,7 @@
     padding-top: 20px;
     min-height: 600px;
   }
-  .title{
+  .name{
     margin-left: 20px;
     padding-left: 20px;
     padding-top: 10px;
@@ -68,6 +68,11 @@
     console.log(err);
   }
   var modal = weex.requireModule('modal');
+  Amap.setSDKKey({
+    h5:'f4b99dcd51752142ec0f1bdcb9a8ec02',
+    ios: '',
+    android: 'db6a973159cb0c2639ad02c617a786ae'
+  });
   module.exports = {
     components: {
       'navbar': navbar
@@ -86,7 +91,7 @@
     methods: {
       setUserLocation() {
         const self = this;
-        Amap.getUserLocation(this.$el('map2017').ref, function (data) {
+        Amap.getUserLocation('map2017', function (data) {
           if(data.result == 'success') {
             self.pos = data.data.position;
           }

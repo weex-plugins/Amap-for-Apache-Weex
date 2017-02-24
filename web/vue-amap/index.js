@@ -11,10 +11,9 @@ const components = [
   AMapMarker
 ];
 const VueAmap = {};
-VueAmap.install = function(Vue) {
-  components.map(_component => {
-    console.log(Vue);
-    Vue.component('weex-' + _component.name, _component);
+VueAmap.install = function (Vue) {
+  components.map((_component) => {
+    return Vue.component('weex-' + _component.name, _component);
   });
 };
 export default VueAmap;

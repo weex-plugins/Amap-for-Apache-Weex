@@ -81,6 +81,12 @@
   
   import navbar from '../include/navbar.vue';
   const modal = weex.requireModule('modal');
+  const Amap = weex.requireModule('amap');
+  Amap.setSDKKey({
+    h5:'f4b99dcd51752142ec0f1bdcb9a8ec02',
+    ios: '',
+    android: 'db6a973159cb0c2639ad02c617a786ae'
+  });
   module.exports = {
     components: {
       'navbar': navbar

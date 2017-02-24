@@ -1,7 +1,6 @@
 <template>
 <div class="weex-vue-amap-container">
     <div class="weex-vue-amap"></div>
-    <slot></slot>
 </div>
 </template>
 <script>
@@ -242,6 +241,7 @@
   height: 100%;
 }
 .weex-vue-amap {
-  height:400px;
+  flex: 1;
+  height:100%;
 }
 </style>

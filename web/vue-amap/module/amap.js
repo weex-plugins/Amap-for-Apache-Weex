@@ -64,6 +64,5 @@ const amap = {
 };
 
 if (window.weex) {
-  console.log(window.weex);
-  window.weex.registerModule('Amap', amap);
+  window.weex.registerModule('amap', amap);
 }
