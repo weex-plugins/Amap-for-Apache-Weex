@@ -33,6 +33,7 @@ Pod::Spec.new do |s|
   #s.xcconfig = { "FRAMEWORK_SEARCH_PATHS" => "$(SDKROOT)/TRemoteDebugger" }
   s.dependency "WeexSDK"
   s.dependency 'AMap3DMap'
+  s.dependency 'AMapSearch'
   #${weexpackPlaceHolder}
 
   # s.vendored_frameworks = 'Weexplugin.framework'

@@ -73,6 +73,7 @@
         <framework src="CoreGraphics.framework"/>
         <framework src="AVFoundation.framework"/>
         <framework spec="" src="AMap3DMap" type="podspec"/>
+        <framework spec="" src="AMapSearch" type="podspec"/>
 
         <preference name="CAMERA_USAGE_DESCRIPTION" default=" "/>
         <config-file parent="NSCameraUsageDescription" target="*-Info.plist">

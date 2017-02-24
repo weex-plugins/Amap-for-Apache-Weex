@@ -236,7 +236,7 @@ static const void *refKey = &refKey;
         NSDictionary *userDic = @{@"result":@"success",@"data":@{@"position":coordinate,@"title":@""}};
         return userDic;
     }
-    return @{@"resuldt":@"false",@"data":@""};
+    return @{@"result":@"false",@"data":@""};
 }
 
 #pragma mark - private method
