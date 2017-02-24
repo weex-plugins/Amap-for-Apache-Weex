@@ -15,17 +15,17 @@
 
 <style>
   .item{
-    height: 460;
-    margin: 40;
-    margin-top: 20;
+    height: 460px;
+    margin: 40px;
+    margin-top: 20px;
     background-color: #fff;
     border-width:1;
-    border-bottom-width: 2;
+    border-bottom-width: 2px;
     border-color: rgba(0,0,0,.2);
   }
   .item-bannar{
-    height: 300;
-    border-width: 10;
+    height: 300px;
+    border-width: 10px;
     border-color: #fff;
   }
   .item-desc {
@@ -39,7 +39,7 @@
   .inner{
     flex:0.7;
     flex-direction: column;
-    padding-left: 10;
+    padding-left: 10px;
     align-items: flex-start;
   }
   .keyword{
@@ -58,24 +58,35 @@
   }
   .btn{
     align-self: center;
-    margin-left: 10;
+    margin-left: 10px;
     display: inline-block;
     background-color: #1995f9;
     color: #fff;
-    padding: 20;
-    padding-top: 10;
-    padding-bottom: 10;
-    border-radius: 30; 
+    padding: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-radius: 30px; 
     font-size: 24px;
   }
 </style>
 
 <script>
-  const navigator = requireModule('navigator');
+  const navigator = weex.requireModule('navigator');
   module.exports = {
-    data: {
-      title: '',
-      url: ''
+    props: {
+      imgsrc: {
+        type: String
+      },
+      keyword: {
+        type: String
+      },
+      desc: {
+        type: String
+      },
+      url: {
+        type: String
+      }
+      
     },
     methods: {
       redirect: function() {

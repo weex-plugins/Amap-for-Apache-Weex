@@ -45,7 +45,7 @@
   }
 </style>
 <script>
-  const navigator = require('@weex-module/navigator');
+  const navigator = weex.requireModule('navigator');
   module.exports = {
     methods: {
       goHome() {

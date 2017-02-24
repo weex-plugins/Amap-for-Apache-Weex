@@ -4,7 +4,7 @@ import './polyfills';
 import AMap from './components/amap.vue';
 import AMapMarker from './components/amap-marker.vue';
 
-require('./modules/amap');
+require('./module/amap');
 
 const components = [
   AMap,

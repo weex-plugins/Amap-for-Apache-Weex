@@ -12,22 +12,22 @@
     position: relative;
     display:flex;
     flex-direction: row;
-    height: 88;
+    height: 88px;
     background-color: #fff;
     align-items: center;
-    border-bottom-width: 2;
+    border-bottom-width: 2px;
     border-bottom-color: #ddd;
   }
   .btn-back{
     z-index:10;
     flex-direction: row;
     align-items: center;
-    width: 180;
+    width: 180px;
   }
   .btn-arrow-left{
-    width: 60;
-    height: 60;
-    margin-left: 10;
+    width: 60px;
+    height: 60px;
+    margin-left: 10px;
   }
   .btn-text{
     color: #0f89f5;
@@ -37,8 +37,8 @@
     left:0;
     right:0;
     top:0;
-    height: 88;
-    line-height: 88;
+    height: 88px;
+    line-height: 88px;
     font-size: 36px;
     text-align: center;
     
@@ -47,6 +47,12 @@
 <script>
   const navigator = weex.requireModule('navigator');
   module.exports = {
+    props: {
+      title: {
+        default: 'Title',
+        type: String
+      }
+    },
     methods: {
       goHome() {
         navigator.pop();

@@ -1,17 +1,16 @@
 <template>
   <div class="container">
     <navbar title="设置地图标记点"></navbar>
-    <weex-amap class="map" id="map2017" sdk-key={{keys}}  map-instance={{map}} zoom={{zoom}} center={{pos}}>
-      <weex-amap-marker position="{{point.position}}" title="{{point.title}}" icon="{{point.icon}}" repeat="point in pointArr"  @click="{{markerClick}}"></weex-amap-marker>
+    <weex-amap class="map" id="map2017" :sdk-key="keys" :zoom="zoom" :center="pos">
+      <weex-amap-marker :position="point.position" :title="point.title" :icon="point.icon" v-for="point in pointArr"  @click="markerClick"></weex-amap-marker>
     </weex-amap>
     <div class="map-control">
-      <text class="title">Element: weex-amap-marker </text> 
+      <text class="name">Element: weex-amap-marker </text> 
       <text class="tips">weex-amap-marker表示在地图上的标记点，你可以设置标记点的位置和点击事件</text>
       <div class="btn-group">
         <div @click="addPoints" class="btnbox"><text class="btn" >添加标记点</text></div>
         <div @click="removePoints" class="btnbox"><text class="btn btn-reverse" >移除标记点</text></div>
       </div>
-      
     </div>
   </div>
 </template>
@@ -26,28 +25,29 @@
     flex: 1;
     position: relative;
     background-color: #fff;
-    min-height: 800;
-    border-bottom-width: 10;
+    min-height: 800px;
+    border-bottom-width: 10px;
     border-bottom-color: #fff;
   }
   .map-control{
-    padding-top: 20;
-    min-height: 600;
+    padding-top: 20px;
+    min-height: 600px;
   }
-  .title{
-    margin-left: 20;
-    padding-left: 20;
-    padding-top: 10;
-    padding-bottom: 10;
+  .name{
+    margin-left: 20px;
+    padding-left: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     font-size: 36px;
-    border-left-width: 6;
+    border-left-width: 6px;
+    border-left-style: solid;
     border-left-color: #0f89f5;
     color: #222;
     text-align: left;
   }
   .tips{
-    margin: 20;
-    padding: 10;
+    margin: 20px;
+    padding: 10px;
     color:#666;
     font-size: 20px;
   }
@@ -59,10 +59,10 @@
      flex:1;
   }
   .btn{
-    margin: 20;
-    padding: 20;
+    margin: 20px;
+    padding: 20px;
     background-color: #1ba1e2;
-    border-radius: 5;
+    border-radius: 5px;
     color: #fff; 
     text-align:center;
     cursor: pointer;
@@ -71,15 +71,16 @@
   .btn-reverse{
     background-color: #fff;
     color: #444;
-    border-width: 2;
+    border-width: 2px;
+    border-style: solid;
     border-color: #ccc;
-    
   }
 </style>
 
 <script>
   
-  import navbar from '../include/navbar';
+  import navbar from '../include/navbar.vue';
+  const modal = weex.requireModule('modal');
   module.exports = {
     components: {
       'navbar': navbar

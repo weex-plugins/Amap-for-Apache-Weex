@@ -22,36 +22,36 @@
     flex: 1;
     position: relative;
     background-color: #fff;
-    min-height: 800;
-    border-bottom-width: 10;
+    min-height: 800px;
+    border-bottom-width: 10px;
     border-bottom-color: #fff;
   }
   .map-control{
-    padding-top: 20;
-    min-height: 600;
+    padding-top: 20px;
+    min-height: 600px;
   }
   .title{
-    margin-left: 20;
-    padding-left: 20;
-    padding-top: 10;
-    padding-bottom: 10;
+    margin-left: 20px;
+    padding-left: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
     font-size: 36px;
-    border-left-width: 6;
+    border-left-width: 6px;
     border-left-color: #e74c3c;
     color: #222;
     text-align: left;
   }
   .tips{
-    margin: 20;
-    padding: 10;
+    margin: 20px;
+    padding: 10px;
     color:#666;
     font-size: 20px;
   }
   .btn{
-    margin: 20;
-    padding: 20;
+    margin: 20px;
+    padding: 20px;
     background-color: #1ba1e2;
-    border-radius: 5;
+    border-radius: 5px;
     color: #fff; 
     text-align:center;
     cursor: pointer;
@@ -60,14 +60,14 @@
 </style>
 
 <script>
-  import navbar from '../include/navbar.we';
+  import navbar from '../include/navbar.vue';
   var Amap = null;
   try {
-    Amap = require('@weex-module/amap');
+    Amap = weex.requireModule('amap');
   } catch(err) {
     console.log(err);
   }
-  var modal = require('@weex-module/modal');
+  var modal = weex.requireModule('modal');
   module.exports = {
     components: {
       'navbar': navbar
@@ -83,7 +83,6 @@
         zoom: 9,
       }
     },
-    
     methods: {
       setUserLocation() {
         const self = this;

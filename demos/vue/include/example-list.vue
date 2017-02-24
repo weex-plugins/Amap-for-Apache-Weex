@@ -7,26 +7,22 @@
 </template>
 
 <script>
+  import exampleListItem from './example-list-item.vue';
   module.exports = {
-    data() {
-      return {
-        root: '',
-        items: []
-      };
+    components: {
+      'example-list-item': exampleListItem
+    },
+    props: {
+      items: {
+        default: []
+      }
     },
     created: function() {
-      console.log(this);
-      const bundleUrl = this.$getConfig().bundleUrl;
+      console.log(this.items);
+      const bundleUrl = weex.config.bundleUrl;
       console.log(bundleUrl);
       var host = '';
       var path = '';
-      var dirs = this.root.split('/');
-      dirs.forEach(function(dir, index) {
-        if (!dir) dirs.splice(index, 1);
-      });
-      var root = dirs.length > 0 ? dirs[0] : '';
-      var subRoot = dirs.length > 1 ? dirs.slice(1).join('/') + '/' : '';
-
       var nativeBase;
       var isAndroidAssets = bundleUrl.indexOf('your_current_IP') >= 0 || bundleUrl.indexOf('file://assets/')>=0;
       var isiOSAssets = bundleUrl.indexOf('file:///') >= 0 && bundleUrl.indexOf('WeexDemo.app') > 0;

@@ -26,12 +26,12 @@
   }
   .map-bg{
     flex: 1;
-    height: 1130;
+    height: 1130px;
   }
   .title {
     color: #1995f9;
     font-size: 38px;
-    padding: 20;
+    padding: 20px;
     align-items: center;
   }
   .logo-wrap{
@@ -39,21 +39,20 @@
     align-items: center;
   }
   .logo{
-    width: 160;
-    height:160;
-    margin-top: 40;
+    width: 160px;
+    height:160px;
+    margin-top: 40px;
   }
   .map{
-    height: 300;
+    height: 300px;
     align-items: center;
   }
 </style>
 
 <script>
   import exampleList from './include/example-list.vue';
-  
   module.exports = {
-    components:{
+    components: {
       'example-list': exampleList
     },
     data() {
