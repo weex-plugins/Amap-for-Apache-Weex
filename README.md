@@ -159,7 +159,7 @@ cd MyApp & weexpack platform add ios (/android)
 －从插件市场下载安装：
 weexpack plugin add weex-amap
 
--地图插件代码clone到本地后安装，
+－地图插件代码clone到本地后安装，
 weexpack plugin add /users/abcd/Code/weex-plugins/weex-amap  (这后面是地图插件本地代码的目录)
 
 5.编译和运行demo
