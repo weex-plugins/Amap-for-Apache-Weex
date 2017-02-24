@@ -1,4 +1,4 @@
-# weex-plugin-amap
+# weex-amap
 
 <img width="320" src="https://img.alicdn.com/tps/TB1m1l.PXXXXXczXFXXXXXXXXXX-800-600.png" />
 
@@ -136,7 +136,7 @@
 ### Demo
 
 ####H5 demo 
-直接点击[Demo](https://weex-plugins.github.io/weex-plugin-amap/)可以演示当前版本支持的功能
+直接点击[Demo](https://weex-plugins.github.io/weex-amap/)可以演示当前版本支持的功能
 
 ####用weexpack运行demo(Android／iOS／H5)
 
@@ -154,13 +154,17 @@ weexpack create MyApp
 
 cd MyApp & weexpack platform add ios (/android)
 
-4.添加地图插件
+4.添加地图插件，有两种方式
 
-weexpack plugin add /users/abcd/Code/weex-plugins/weex-plugin-amap (这后面是地图插件clone到本地的目录)
+－从插件市场下载安装：
+weexpack plugin add weex-amap
+
+-地图插件代码clone到本地后安装，
+weexpack plugin add /users/abcd/Code/weex-plugins/weex-amap  (这后面是地图插件本地代码的目录)
 
 5.编译和运行demo
 
-把demo文件（所有在目录plugins/weex-plugin-amap/demos/下的文件）拷贝到项目工程MyApp/src下，然后：
+把demo文件（所有在目录plugins/weex-amap/demos/下的文件）拷贝到项目工程MyApp/src下，然后：
 
 对H5用如下命令：weexpack build web & weexpack run web
 
@@ -172,7 +176,6 @@ ios demo 如下所示
 
 
 
+### 集成插件
 
-
-
-
+如何将地图插件集成到自己的项目呢，请参考[weexpack文档说明](https://github.com/weexteam/weex-pack/tree/dev#5组件容器)
