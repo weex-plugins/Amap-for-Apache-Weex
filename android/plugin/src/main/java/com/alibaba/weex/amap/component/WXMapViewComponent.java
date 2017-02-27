@@ -1,10 +1,15 @@
 package com.alibaba.weex.amap.component;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.MotionEvent;
+import android.widget.Toast;
 
 import com.alibaba.weex.amap.util.Constant;
 import com.amap.api.location.AMapLocation;
@@ -33,10 +38,15 @@ import org.json.JSONObject;
 
 public class WXMapViewComponent extends WXVContainer<MapView> implements LocationSource,
     AMapLocationListener {
-
+  private static final int REQUEST_CODE_MAPVIEW = 10000001;
+  private static String[] permissions = new String[]{
+      "android.permission.ACCESS_FINE_LOCATION",
+      "android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"
+  };
   private MapView mMapView;
   private AMap mAMap;
   private UiSettings mUiSettings;
+  private Activity mActivity;
 
   private boolean isScaleEnable = true;
   private boolean isZoomEnable = true;
@@ -58,6 +68,9 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
   protected MapView initComponentHostView(@NonNull Context context) {
     mMapView = new MapView(context);
     mMapView.onCreate(null);
+    if (context instanceof Activity) {
+      mActivity = (Activity) context;
+    }
     initMap();
     return mMapView;
   }
@@ -139,9 +152,9 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
     mUiSettings.setZoomControlsEnabled(isZoomEnable);
     mUiSettings.setCompassEnabled(isCompassEnable);
     mUiSettings.setIndoorSwitchEnabled(isIndoorSwitchEnable);
-
-
-    setMyLocationStatus(isMyLocationEnable);
+    if (checkPermissions(mActivity, permissions)) {
+      setMyLocationStatus(isMyLocationEnable);
+    }
     updateGestureSetting();
 
   }
@@ -187,7 +200,7 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
 
   @Override
   public void onActivityCreate() {
-    Log.e("weex", "onActivityCreate");
+    super.onActivityCreate();
   }
 
   @Override
@@ -199,6 +212,21 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
   @Override
   public void onActivityResume() {
     mMapView.onResume();
+  }
+
+  private boolean requestPermissions() {
+    boolean granted = true;
+    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+      granted = false;
+      if (mActivity != null) {
+        if (!checkPermissions(mActivity, permissions)) {
+          ActivityCompat.requestPermissions(mActivity, permissions, REQUEST_CODE_MAPVIEW);
+        } else {
+          granted = true;
+        }
+      }
+    }
+    return granted;
   }
 
   @Override
@@ -251,7 +279,9 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
   @WXComponentProp(name = Constant.Name.GEOLOCATION)
   public void setMyLocationEnable(boolean myLocationEnable) {
     this.isMyLocationEnable = myLocationEnable;
-    setMyLocationStatus(myLocationEnable);
+    if (requestPermissions()) {
+      setMyLocationStatus(myLocationEnable);
+    }
   }
 
   @WXComponentProp(name = Constant.Name.CENTER)
@@ -337,7 +367,7 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
 
     if (isActive) {
       mAMap.setLocationSource(this);// 设置定位监听
-      mUiSettings.setMyLocationButtonEnabled(true);// 设置默认定位按钮是否显示
+      mUiSettings.setMyLocationButtonEnabled(true && checkPermissions(mActivity, permissions));// 设置默认定位按钮是否显示
       mAMap.setMyLocationEnabled(true);// 设置为true表示显示定位层并可触发定位，false表示隐藏定位层并不可触发定位，默认是false
       // 设置定位的类型为定位模式 ，可以由定位、跟随或地图根据面向方向旋转几种
       mAMap.setMyLocationType(AMap.LOCATION_TYPE_LOCATE);
@@ -391,5 +421,35 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
         WXLogUtils.e("AmapErr", errText);
       }
     }
+  }
+
+  @Override
+  public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+    switch (requestCode) {
+      case REQUEST_CODE_MAPVIEW:
+        if (checkPermissions(mActivity, permissions) && isMyLocationEnable) {
+          setMyLocationEnable(isMyLocationEnable);
+        }
+        break;
+      default:
+        break;
+    }
+    super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+  }
+
+  public boolean checkPermissions(Activity context, String[] permissions) {
+    boolean granted = true;
+    if (permissions != null && permissions.length > 0) {
+      for (String permission : permissions) {
+        if (ContextCompat.checkSelfPermission(context, permission) != PackageManager.PERMISSION_GRANTED) {
+          granted = false;
+          if (ActivityCompat.shouldShowRequestPermissionRationale(context, permission)) {
+            Toast.makeText(context, "please give me the permissions", Toast.LENGTH_SHORT).show();
+          }
+        }
+      }
+    }
+
+    return granted;
   }
 }

@@ -3,4 +3,8 @@ android/patch
 android/dev
 android_dev.sh
 android/plugin/build
+android/gradle
+android/gradlew
+android/gradlew.bat
+android/local.properties
 *.iml

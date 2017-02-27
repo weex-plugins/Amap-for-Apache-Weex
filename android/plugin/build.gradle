@@ -57,7 +57,7 @@ dependencies {
     })
     compile 'com.android.support:appcompat-v7:23.1.1'
     provided 'com.taobao.android:weex_sdk:0.10.0'
-    compile 'com.amap.api:map3d-native:latest.integration'
-    compile 'com.amap.api:map3d:latest.integration'
-    compile 'com.amap.api:location:latest.integration'
+    compile 'com.amap.api:map3d-native:4.1.3'
+    compile 'com.amap.api:map3d:4.1.3'
+    compile 'com.amap.api:location:3.3.0'
 }
