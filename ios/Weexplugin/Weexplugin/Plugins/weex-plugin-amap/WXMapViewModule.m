@@ -24,6 +24,7 @@
 
 WX_EXPORT_METHOD(@selector(getUserLocation:callback:))
 WX_EXPORT_METHOD(@selector(search:callback:ref:))
+WX_EXPORT_METHOD(@selector(searchNearBy:position:radius:callback:))
 
 - (void)getUserLocation:(NSString *)elemRef callback:(WXModuleCallback)callback
 {
@@ -34,13 +35,19 @@ WX_EXPORT_METHOD(@selector(search:callback:ref:))
 
 - (void)search:(NSString *)keyWord callback:(WXModuleCallback)callback ref:(NSString *)elemRef
 {
-    if (!_search) {
-        _search = [[AMapSearchAPI alloc] init];
-        _search.delegate = self;
-    }
-    _searchCallback = nil;
+    [self setupSearchInstance];
     _searchCallback = [callback copy];
     [self searchPoiByKeyword:keyWord];
+}
+                 
+- (void)searchNearBy:(NSString *)type position:(NSArray *)pos radius:(NSInteger)radius callback:(WXModuleCallback)callback
+{
+    [self setupSearchInstance];
+    _searchCallback = [callback copy];
+    if (pos.count < 2) {
+        return;
+    }
+    [self searchPoiByCenterCoordinate:pos keyword:type radius:radius];
 }
 
 - (void)performBlockWithMapView:(NSString *)elemRef block:(void (^)(WXMapViewComponent *))block {
@@ -59,6 +66,15 @@ WX_EXPORT_METHOD(@selector(search:callback:ref:))
             block(mapView);
         } waitUntilDone:NO];
     });
+}
+
+- (void)setupSearchInstance
+{
+    if (!_search) {
+        _search = [[AMapSearchAPI alloc] init];
+        _search.delegate = self;
+    }
+    _searchCallback = nil;
 }
 
 - (void)doBlock:(void (^)())block {
@@ -82,6 +98,21 @@ WX_EXPORT_METHOD(@selector(search:callback:ref:))
     request.requireSubPOIs      = YES;
     
     [_search AMapPOIKeywordsSearch:request];
+}
+
+/* 根据中心点坐标来搜周边的POI. */
+- (void)searchPoiByCenterCoordinate:(NSArray *)center keyword:(NSString *)keyword radius:(NSInteger)radius
+{
+    AMapPOIAroundSearchRequest *request = [[AMapPOIAroundSearchRequest alloc] init];
+    
+    request.location            = [AMapGeoPoint locationWithLatitude:[center[1] doubleValue] longitude:[center[0] doubleValue]];
+    request.keywords            = keyword;
+    request.radius = radius;
+    /* 按照距离排序. */
+    request.sortrule            = 0;
+    request.requireExtension    = YES;
+    
+    [_search AMapPOIAroundSearch:request];
 }
 
 /* POI 搜索回调. */
