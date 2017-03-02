@@ -1,4 +1,4 @@
-import upperCamelCase from 'uppercamelcase';
+import upperCamelCase from '../utils/uppercamelcase';
 import CONST from '../utils/constant';
 import { toLngLat, toPixel, toBounds } from '../utils/convert-helper';
 import eventHelper from '../utils/event-helper';

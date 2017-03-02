@@ -18,9 +18,7 @@
       }
     },
     created: function() {
-      console.log(this.items);
       const bundleUrl = weex.config.bundleUrl;
-      console.log(bundleUrl);
       var host = '';
       var path = '';
       var nativeBase;
@@ -50,13 +48,15 @@
       // in Native
       var base = nativeBase;
       if (typeof navigator!=='undefined'&& (navigator.appCodeName === 'Mozilla' || navigator.product === 'Gecko') ) {
-        base = h5Base + '/dist/';
+        // check if in weexpack project
+        if (path === 'web') {
+          base = h5Base + '/dist/';  
+        } else {
+          base = h5Base;
+        }
       } else {
-        base = nativeBase + path + '/';      
-        
+        base = nativeBase + path + '/';
       }
-    
-
       for (var i in this.items) {
         var item = this.items[i];
         if (!item.url) {

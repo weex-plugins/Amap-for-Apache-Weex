@@ -2,7 +2,6 @@
 <script>
 import registerMixin from '../mixins/register-component';
 import CONST from '../utils/constant';
-console.log(CONST);
 export default {
   name: 'amap-marker',
   mixins: [registerMixin],
@@ -45,7 +44,7 @@ export default {
           this.setzIndex(index);
         },
         visible(flag) {
-          flag === false ? this.hide() : this.show();
+          // flag === false ? this.hide() : this.show();
         }
       }
     };

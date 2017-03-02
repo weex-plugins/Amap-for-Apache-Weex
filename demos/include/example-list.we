@@ -48,11 +48,16 @@
         }
         nativeBase = 'http://' + host + '/';
       }
-      var h5Base = './index.html?page=';
+      var h5Base = './weex.html?page=';
       // in Native
       var base = nativeBase;
       if (typeof navigator!=='undefined'&& (navigator.appCodeName === 'Mozilla' || navigator.product === 'Gecko') ) {
-        base = h5Base + '/dist/';
+        // check if in weexpack project
+        if (path === 'web') {
+          base = h5Base + '/dist/';  
+        } else {
+          base = h5Base;
+        }
       } else {
         base = nativeBase + path + '/';      
         

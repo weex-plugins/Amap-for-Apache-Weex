@@ -41,11 +41,10 @@
     line-height: 88;
     font-size: 36px;
     text-align: center;
-    
   }
 </style>
 <script>
-  const navigator = weex.requireModule('navigator');
+  const navigator = require('@weex-module/navigator');
   module.exports = {
     methods: {
       goHome() {

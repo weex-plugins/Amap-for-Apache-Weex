@@ -149,7 +149,7 @@
           });
           return;
         }
-        Amap.search(this.place, (res) => {
+        Amap.search(this.place, function(res) {
           if(res.result == 'success') {
             let newarr = [];
             if(res.data.info === 'OK' ) {
@@ -172,7 +172,7 @@
       },
       changeType(q) {
         this.type = q;
-        Amap.searchNearBy(this.type, this.pos, 1000, (res) => {
+        Amap.searchNearBy(this.type, this.pos, 1000, function(res) {
           if(res.result == 'success') {
             let newarr = [];
             if(res.data.info === 'OK' ) {
