@@ -9,6 +9,7 @@
 #import "WXMapViewModule.h"
 #import "WXMapViewComponent.h"
 #import <AMapSearchKit/AMapSearchKit.h>
+#import <MJExtension/MJExtension.h>
 
 @interface WXMapViewModule () <AMapSearchDelegate>
 
@@ -88,13 +89,6 @@ WX_EXPORT_METHOD(@selector(searchNearBy:position:radius:callback:))
 {
     AMapPOIKeywordsSearchRequest *request = [[AMapPOIKeywordsSearchRequest alloc] init];
     request.keywords = keyword;
-    //    request.keywords            = @"北京大学";
-    //    request.city                = @"北京";
-    //    request.types               = @"高等院校";
-    //    request.requireExtension    = YES;
-    //
-    //    /*  搜索SDK 3.2.0 中新增加的功能，只搜索本城市的POI。*/
-    //    request.cityLimit           = YES;
     request.requireSubPOIs      = YES;
     
     [_search AMapPOIKeywordsSearch:request];
@@ -119,7 +113,7 @@ WX_EXPORT_METHOD(@selector(searchNearBy:position:radius:callback:))
 - (void)onPOISearchDone:(AMapPOISearchBaseRequest *)request response:(AMapPOISearchResponse *)response
 {
     NSDictionary *userDic;
-    NSDictionary *data = [self parseAmapSearchResponse:response];
+    NSDictionary *data = response.mj_keyValues;
     if (!data) {
         userDic = @{@"result":@"false",@"data":[NSDictionary dictionary]};
     }else{
@@ -128,17 +122,5 @@ WX_EXPORT_METHOD(@selector(searchNearBy:position:radius:callback:))
     _searchCallback(userDic ? : nil);
 }
 
-- (NSDictionary *)parseAmapSearchResponse:(AMapPOISearchResponse *)res
-{
-    if (res.count <= 0) {
-        return nil;
-    }
-    return @{
-             @"count":@(res.count),
-             @"suggestion":@{@"keywords":res.suggestion.keywords,
-             @"cities":res.suggestion.cities},
-             @"pois":res.pois
-            };
-}
 
 @end
