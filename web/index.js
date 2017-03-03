@@ -2,11 +2,13 @@ import amapModuleReg from './module/amap';
 import Amap from './components/amap';
 import AmapMarker from './components/amap-marker';
 import AmapCircle from './components/amap-circle';
+import AmapPolygon from './components/amap-polygon';
 // import VueAmap from './vue-amap/index';
 const components = [
   Amap,
   AmapMarker,
-  AmapCircle
+  AmapCircle,
+  AmapPolygon
 ];
 
 function init(Weex) {
