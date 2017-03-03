@@ -3,12 +3,14 @@ import Amap from './components/amap';
 import AmapMarker from './components/amap-marker';
 import AmapCircle from './components/amap-circle';
 import AmapPolygon from './components/amap-polygon';
+import AmapPolyline from './components/amap-polyline';
 // import VueAmap from './vue-amap/index';
 const components = [
   Amap,
   AmapMarker,
   AmapCircle,
-  AmapPolygon
+  AmapPolygon,
+  AmapPolyline
 ];
 
 function init(Weex) {

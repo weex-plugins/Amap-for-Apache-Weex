@@ -1,13 +1,11 @@
 <template>
   <div class="container">
     <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
-      <weex-amap-polyline path="path" stroke-color="#000" stroke-weight="2"></weex-amap-polyline>
+      <weex-amap-polyline path="{{path}}" stroke-color="#000" stroke-weight="2"></weex-amap-polyline>
     </weex-amap>
     <div class="map-control">
-      <text class="title">Methods: getDistanceBetweenMarkers</text> 
-      <text class="tips">getDistanceBetweenMarkers，可以获取地图上两个坐标点的距离</text>
-      <div onclick="changeCenter" class="btnbox"><text class="btn" >Get Distance</text></div>
-      <text class="distance" v-if="distance"></text>
+      <text class="title">Component weex-amap-polyline</text> 
+      <text class="tips">在地图上绘制折线</text>
     </div>
   </div>
 </template>
@@ -47,23 +45,6 @@
     color:#666;
     font-size: 20px;
   }
-  .btn{
-    margin: 20;
-    padding: 20;
-    background-color: #1ba1e2;
-    border-radius: 5;
-    color: #fff; 
-    text-align:center;
-    cursor: pointer;
-    font-size: 28px;
-  }
-  .distance{
-    padding: 5;
-    margin: 20;
-    font-size: 22;
-    background-color: #f1c40f;
-    color: #000;
-  }
 </style>
 
 <script>
@@ -88,11 +69,7 @@
         [116.382122, 39.901176],
         [116.387271, 39.912501],
         [116.398258, 39.904600]],
-      zoom: 9,
-      distance: false
-    },
-    
-    methods: {
+      zoom: 13
     }
   }
 </script>
