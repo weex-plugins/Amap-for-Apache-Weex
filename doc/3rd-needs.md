@@ -60,7 +60,6 @@ module.exports = {
 | radius | number     |    50 | 圆的半径 |
 | fill-color | string     |    #000 | 圆的填充颜色 |
 | fill-opacity | string     |    #000 | 圆的填充透明度 |
-| fill-opacity | string     |    #000 | 圆的填充透明度 |
 | stroke-color | string     |    #000 | 圆的轮廓线条颜色 |
 | stroke-width | number   |   2 | 圆的轮廓线条宽度 |
 | stroke-opacity | number  | 0.5  | 圆的轮廓线条透明度[0-1]
