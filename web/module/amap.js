@@ -22,6 +22,21 @@ const amap = {
         console.warn(res.message);
       }
     });
+  },
+  /** get distance between two position
+  * @param coor1
+  * @param corr2
+  * @param callback
+  **/
+  getLineDistance(coor1, coor2, callback) {
+    const lnglat = new AMap.LngLat(coor1[0], coor1[1]);
+    const result = lnglat.distance(coor2);
+    this.sender.performCallback(callback, {
+      result: !result ? 'fail' : 'success',
+      data: {
+        distance: result
+      }
+    });
   }
 };
 
