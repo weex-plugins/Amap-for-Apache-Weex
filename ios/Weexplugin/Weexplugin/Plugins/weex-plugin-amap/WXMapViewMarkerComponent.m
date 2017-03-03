@@ -8,6 +8,7 @@
 
 #import "WXMapViewMarkerComponent.h"
 #import "WXMapViewComponent.h"
+#import "NSDictionary+WXMap.h"
 
 @implementation WXMapViewMarkerComponent
 {
@@ -32,9 +33,9 @@
         if ([events containsObject:@"click"]) {
             _clickEvent = @"click";
         }
-        _location = attributes[@"position"];
-        _title = attributes[@"title"];
-        _icon = attributes[@"icon"];
+        _location = [attributes wxmap_safeObjectForKey:@"position"];
+        _title = [attributes wxmap_safeObjectForKey:@"title"];
+        _icon = [attributes wxmap_safeObjectForKey:@"icon"];
     }
     _viewLoaded = NO;
     return self;
@@ -60,12 +61,12 @@
         [mapComponent updateTitleMarker:self];
     }
     
-    if (attributes[@"icon"]) {
+    if ([attributes wxmap_safeObjectForKey:@"icon"]) {
         _icon = attributes[@"icon"];
         [mapComponent updateIconMarker:self];
     }
     
-    if (attributes[@"position"]) {
+    if ([attributes wxmap_safeObjectForKey:@"position"]) {
         _location = attributes[@"position"];
         [mapComponent updateLocationMarker:self];
         

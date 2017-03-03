@@ -9,6 +9,8 @@
 #import "WXMapViewComponent.h"
 #import "WXMapViewMarkerComponent.h"
 #import "WXImgLoaderImpl.h"
+#import "NSArray+WXMap.h"
+#import "NSDictionary+WXMap.h"
 #import <objc/runtime.h>
 
 @interface MAPointAnnotation(imageAnnotation)
@@ -81,12 +83,13 @@ static const void *refKey = &refKey;
 {
     self = [super initWithRef:ref type:type styles:styles attributes:attributes events:events weexInstance:weexInstance];
     if (self) {
-        _centerCoordinate.latitude = [attributes[@"center"][1] doubleValue];
-        _centerCoordinate.longitude = [attributes[@"center"][0] doubleValue];
-        _zoomLevel = [attributes[@"zoom"] floatValue];
-        _showScale = [attributes[@"scale"] boolValue];
-        _showGeolocation = [attributes[@"geolocation"] boolValue];
-        if (attributes[@"sdkKey"]) {
+        NSArray *center = [attributes wxmap_safeObjectForKey:@"center"];
+        _centerCoordinate.latitude = [[center wxmap_safeObjectForKey:1] doubleValue];
+        _centerCoordinate.longitude = [[center wxmap_safeObjectForKey:0] doubleValue];
+        _zoomLevel = [[attributes wxmap_safeObjectForKey:@"zoom"] floatValue];
+        _showScale = [[attributes wxmap_safeObjectForKey:@"scale"] boolValue];
+        _showGeolocation = [[attributes wxmap_safeObjectForKey:@"geolocation"] boolValue];
+        if ([attributes wxmap_safeObjectForKey:@"sdkKey"]) {
             [self setAPIKey:[attributes[@"sdkKey"] objectForKey:@"ios"] ? : @""];
         }
         if ([events containsObject:@"zoomchange"]) {
