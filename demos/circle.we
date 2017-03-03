@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
-      <weex-amap-circle center="pos" fill-color="#2ecc71" fill-weight="4"></weex-amap-circle>
+      <weex-amap-circle center="{{pos}}" radius="7000" fill-color="#2ecc71" fill-width="4"></weex-amap-circle>
     </weex-amap>
     <div class="map-control">
       <text class="title">Componenet: weex-amap-circle</text> 
@@ -45,23 +45,6 @@
     color:#666;
     font-size: 20px;
   }
-  .btn{
-    margin: 20;
-    padding: 20;
-    background-color: #1ba1e2;
-    border-radius: 5;
-    color: #fff; 
-    text-align:center;
-    cursor: pointer;
-    font-size: 28px;
-  }
-  .distance{
-    padding: 5;
-    margin: 20;
-    font-size: 22;
-    background-color: #f1c40f;
-    color: #000;
-  }
 </style>
 
 <script>
@@ -72,11 +55,6 @@
   } catch(err) {
     console.log(err);
   }
-  var polygonArr = new Array();//多边形覆盖物节点坐标数组
-  polygonArr.push([116.403322, 39.920255]);
-  polygonArr.push([116.410703, 39.897555]);
-  polygonArr.push([116.402292, 39.892353]);
-  polygonArr.push([116.389846, 39.891365]);
   module.exports = {
     data: {
       keys: {
@@ -85,7 +63,6 @@
         android: 'db6a973159cb0c2639ad02c617a786ae'
       },
       pos: [116.397428, 39.90923],
-      path: polygonArr,
       zoom: 9
     }
   }
