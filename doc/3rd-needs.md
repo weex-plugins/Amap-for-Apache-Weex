@@ -8,7 +8,7 @@
 | ------------- |:-------------:| -----:|----------:|
 | path     | array | [[116.487, 40.00003],[113.487, 40.0002]...]| 折线的节点坐标数组 |
 | stroke-color | string     |    #000 | 线条颜色 |
-| stroke-weight | number   |   2 | 线条宽度 |
+| stroke-width | number   |   2 | 线条宽度 |
 | stroke-opacity | number  | 0.5  | 线条透明度[0-1]
 | stroke-style   | string  | solid | 线条的样式 实线:solid，虚线:dashed
 
@@ -44,7 +44,7 @@ module.exports = {
 | fill-color | string     |    #000 | 多边形填充颜色 |
 | fill-opacity | string     |    #000 | 多边形填充透明度 |
 | stroke-color | string     |    #000 | 线条颜色 |
-| stroke-weight | number   |   2 | 线条宽度 |
+| stroke-width | number   |   2 | 线条宽度 |
 | stroke-opacity | number  | 0.5  | 线条透明度[0-1]
 | stroke-style   | string  | solid | 线条的样式 实线:solid，虚线:dashed
 
@@ -62,7 +62,7 @@ module.exports = {
 | fill-opacity | string     |    #000 | 圆的填充透明度 |
 | fill-opacity | string     |    #000 | 圆的填充透明度 |
 | stroke-color | string     |    #000 | 圆的轮廓线条颜色 |
-| stroke-weight | number   |   2 | 圆的轮廓线条宽度 |
+| stroke-width | number   |   2 | 圆的轮廓线条宽度 |
 | stroke-opacity | number  | 0.5  | 圆的轮廓线条透明度[0-1]
 | stroke-style   | string  | solid | 圆的轮廓线条的样式 实线:solid，虚线:dashed
 
