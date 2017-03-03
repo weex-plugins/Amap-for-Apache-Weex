@@ -49,7 +49,7 @@ module.exports = {
 | stroke-style   | string  | solid | 线条的样式 实线:solid，虚线:dashed
 
 
-### 圆形组件
+### 圆形组件 weex-amap-circle
 
 在地图上绘制圆形
 
