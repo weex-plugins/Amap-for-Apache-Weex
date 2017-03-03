@@ -41,10 +41,16 @@ const amap = {
 };
 
 const meta = {
-  amap: [{
-    name: 'getUserLocation',
-    args: ['string', 'function']
-  }]
+  amap: [
+    {
+      name: 'getUserLocation',
+      args: ['string', 'function'],
+    },
+    {
+      name: 'getLineDistance',
+      args: ['array', 'array', 'function']
+    }
+  ]
 };
 
 module.exports = function (Weex) {

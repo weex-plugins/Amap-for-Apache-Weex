@@ -1,14 +1,14 @@
 <template>
   <div class="container">
     <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
-      <weex-amap-marker position="marker1.position" title="marker1.title"></weex-amap-marker>
-      <weex-amap-marker position="marker2.position" title="marker2.title"></weex-amap-marker>
+      <weex-amap-marker position="{{marker1.position}}" title="{{marker1.title}}"></weex-amap-marker>
+      <weex-amap-marker position="{{marker2.position}}" title="{{marker2.title}}"></weex-amap-marker>
     </weex-amap>
     <div class="map-control">
       <text class="title">Methods: getDistanceBetweenMarkers</text> 
       <text class="tips">getDistanceBetweenMarkers，可以获取地图上两个坐标点的巨鹿</text>
-      <div onclick="changeCenter" class="btnbox"><text class="btn" >Get Distance</text></div>
-      <text class="distance" v-if="distance"></text>
+      <div onclick="getDistance" class="btnbox"><text class="btn" >Get Distance</text></div>
+      <text class="distance" if="distance">{{distance}}</text>
     </div>
   </div>
 </template>
@@ -91,16 +91,16 @@
         position: [116.387271, 39.922501],
         title: '标记点2'
       },
-      zoom: 9,
+      zoom: 13,
+      pos: [116.387271, 39.922501],
       distance: false
     },
     
     methods: {
       getDistance() {
-        amap.getDistanceBetweenMarkers(this.marker1.position, this.marker2.position, (res) => {
+        Amap.getLineDistance(this.marker1.position, this.marker2.position, (res) => {
           if(res.result == 'success') {
-            this.distance = '两点相距' + res.data + '米';
-            console.log(res.data + '米');
+            this.distance = '两点相距' + res.data.distance + '米';
           } else {
             console.log('计算失败');
           }
