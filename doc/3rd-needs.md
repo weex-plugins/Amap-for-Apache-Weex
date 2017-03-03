@@ -67,7 +67,7 @@ module.exports = {
 | stroke-style   | string  | solid | 圆的轮廓线条的样式 实线:solid，虚线:dashed
 
 
-### Amap方法  getDistanceBetweenMarkers
+### Amap方法  getLineDistance
 
 计算两个标记点的距离
 
@@ -81,10 +81,10 @@ module.exports = {
 
 ``` js
 //...
-amap.getDistanceBetweenMarkers(this.marker1.position, this.marker2.position, (res) => {
+amap.getLineDistance(this.marker1.position, this.marker2.position, (res) => {
   if(res.result == 'success') {
     this.distance = '两点相距' + res.data + '米';
-    console.log(res.data + '米');
+    console.log(res.data.distance + '米');
   } else {
     console.log('计算失败');
   }
