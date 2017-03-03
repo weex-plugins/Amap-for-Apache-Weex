@@ -31,7 +31,16 @@ public class Constant {
     String POSITION = "position";
     String ICON = "icon";
     String TITLE = "title";
+
+    // polyline
+    String PATH = "path";
+    String STROKE_COLOR = "strokeColor";
+    String STROKE_WIDTH = "strokeWidth";
+    String STROKE_OPACITY = "strokeOpacity";
+    String STROKE_STYLE = "strokeStyle";
   }
+
+
 
   public static interface EVENT {
     String ZOOM_CHANGE = "zoomchange";
