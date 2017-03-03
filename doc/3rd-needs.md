@@ -72,8 +72,11 @@ module.exports = {
 计算两个标记点的距离
 
 该方法接收三个参数 进行计算比如:
+
 @param coor1 坐标1
+
 @param coor2 坐标2
+
 @param callback 计算完成后的回调 会返回一个计算出的具体距离，单位 米
 
 ``` js
@@ -95,6 +98,7 @@ amap.getDistanceBetweenMarkers(this.marker1.position, this.marker2.position, (re
 该方法接收两个参数，返回一个boolean值
 
 @param coor 点的坐标
+
 @param 多边形的ref
 
 ``` 
