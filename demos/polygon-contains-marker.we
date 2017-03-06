@@ -1,13 +1,13 @@
 <template>
   <div class="container">
     <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
-      <weex-amap-polygon path="path" fill-color="#2ecc71" fill-weight="4"></weex-amap-polygon>
-      <weex-amap-marker position="marker.position" title="marker.title"></weex-amap-marker>
+      <weex-amap-polygon id="plg-2017" path="{{path}}" fill-color="#2ecc71" fill-weight="4"></weex-amap-polygon>
+      <weex-amap-marker position="{{marker.position}}" title="{{marker.title}}"></weex-amap-marker>
     </weex-amap>
     <div class="map-control">
       <text class="title">Method: polygonContainsMarker</text> 
       <text class="tips">判断多边形是不是包含某个点</text>
-      <div onclick="changeCenter" class="btnbox"><text class="btn" >Test</text></div>
+      <div onclick="test" class="btnbox"><text class="btn" >Test</text></div>
     </div>
   </div>
 </template>
@@ -90,7 +90,7 @@
       },
       pos: [116.397428, 39.90923],
       path: path,
-      zoom: 9,
+      zoom: 13,
       marker: {
         position: [116.368904, 39.923423],
         title: 'a marker'
@@ -102,7 +102,7 @@
         const result = amap.polygonContainsMarker(marker.position, this.$el('polygon-2017').ref);
         const msg = result ? '存在' : '不存在';
         modal.alert({
-          message: '标记点' + msg;
+          message: '标记点' + msg
         })
       }
     }

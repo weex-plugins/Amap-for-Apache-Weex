@@ -4,5 +4,11 @@ module.exports = {
   },
   setFirstLetterToUppercase(str) {
     return str.substr(0, 1).toUpperCase() + str.substring(1);
+  },
+  getObjectFirstVal(obj) {
+    if(typeof obj === 'object') {
+      return obj[Object.keys(obj)[0]]
+    }
+    return null;
   }
 };

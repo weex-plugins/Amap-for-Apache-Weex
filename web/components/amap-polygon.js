@@ -7,7 +7,7 @@ const proto = {
   create() {
     const node = document.createElement('div');
     const data = this.data.attr;
-    const comId = data.ref || vendor.gengerateRandomId(componentName);
+    const comId = this.data.ref || vendor.gengerateRandomId(componentName);
     if (data.path && Array.isArray(data.path)) {
       components.registerComponent(componentName, {
         path: data.path,

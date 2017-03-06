@@ -1,3 +1,4 @@
+import components from '../service/components';
 // AMap module
 const amap = {
   /** get user loaction by browser and IP
@@ -37,6 +38,14 @@ const amap = {
         distance: result
       }
     });
+  },
+  /** tell if the marker in a polygon
+  * @param coor the marker position
+  * @param polygonRef
+  **/
+  polygonContainsMarker(coor, polygonRef) {
+    const polygonCom = components.getComponent(polygonRef);
+    return polygonCom.contains(coor);
   }
 };
 
@@ -49,6 +58,10 @@ const meta = {
     {
       name: 'getLineDistance',
       args: ['array', 'array', 'function']
+    },
+    {
+      name: 'polygonContainsMarker',
+      args: ['array', 'string']
     }
   ]
 };
