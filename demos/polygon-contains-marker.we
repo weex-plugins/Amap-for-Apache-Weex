@@ -99,7 +99,7 @@
     
     methods: {
       test() {
-        const result = Amap.polygonContainsMarker(marker.position, this.$el('polygon-2017').ref);
+        const result = Amap.polygonContainsMarker(this.marker.position, this.$el('polygon-2017').ref);
         const msg = result ? '存在' : '不存在';
         modal.alert({
           message: '标记点' + msg
