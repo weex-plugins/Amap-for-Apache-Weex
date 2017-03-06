@@ -2,6 +2,7 @@ import upperCamelCase from '../utils/uppercamelcase';
 import CONST from '../utils/constant';
 import { toLngLat, toPixel, toBounds } from '../utils/convert-helper';
 import eventHelper from '../utils/event-helper';
+
 export default {
   mounted() {
     this.$amap = this.$amap || this.$parent.$amap;
@@ -35,6 +36,9 @@ export default {
       for (let key in this.$options.propsData) {
         let propsValue = this.convertSignalProp(key, this.$options.propsData[key]);
         if (propsValue === undefined) continue;
+        if (key === 'strokeWidth') {
+          props['strokeWeight'] = propsValue;
+        }
         props[key] = propsValue;
       }
       return props;
