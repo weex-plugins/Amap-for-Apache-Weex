@@ -43,9 +43,13 @@ const amap = {
   * @param coor the marker position
   * @param polygonRef
   **/
-  polygonContainsMarker(coor, polygonRef) {
+  polygonContainsMarker(coor, polygonRef, callback) {
     const polygonCom = components.getComponent(polygonRef);
-    return polygonCom.contains(coor);
+    const result = polygonCom.contains(coor);
+    this.sender.performCallback(callback, {
+      result: !result ? 'fail' : 'success',
+      data: result
+    });
   }
 };
 
