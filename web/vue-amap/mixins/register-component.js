@@ -10,7 +10,6 @@ export default {
       this.register();
     } else {
       this.$on(CONST.AMAP_READY_EVENT, map => {
-        this.$amap = map;
         this.register();
       });
     }
@@ -41,6 +40,7 @@ export default {
         }
         props[key] = propsValue;
       }
+      console.log(props);
       return props;
     },
 

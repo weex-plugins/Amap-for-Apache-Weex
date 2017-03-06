@@ -60,7 +60,7 @@ export default {
           self.$emit(ev, {result: 'success'});
         };
       });
-      console.log(options);
+      console.log('marker');
       this.$amapComponent = new AMap.Marker(options);
     }
   }

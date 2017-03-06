@@ -25,10 +25,6 @@ export default {
     'onceEvents'
   ],
   
-  computed() {
-      
-  },
-  
   data() {
     return {
       converters: {},

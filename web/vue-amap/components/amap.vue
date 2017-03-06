@@ -1,6 +1,8 @@
 <template>
 <div class="weex-vue-amap-container">
-    <div class="weex-vue-amap"></div>
+    <div class="weex-vue-amap">
+      <slot></slot>
+    </div>
 </div>
 </template>
 <script>
