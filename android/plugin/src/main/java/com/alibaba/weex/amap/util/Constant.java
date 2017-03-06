@@ -13,7 +13,7 @@ public class Constant {
     int ROTATEGESTURE = 0x1 << 3;
   }
 
-  public static interface Name {
+  public interface Name {
 
     // mapview
     String SCALECONTROL = "scale";
