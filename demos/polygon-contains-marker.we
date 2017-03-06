@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
-      <weex-amap-polygon id="plg-2017" path="{{path}}" fill-color="#2ecc71" fill-weight="4"></weex-amap-polygon>
+      <weex-amap-polygon id="polygon-2017" path="{{path}}" fill-color="#2ecc71"></weex-amap-polygon>
       <weex-amap-marker position="{{marker.position}}" title="{{marker.title}}"></weex-amap-marker>
     </weex-amap>
     <div class="map-control">

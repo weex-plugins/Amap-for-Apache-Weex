@@ -14,7 +14,7 @@ const proto = {
         radius: data.radius,
         fillColor: data.fillColor,
         filOpacity: data.fillOpacity,
-        strokeWidth: data.strokeWidth,
+        strokeWeight: data.strokeWidth,
         strokeOpacity: data.strokeOpacity,
         strokeColor: data.strokeColor,
         strokeStyle: data.strokeStyle,

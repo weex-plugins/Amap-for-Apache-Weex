@@ -11,7 +11,7 @@ const proto = {
     if (data.path && Array.isArray(data.path)) {
       components.registerComponent(componentName, {
         path: data.path,
-        strokeWidth: data.strokeWidth,
+        strokeWeight: data.strokeWidth,
         strokeOpacity: data.strokeOpacity,
         strokeColor: data.strokeColor,
         strokeStyle: data.strokeStyle,

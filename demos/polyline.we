@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
-      <weex-amap-polyline path="{{path}}" stroke-color="#000000" stroke-width="2"></weex-amap-polyline>
+      <weex-amap-polyline path="{{path}}" stroke-style="solid" stroke-opacity="0.7" stroke-color="#000000" stroke-width="2"></weex-amap-polyline>
     </weex-amap>
     <div class="map-control">
       <text class="title">Component weex-amap-polyline</text> 
