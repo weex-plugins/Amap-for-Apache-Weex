@@ -25,6 +25,9 @@ const components = {
       return vendor.getObjectFirstVal(this._components);
     }
     return this._components[id];
+  },
+  getComponentMap() {
+    return amapManager.getMap();
   }
 };
 

@@ -66,6 +66,18 @@ module.exports = {
 | stroke-style   | string  | solid | 圆的轮廓线条的样式 实线:solid，虚线:dashed
 
 
+#### 自定义信息窗体 weex-amap-info-window
+
+在地图上显示自定义窗体
+
+| 属性        | 类型         | Demo  | 描述  |
+| ------------- |:-------------:| -----:|----------:|
+| position     | array | [[116.487, 40.00003]| 在地图上的位置 |
+| open | boolean     |    true | 是否在地图上打开 |
+| offset | array     |    偏移 | 相对定位点坐标偏移 |
+| children | weex comonnet     |    <text>This is a info window</text> | 窗体的内容 |
+
+
 ### Amap方法  getLineDistance
 
 计算两个标记点的距离
