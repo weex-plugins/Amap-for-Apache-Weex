@@ -38,6 +38,10 @@ public class Constant {
     String STROKE_WIDTH = "strokeWidth";
     String STROKE_OPACITY = "strokeOpacity";
     String STROKE_STYLE = "strokeStyle";
+
+    // circle
+    String RADIUS = "radius";
+    String FILL_COLOR = "fillColor";
   }
 
 
