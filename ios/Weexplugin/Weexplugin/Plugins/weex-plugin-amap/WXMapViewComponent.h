@@ -8,6 +8,7 @@
 
 #import <WeexSDK/WeexSDK.h>
 #import "WXMapViewMarkerComponent.h"
+#import "WXMapRenderer.h"
 #import <MAMapKit/MAMapKit.h>
 #import <AMapFoundationKit/AMapFoundationKit.h>
 
@@ -15,7 +16,9 @@
 
 - (NSDictionary *)getUserLocation;
 
-- (void)addMarker:(WXMapViewMarkerComponent *)marker;
+
+#pragma - Marker
+//- (void)addMarker:(WXMapViewMarkerComponent *)marker;
 
 - (void)updateTitleMarker:(WXMapViewMarkerComponent *)marker;
 
@@ -25,6 +28,8 @@
 
 - (void)removeMarker:(WXMapViewMarkerComponent *)marker;
 
+#pragma - Overlay
+//- (void)addOverlay:(id)overlay;
 
 @end
 

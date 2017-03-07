@@ -8,9 +8,13 @@
 
 #import "WXMapViewComponent.h"
 #import "WXMapViewMarkerComponent.h"
+#import "WXMapPolylineComponent.h"
+#import "WXMapPolygonComponent.h"
+#import "WXMapCircleComponent.h"
 #import "WXImgLoaderImpl.h"
 #import "NSArray+WXMap.h"
 #import "NSDictionary+WXMap.h"
+#import "WXConvert+AMapKit.h"
 #import <objc/runtime.h>
 
 @interface MAPointAnnotation(imageAnnotation)
@@ -41,6 +45,28 @@ static const void *refKey = &refKey;
 
 - (NSString *)ref {
     return objc_getAssociatedObject(self, refKey);
+}
+
+@end
+
+@interface MAShape(WXMapShape)
+
+@property(nonatomic, strong) WXComponent *component;
+
+@end
+
+static const void *componentKey = &componentKey;
+
+@implementation MAShape(WXMapShape)
+
+@dynamic component;
+
+- (void)setComponent:(WXComponent *)component {
+    objc_setAssociatedObject(self, componentKey, component, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+}
+
+- (WXComponent *)component {
+    return objc_getAssociatedObject(self, componentKey);
 }
 
 @end
@@ -116,9 +142,21 @@ static const void *refKey = &refKey;
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
     self.mapView.showsScale = _showScale;
     [self.mapView setCenterCoordinate:_centerCoordinate];
     [self.mapView setZoomLevel:_zoomLevel];
+}
+
+
+- (void)insertSubview:(WXComponent *)subcomponent atIndex:(NSInteger)index
+{
+    if ([subcomponent isKindOfClass:[WXMapRenderer class]]) {
+        WXMapRenderer *overlayRenderer = (WXMapRenderer *)subcomponent;
+        [self addOverlay:overlayRenderer];
+    }else if ([subcomponent isKindOfClass:[WXMapViewMarkerComponent class]]) {
+        [self addMarker:subcomponent];
+    }
 }
 
 - (void)layoutDidFinish
@@ -158,7 +196,38 @@ static const void *refKey = &refKey;
     
 }
 
-#pragma mark - component interface
+#pragma mark - mark
+- (void)addOverlay:(WXMapRenderer *)overlayRenderer
+{
+    MAShape *shape;
+    if (!overlayRenderer.path && [overlayRenderer isKindOfClass:[WXMapCircleComponent class]]) {
+        WXMapCircleComponent *circle = (WXMapCircleComponent *)overlayRenderer;
+        CLLocationCoordinate2D centerCoordinate = [WXConvert CLLocationCoordinate2D:circle.center];
+        shape = [MACircle circleWithCenterCoordinate:centerCoordinate radius:circle.radius];
+    }else {
+        NSInteger count = overlayRenderer.path.count;
+        if (count <= 0) {
+            return;
+        }
+        CLLocationCoordinate2D shapePoints[count];
+        for (NSInteger i = 0; i < count; i++) {
+            CLLocationCoordinate2D coordinate = [WXConvert CLLocationCoordinate2D:[overlayRenderer.path wxmap_safeObjectForKey:i]];
+            shapePoints[i].latitude = coordinate.latitude;
+            shapePoints[i].longitude = coordinate.longitude;
+        }
+        
+        if ([overlayRenderer isKindOfClass:[WXMapPolylineComponent class]]) {
+            shape = [MAPolyline polylineWithCoordinates:shapePoints count:count];
+        }else if ([overlayRenderer isKindOfClass:[WXMapPolygonComponent class]]) {
+            shape = [MAPolygon polygonWithCoordinates:shapePoints count:count];
+        }
+    }
+    shape.component = overlayRenderer;
+    overlayRenderer.shape = shape;
+    [self.mapView addOverlay:shape];
+}
+
+#pragma mark - mark
 - (void)addMarker:(WXMapViewMarkerComponent *)marker {
     [self initPOIData];
     MAPointAnnotation *a1 = [[MAPointAnnotation alloc] init];
@@ -200,40 +269,36 @@ static const void *refKey = &refKey;
 
 
 - (void)removeMarker:(WXMapViewMarkerComponent *)marker {
-    /*NSArray *tempAnnotations = [NSArray arrayWithArray:_annotations];
-    [tempAnnotations enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        MAPointAnnotation *annotation = (MAPointAnnotation *)obj;
-        if ([annotation.ref isEqualToString:marker.ref]) {
-            [self.mapView removeAnnotation:annotation];
-            *stop = YES;
-            [_annotations removeObject:obj];
-        }
-    }];*/
-    
     if (_annotations[marker.ref]) {
         [self.mapView removeAnnotation:_annotations[marker.ref]];
         [_annotations removeObjectForKey:marker.ref];
     }
 }
 
-- (void)setAPIKey:(NSString *)appKey {
+
+#pragma mark - component interface
+- (void)setAPIKey:(NSString *)appKey
+{
     [AMapServices sharedServices].apiKey = appKey;
 }
 
-- (void)setCenter:(NSArray *)center {
+- (void)setCenter:(NSArray *)center
+{
     CLLocationCoordinate2D centerCoordinate;
     centerCoordinate.latitude = [center[1] doubleValue];
     centerCoordinate.longitude = [center[0] doubleValue];
     [self.mapView setCenterCoordinate:centerCoordinate];
 }
 
-- (void)setZoomLevel:(CGFloat)zoom {
+- (void)setZoomLevel:(CGFloat)zoom
+{
     [self.mapView setZoomLevel:zoom animated:YES];
 }
 
 
 #pragma mark - publish method
-- (NSDictionary *)getUserLocation {
+- (NSDictionary *)getUserLocation
+{
     if(self.mapView.userLocation.updating && self.mapView.userLocation.location) {
         NSArray *coordinate = @[[NSNumber numberWithDouble:self.mapView.userLocation.location.coordinate.longitude],[NSNumber numberWithDouble:self.mapView.userLocation.location.coordinate.latitude]];
         NSDictionary *userDic = @{@"result":@"success",@"data":@{@"position":coordinate,@"title":@""}};
@@ -243,13 +308,15 @@ static const void *refKey = &refKey;
 }
 
 #pragma mark - private method
-- (void)initPOIData {
+- (void)initPOIData
+{
     if (!_annotations) {
         _annotations = [NSMutableDictionary dictionaryWithCapacity:5];
     }
 }
 
-- (void)clearPOIData {
+- (void)clearPOIData
+{
     [_annotations removeAllObjects];
     _annotations = nil;
 }
@@ -258,7 +325,8 @@ static const void *refKey = &refKey;
 /*!
  @brief 根据anntation生成对应的View
  */
-- (MAAnnotationView*)mapView:(MAMapView *)mapView viewForAnnotation:(id <MAAnnotation>)annotation {
+- (MAAnnotationView*)mapView:(MAMapView *)mapView viewForAnnotation:(id <MAAnnotation>)annotation
+{
     if ([annotation isKindOfClass:[MAPointAnnotation class]])
     {
         MAPointAnnotation *pointAnnotation = (MAPointAnnotation *)annotation;
@@ -300,14 +368,16 @@ static const void *refKey = &refKey;
 /**
  * @brief 地图将要发生缩放时调用此接口
  */
-- (void)mapView:(MAMapView *)mapView mapWillZoomByUser:(BOOL)wasUserAction {
+- (void)mapView:(MAMapView *)mapView mapWillZoomByUser:(BOOL)wasUserAction
+{
     
 }
 
 /**
  * @brief 地图缩放结束后调用此接口
  */
-- (void)mapView:(MAMapView *)mapView mapDidZoomByUser:(BOOL)wasUserAction {
+- (void)mapView:(MAMapView *)mapView mapDidZoomByUser:(BOOL)wasUserAction
+{
     if (_zoomChanged) {
         [self fireEvent:@"zoomchange" params:[NSDictionary dictionary]];
     }
@@ -318,7 +388,8 @@ static const void *refKey = &refKey;
  * @param mapView 地图View
  * @param view 选中的annotation views
  */
-- (void)mapView:(MAMapView *)mapView didSelectAnnotationView:(MAAnnotationView *)view {
+- (void)mapView:(MAMapView *)mapView didSelectAnnotationView:(MAAnnotationView *)view
+{
     MAPointAnnotation *annotation = view.annotation;
     for (WXComponent *component in self.subcomponents) {
         if ([component isKindOfClass:[WXMapViewMarkerComponent class]] &&
@@ -336,7 +407,8 @@ static const void *refKey = &refKey;
  * @param mapView 地图View
  * @param view 取消选中的annotation views
  */
-- (void)mapView:(MAMapView *)mapView didDeselectAnnotationView:(MAAnnotationView *)view {
+- (void)mapView:(MAMapView *)mapView didDeselectAnnotationView:(MAAnnotationView *)view
+{
     
 }
 
@@ -345,10 +417,48 @@ static const void *refKey = &refKey;
  * @param mapView       地图view
  * @param wasUserAction 标识是否是用户动作
  */
-- (void)mapView:(MAMapView *)mapView mapDidMoveByUser:(BOOL)wasUserAction {
+- (void)mapView:(MAMapView *)mapView mapDidMoveByUser:(BOOL)wasUserAction
+{
     if (_isDragend) {
         [self fireEvent:@"dragend" params:[NSDictionary dictionary]];
     }
+}
+
+#pragma mark - Overlay
+- (MAOverlayRenderer *)mapView:(MAMapView *)mapView rendererForOverlay:(id <MAOverlay>)overlay
+{
+    if ([overlay isKindOfClass:[MAPolyline class]])
+    {
+        MAPolyline *polyline = (MAPolyline *)overlay;
+        WXMapPolylineComponent *component = polyline.component;
+        MAPolylineRenderer *polylineRenderer = [[MAPolylineRenderer alloc] initWithPolyline:overlay];
+        polylineRenderer.strokeColor = [WXConvert UIColor:component.strokeColor];
+        polylineRenderer.lineWidth   = component.strokeWidth;
+        polylineRenderer.lineCapType = kCGLineCapSquare;
+        polylineRenderer.lineDash = [WXConvert isLineDash:component.strokeStyle];
+        return polylineRenderer;
+    }else if ([overlay isKindOfClass:[MAPolygon class]])
+    {
+        MAPolygon *polygon = (MAPolygon *)overlay;
+        WXMapPolygonComponent *component = polygon.component;
+        MAPolygonRenderer *polygonRenderer = [[MAPolygonRenderer alloc] initWithPolygon:overlay];
+        polygonRenderer.lineWidth   = component.strokeWidth;;
+        polygonRenderer.strokeColor = [WXConvert UIColor:component.strokeColor];
+        polygonRenderer.fillColor   = [WXConvert UIColor:component.fillColor];
+        polygonRenderer.lineDash = [WXConvert isLineDash:component.strokeStyle];
+        return polygonRenderer;
+    }else if ([overlay isKindOfClass:[MACircle class]])
+    {
+        MACircle *circle = (MACircle *)overlay;
+        WXMapCircleComponent *component = circle.component;
+        MACircleRenderer *circleRenderer = [[MACircleRenderer alloc] initWithCircle:overlay];
+        circleRenderer.lineWidth   = component.strokeWidth;
+        circleRenderer.strokeColor = [WXConvert UIColor:component.strokeColor];
+        circleRenderer.fillColor   = [WXConvert UIColor:component.fillColor];
+        return circleRenderer;
+    }
+    
+    return nil;
 }
 
 @end
