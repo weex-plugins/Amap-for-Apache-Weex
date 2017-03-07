@@ -45,9 +45,25 @@
         <param name="ios-package" value="WXMapViewMarkerComponent" />
         <param name="api" value="weex-amap-marker" />
     </feature>
+    <feature name="WXMapPolylineComponent">
+        <param name="category" value="component" />
+        <param name="ios-package" value="WXMapPolylineComponent" />
+        <param name="api" value="weex-amap-polyline" />
+    </feature>
+    <feature name="WXMapPolygonComponent">
+        <param name="category" value="component" />
+        <param name="ios-package" value="WXMapPolygonComponent" />
+        <param name="api" value="weex-amap-polygon" />
+    </feature>
+    <feature name="WXMapCircleComponent">
+        <param name="category" value="component" />
+        <param name="ios-package" value="WXMapCircleComponent" />
+        <param name="api" value="weex-amap-circle" />
+    </feature>
     <feature name="WXMapViewModule">
         <param name="category" value="module" />
         <param name="ios-package" value="WXMapViewModule" />
         <param name="api" value="amap" />
     </feature>
+    
 </widget>

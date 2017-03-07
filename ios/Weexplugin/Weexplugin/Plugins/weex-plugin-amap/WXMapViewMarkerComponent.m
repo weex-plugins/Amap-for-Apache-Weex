@@ -41,6 +41,7 @@
     return self;
 }
 
+/*
 - (UIView *) loadView
 {
     return nil;
@@ -48,11 +49,13 @@
 
 - (void)viewDidLoad
 {
+    [super viewDidLoad];
     if (!_viewLoaded) {
         [(WXMapViewComponent *)self.supercomponent addMarker:self];
         _viewLoaded = YES;
     }
 }
+ */
 - (void)updateAttributes:(NSDictionary *)attributes
 {
     WXMapViewComponent *mapComponent = (WXMapViewComponent *)self.supercomponent;
@@ -71,7 +74,6 @@
         [mapComponent updateLocationMarker:self];
         
     }
-    
 }
 
 - (void)removeFromSuperview;
