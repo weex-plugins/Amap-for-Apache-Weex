@@ -12,7 +12,7 @@
 #import "WXMapPolygonComponent.h"
 #import "WXMapCircleComponent.h"
 #import "WXMapInfoWindowComponent.h"
-#import "WXMapCustomInfoWindow.h"
+#import "WXMapInfoWindow.h"
 #import "WXImgLoaderImpl.h"
 #import "NSArray+WXMap.h"
 #import "NSDictionary+WXMap.h"
@@ -364,6 +364,26 @@ static const void *componentKey = &componentKey;
     }
 }
 
+- (MAAnnotationView *)_generateCustomInfoWindow:(MAMapView *)mapView viewForAnnotation:(MAPointAnnotation *)annotation
+{
+    WXMapInfoWindowComponent *infoWindowComponent = (WXMapInfoWindowComponent *)annotation.component;
+    static NSString *customReuseIndetifier = @"customReuseIndetifier";
+    WXMapInfoWindow *annotationView = (WXMapInfoWindow*)[mapView dequeueReusableAnnotationViewWithIdentifier:customReuseIndetifier];
+    if (annotationView == nil) {
+        infoWindowComponent.annotation = annotation;
+        infoWindowComponent.identifier = customReuseIndetifier;
+        annotationView = infoWindowComponent.view;
+        if (infoWindowComponent.subcomponents.count > 0) {
+            for (WXComponent *component in annotation.component.subcomponents) {
+                [annotationView addCustomView:component.view];
+            }
+        }
+        annotationView.canShowCallout = NO;
+        annotationView.draggable = YES;
+        return annotationView;
+    }
+}
+
 #pragma mark - mapview delegate
 /*!
  @brief 根据anntation生成对应的View
@@ -374,22 +394,7 @@ static const void *componentKey = &componentKey;
     {
         MAPointAnnotation *pointAnnotation = (MAPointAnnotation *)annotation;
         if ([pointAnnotation.component isKindOfClass:[WXMapInfoWindowComponent class]]) {
-            WXMapInfoWindowComponent *infoWindowComponent = (WXMapInfoWindowComponent *)pointAnnotation.component;
-            static NSString *customReuseIndetifier = @"customReuseIndetifier";
-            WXMapCustomInfoWindow *annotationView = (WXMapCustomInfoWindow*)[mapView dequeueReusableAnnotationViewWithIdentifier:customReuseIndetifier];
-            if (annotationView == nil) {
-                infoWindowComponent.annotation = annotation;
-                infoWindowComponent.identifier = customReuseIndetifier;
-                annotationView = infoWindowComponent.view;
-                if (infoWindowComponent.subcomponents.count > 0) {
-                    for (WXComponent *component in pointAnnotation.component.subcomponents) {
-                        [annotationView addCustomView:component.view];
-                    }
-                }
-                annotationView.canShowCallout = NO;
-                annotationView.draggable = YES;
-                return annotationView;
-            }
+            return [self _generateCustomInfoWindow:mapView viewForAnnotation:pointAnnotation];
             
         }else {
             return [self _generateAnnotationView:mapView viewForAnnotation:pointAnnotation];

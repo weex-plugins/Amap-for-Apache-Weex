@@ -8,7 +8,7 @@
 
 #import <MAMapKit/MAMapKit.h>
 
-@interface WXMapCustomInfoWindow : MAAnnotationView
+@interface WXMapInfoWindow : MAAnnotationView
 
 - (void)addCustomView:(UIView *)view;
 

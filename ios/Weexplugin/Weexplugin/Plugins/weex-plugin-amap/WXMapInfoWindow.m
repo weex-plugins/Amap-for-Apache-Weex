@@ -6,20 +6,15 @@
 //
 //
 
-#import "WXMapCustomInfoWindow.h"
+#import "WXMapInfoWindow.h"
 
-@implementation WXMapCustomInfoWindow
+@implementation WXMapInfoWindow
 
 - (id)initWithAnnotation:(id<MAAnnotation>)annotation reuseIdentifier:(NSString *)reuseIdentifier
 {
     self = [super initWithAnnotation:annotation reuseIdentifier:reuseIdentifier];
     
-    if (self)
-    {
-        self.bounds = CGRectMake(0.f, 0.f, 150, 120);
-        
-        self.backgroundColor = [UIColor grayColor];
-    }
+    if (self){}
     
     return self;
 }

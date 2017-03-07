@@ -14,4 +14,6 @@
 @property (nonatomic, strong) MAPointAnnotation *annotation;
 @property (nonatomic, copy) NSString *identifier;
 
+@property (nonatomic, assign) BOOL isOpen;
+
 @end

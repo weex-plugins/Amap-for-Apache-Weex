@@ -18,7 +18,7 @@
 
 
 #pragma - Marker
-//- (void)addMarker:(WXMapViewMarkerComponent *)marker;
+- (void)addMarker:(WXMapViewMarkerComponent *)marker;
 
 - (void)updateTitleMarker:(WXMapViewMarkerComponent *)marker;
 

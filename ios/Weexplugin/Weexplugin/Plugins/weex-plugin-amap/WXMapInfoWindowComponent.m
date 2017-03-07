@@ -7,11 +7,14 @@
 //
 
 #import "WXMapInfoWindowComponent.h"
-#import "WXMapCustomInfoWindow.h"
+#import "WXMapViewComponent.h"
+#import "WXMapInfoWindow.h"
 
 @implementation WXMapInfoWindowComponent
 @synthesize annotation = _annotation;
 @synthesize identifier = _identifier;
+
+@synthesize isOpen = _isOpen;
 
 - (instancetype)initWithRef:(NSString *)ref
                        type:(NSString*)type
@@ -22,19 +25,42 @@
 {
     self = [super initWithRef:ref type:type styles:styles attributes:attributes events:events weexInstance:weexInstance];
     if (self) {
-        
+        if (attributes[@"open"]) {
+            _isOpen = [attributes[@"open"] boolValue];
+        }
     }
     return self;
 }
 
 - (UIView *) loadView
 {
-    return [[WXMapCustomInfoWindow alloc] initWithAnnotation:_annotation reuseIdentifier:_identifier];
+    return [[WXMapInfoWindow alloc] initWithAnnotation:_annotation reuseIdentifier:_identifier];
 }
 
-- (void)insertSubview:(WXComponent *)subcomponent atIndex:(NSInteger)index
+- (void)insertSubview:(WXComponent *)subcomponent atIndex:(NSInteger)index{}
+- (void)updateAttributes:(NSDictionary *)attributes
 {
-    
+    if (attributes[@"open"])
+    {
+        _isOpen = [attributes[@"open"] boolValue];
+        if (_isOpen) {
+            [self _addSubView];
+        }else {
+            [self _removeViewFromSuperView];
+        }
+    }
+}
+
+#pragma mark - private method
+- (void)_addSubView
+{
+    [self _removeViewFromSuperView];
+    [(WXMapViewComponent *)self.supercomponent addMarker:self];
+}
+
+- (void)_removeViewFromSuperView
+{
+    [(WXMapViewComponent *)self.supercomponent removeMarker:self];
 }
 
 @end

@@ -56,22 +56,6 @@ static const void *shapeKey = &shapeKey;
     _viewLoaded = NO;
     return self;
 }
-
-/*
-- (UIView *) loadView
-{
-    return nil;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    if (!_viewLoaded) {
-        [(WXMapViewComponent *)self.supercomponent addOverlay:self];
-        _viewLoaded = YES;
-    }
-}
-*/
  
 - (void)updateAttributes:(NSDictionary *)attributes
 {

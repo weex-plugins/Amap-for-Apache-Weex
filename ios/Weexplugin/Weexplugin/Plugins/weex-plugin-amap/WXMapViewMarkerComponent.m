@@ -37,21 +37,13 @@
     return self;
 }
 
-/*
-- (UIView *) loadView
+- (void)addEvent:(NSString *)eventName
 {
-    return nil;
-}
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    if (!_viewLoaded) {
-        [(WXMapViewComponent *)self.supercomponent addMarker:self];
-        _viewLoaded = YES;
+    if ([eventName isEqualToString:@"open"]) {
+        
     }
 }
- */
+
 - (void)updateAttributes:(NSDictionary *)attributes
 {
     WXMapViewComponent *mapComponent = (WXMapViewComponent *)self.supercomponent;
