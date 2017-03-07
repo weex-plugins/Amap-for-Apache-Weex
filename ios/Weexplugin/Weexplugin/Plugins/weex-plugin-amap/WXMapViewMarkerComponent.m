@@ -11,9 +11,6 @@
 #import "NSDictionary+WXMap.h"
 
 @implementation WXMapViewMarkerComponent
-{
-    @private BOOL _viewLoaded;
-}
 
 @synthesize clickEvent = _clickEvent;
 @synthesize icon = _icon;
@@ -37,7 +34,6 @@
         _title = [attributes wxmap_safeObjectForKey:@"title"];
         _icon = [attributes wxmap_safeObjectForKey:@"icon"];
     }
-    _viewLoaded = NO;
     return self;
 }
 
