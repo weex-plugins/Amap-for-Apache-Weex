@@ -7,8 +7,8 @@
     <div class="map-control">
       <text class="title">Component: weex-amap-info-window</text> 
       <text class="tips">在地图上显示自定义窗体</text> 
-      <div onclick="open" class="btnbox"><text class="btn" >Open InfoWindow</text></div>
-      <div onclick="close" class="btnbox"><text class="btn" >Close InfoWindow</text></div>
+      <div if="{{!infoWindow.open}}" onclick="open" class="btnbox"><text class="btn" >Open InfoWindow</text></div>
+      <div if="{{infoWindow.open}}" onclick="close" class="btnbox"><text class="btn" >Close InfoWindow</text></div>
     </div>
   </div>
 </template>
