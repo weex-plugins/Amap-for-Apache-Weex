@@ -7,18 +7,29 @@ const proto = {
   create() {
     const node = document.createElement('div');
     const data = this.data.attr;
-    console.log(this);
     const comId = data.ref || vendor.gengerateRandomId(componentName);
-    if (data.position && Array.isArray(data.position)) {
-      components.registerComponent(componentName, {
-        position: data.position,
-        content: data.content,
-        offset: data.offset,
-        open: data.open
-      }, comId);
-    } else {
-      console.warn('attribute center must be an array.');
-    }
+    this.addAppendHandler(() => {
+      if (data.position && Array.isArray(data.position)) {
+        components.registerComponent(componentName, {
+          position: data.position,
+          offset: data.offset,
+          open: data.open
+        }, comId, (com, map) => {
+          if (data.open) {
+            let content = data.content;
+            if (this.node.children.length > 0) {
+              content = this.node.children[0].innerHTML;
+            }
+            if (content) {
+              com.setContent(content);
+              com.open(map, data.position);
+            }
+          }
+        });
+      } else {
+        console.warn('attribute center must be an array.');
+      }
+    });
     this._comId = comId;
     return node;
   }

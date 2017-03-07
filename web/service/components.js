@@ -4,7 +4,7 @@ import amapManager from './map-manager';
 import vendor from './vendor';
 
 const components = {
-  registerComponent(componentName, options, id) {
+  registerComponent(componentName, options, id, callback) {
     const opts = options || {};
     if (!this._components) {
       this._components = {};
@@ -13,14 +13,17 @@ const components = {
       opts.map = mapIns;
       // options.center = new AMap.LngLat(options.center[0],options.center[1]);
       const className = vendor.setFirstLetterToUppercase(componentName);
-      this._components[id] = new AMap[className](options);
+      if (opts.offset) {
+        opts.offset = new AMap.Pixel(opts.offset[0], opts.offset[1]);
+      }
+      this._components[id] = new AMap[className](opts);
+      callback && callback(this._components[id], mapIns);
     });
   },
   getComponent(id) {
     if (!this._components) {
       return null;
     }
-    console.log(this._components);
     if (!id) {
       return vendor.getObjectFirstVal(this._components);
     }

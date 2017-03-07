@@ -6,6 +6,9 @@
     "globals":{
       "AMap": true
     },
+    "env": {
+      "browser": true
+    },
     "rules": {
         "func-names": 0,
         "comma-dangle": 0,
