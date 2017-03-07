@@ -61,7 +61,6 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
 
   public WXMapViewComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
     super(instance, dom, parent, isLazy);
-    registerActivityStateListener();
   }
 
   @Override
