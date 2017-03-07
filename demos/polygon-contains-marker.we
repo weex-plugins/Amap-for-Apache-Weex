@@ -3,11 +3,13 @@
     <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
       <weex-amap-polygon id="polygon-2017" path="{{path}}" fill-color="#2ecc71"></weex-amap-polygon>
       <weex-amap-marker position="{{marker.position}}" title="{{marker.title}}"></weex-amap-marker>
+      <weex-amap-marker position="{{marker2.position}}" title="{{marker2.title}}"></weex-amap-marker>
     </weex-amap>
     <div class="map-control">
       <text class="title">Method: polygonContainsMarker</text> 
       <text class="tips">判断多边形是不是包含某个点</text>
-      <div onclick="test" class="btnbox"><text class="btn" >Test</text></div>
+      <div onclick="test" class="btnbox"><text class="btn" >Test Marker1</text></div>
+      <div onclick="test2" class="btnbox"><text class="btn" >Test Marker2</text></div>
     </div>
   </div>
 </template>
@@ -95,15 +97,35 @@
         position: [116.368904, 39.923423],
         title: 'a marker'
       },
+      marker2: {
+        position: [116.403322, 39.897555],
+        title: 'another marker'
+      }
     },
     
     methods: {
       test() {
-        const result = Amap.polygonContainsMarker(this.marker.position, this.$el('polygon-2017').ref);
-        const msg = result ? '存在' : '不存在';
+        Amap.polygonContainsMarker(this.marker.position, this.$el('polygon-2017').ref, (res) => {
+          this.handleRes(res);
+        });
+      },
+      
+      test2() {
+        Amap.polygonContainsMarker(this.marker2.position, this.$el('polygon-2017').ref, (res) => {
+          this.handleRes(res);
+        });
+      },
+      
+      handleRes(res) {
+        let msg = '标记点';
+        if(res.result === 'success' && res.data) {
+          msg += '存在';
+        } else {
+          msg += '不存在';
+        }
         modal.alert({
           message: '标记点' + msg
-        })
+        }); 
       }
     }
   }

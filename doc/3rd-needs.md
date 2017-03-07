@@ -81,7 +81,7 @@ module.exports = {
 ``` js
 //...
 amap.getLineDistance(this.marker1.position, this.marker2.position, (res) => {
-  if(res.result == 'success') {
+  if (res.result == 'success') {
     this.distance = '两点相距' + res.data + '米';
     console.log(res.data.distance + '米');
   } else {
@@ -98,10 +98,17 @@ amap.getLineDistance(this.marker1.position, this.marker2.position, (res) => {
 
 @param coor 点的坐标
 
-@param 多边形的ref
+@param polygonRef 多边形的ref
+
+@param  callbcak 计算完成后的回调 会返回一个运算的结果,其中data字段是个boolean，表示是否包含
+
 
 ``` 
-amap.polygonContainsMarker([114.23423, 43.2222], this.$ref('polygon2017'))
+amap.polygonContainsMarker([114.23423, 43.2222], this.$ref('polygon2017'), (res) => {
+  if (res.result == 'success') {
+    console.log(res.data ? '存在' : '不存在' );
+  }
+})
 
 ```
 
