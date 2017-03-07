@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
-      <weex-amap-marker position="{{marker.position}}" title="{{marker.title}}"></weex-amap-marker>
+      <weex-amap-marker onclick="open" position="{{marker.position}}" title="{{marker.title}}"></weex-amap-marker>
       <weex-amap-info-window open="{{infoWindow.open}}" position="{{infoWindow.position}}" offset="{{infoWindow.offset}}" contents="This is a info window"><text>This is a info window</text></weex-amap-info-window>
     </weex-amap>
     <div class="map-control">
