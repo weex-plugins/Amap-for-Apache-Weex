@@ -3,6 +3,7 @@ package com.alibaba.weex.amap.module;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.alibaba.weex.amap.component.WxMapPolygonComponent;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -13,6 +14,7 @@ import com.taobao.weex.WXEnvironment;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.bridge.JSCallback;
 import com.taobao.weex.common.WXModule;
+import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.utils.WXLogUtils;
 
 import org.json.JSONArray;
@@ -31,7 +33,6 @@ public class WXMapModule extends WXModule {
 
   private static final String RESULT_OK = "success";
   private static final String RESULT_FAILED = "failed";
-
 
   /**
    * get line distance between to POI.
@@ -55,6 +56,32 @@ public class WXMapModule extends WXModule {
       data.put("distance", distance);
       map.put(DATA, data);
       map.put(RESULT, distance >= 0 ? RESULT_OK : RESULT_FAILED);
+      callback.invoke(map);
+    }
+
+  }
+
+  @JSMethod
+  public void polygonContainsMarker(String position, String id, @Nullable final JSCallback callback) {
+    boolean contains = false;
+    boolean success = false;
+    try {
+      JSONArray jsonArray = new JSONArray(position);
+      LatLng latLng = new LatLng(jsonArray.optDouble(1), jsonArray.optDouble(0));
+
+      WXComponent component = findComponent(id);
+
+      if (component != null && component instanceof WxMapPolygonComponent) {
+        contains = ((WxMapPolygonComponent) component).contains(latLng);
+        success = true;
+      }
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+    if (callback != null) {
+      HashMap map = new HashMap(2);
+      map.put(DATA, contains);
+      map.put(RESULT, success ? RESULT_OK : RESULT_FAILED);
       callback.invoke(map);
     }
 

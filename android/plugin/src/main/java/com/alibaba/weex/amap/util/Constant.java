@@ -13,7 +13,7 @@ public class Constant {
     int ROTATEGESTURE = 0x1 << 3;
   }
 
-  public static interface Name {
+  public interface Name {
 
     // mapview
     String SCALECONTROL = "scale";
@@ -38,6 +38,10 @@ public class Constant {
     String STROKE_WIDTH = "strokeWidth";
     String STROKE_OPACITY = "strokeOpacity";
     String STROKE_STYLE = "strokeStyle";
+
+    // circle
+    String RADIUS = "radius";
+    String FILL_COLOR = "fillColor";
   }
 
 
