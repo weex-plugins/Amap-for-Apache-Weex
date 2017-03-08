@@ -1,21 +1,23 @@
 <template>
   <div class="container">
+    <navbar title="多边形包含判断"></navbar>
     <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
-      <weex-amap-marker onclick="open" position="{{marker.position}}" title="{{marker.title}}"></weex-amap-marker>
-      <weex-amap-info-window open="{{infoWindow.open}}" position="{{infoWindow.position}}" offset="{{infoWindow.offset}}" contents="This is a info window"><text>This is a info window</text></weex-amap-info-window>
+      <weex-amap-polygon id="polygon-2017" path="{{path}}" fill-color="#2ecc71"></weex-amap-polygon>
+      <weex-amap-marker position="{{marker.position}}" title="{{marker.title}}"></weex-amap-marker>
+      <weex-amap-marker position="{{marker2.position}}" title="{{marker2.title}}"></weex-amap-marker>
     </weex-amap>
     <div class="map-control">
-      <text class="title">Component: weex-amap-info-window</text> 
-      <text class="tips">在地图上显示自定义窗体</text> 
-      <div if="{{!infoWindow.open}}" onclick="open" class="btnbox"><text class="btn" >Open InfoWindow</text></div>
-      <div if="{{infoWindow.open}}" onclick="close" class="btnbox"><text class="btn" >Close InfoWindow</text></div>
+      <text class="title">Method: polygonContainsMarker</text> 
+      <text class="tips">判断多边形是不是包含某个点</text>
+      <div onclick="test" class="btnbox"><text class="btn" >Test Marker1</text></div>
+      <div onclick="test2" class="btnbox"><text class="btn" >Test Marker2</text></div>
     </div>
   </div>
 </template>
 
 <style>
   .container{
-    position: relative; 
+    position: relative;
     flex:1; 
     background-color: #fff;
   }
@@ -68,7 +70,7 @@
 </style>
 
 <script>
- // require('../include/navbar.we');
+  require('../include/navbar.we');
   var Amap = null;
   try {
     Amap = require('@weex-module/amap');
@@ -76,6 +78,12 @@
     console.log(err);
   }
   var modal = require('@weex-module/modal');
+  var path = [
+    [116.403322, 39.920255],
+    [116.410703, 39.897555],
+    [116.402292, 39.892353],
+    [116.389846, 39.891365]
+  ];
   module.exports = {
     data: {
       keys: {
@@ -84,26 +92,42 @@
         android: 'db6a973159cb0c2639ad02c617a786ae'
       },
       pos: [116.397428, 39.90923],
+      path: path,
       zoom: 13,
       marker: {
         position: [116.368904, 39.923423],
         title: 'a marker'
       },
-      infoWindow: {
-        position: [116.368904, 39.923423],
-        offset: [16,-45],
-        open: true
+      marker2: {
+        position: [116.403322, 39.897555],
+        title: 'another marker'
       }
     },
     
     methods: {
-      open() {
-        this.infoWindow.open = true;
+      test() {
+        Amap.polygonContainsMarker(this.marker.position, this.$el('polygon-2017').ref, (res) => {
+          this.handleRes(res);
+        });
       },
       
-      close() {
-        this.infoWindow.open = false;
-      } 
+      test2() {
+        Amap.polygonContainsMarker(this.marker2.position, this.$el('polygon-2017').ref, (res) => {
+          this.handleRes(res);
+        });
+      },
+      
+      handleRes(res) {
+        let msg = '标记点';
+        if(res.result === 'success' && res.data) {
+          msg += '存在';
+        } else {
+          msg += '不存在';
+        }
+        modal.alert({
+          message: '标记点' + msg
+        }); 
+      }
     }
   }
 </script>

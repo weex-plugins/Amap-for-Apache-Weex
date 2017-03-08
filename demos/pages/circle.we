@@ -1,11 +1,12 @@
 <template>
   <div class="container">
+    <navbar title="设置圆形"></navbar>
     <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
-      <weex-amap-polyline path="{{path}}" stroke-style="solid" stroke-opacity="0.7" stroke-color="#000000" stroke-width="2"></weex-amap-polyline>
+      <weex-amap-circle center="{{pos}}" radius="7000" fill-color="#2ecc71" fill-width="4"></weex-amap-circle>
     </weex-amap>
     <div class="map-control">
-      <text class="title">Component weex-amap-polyline</text> 
-      <text class="tips">在地图上绘制折线</text>
+      <text class="title">Componenet: weex-amap-circle</text> 
+      <text class="tips">可以在地图上绘制圆形</text>
     </div>
   </div>
 </template>
@@ -48,14 +49,13 @@
 </style>
 
 <script>
- // require('../include/navbar.we');
+  require('../include/navbar.we');
   var Amap = null;
   try {
     Amap = require('@weex-module/amap');
   } catch(err) {
     console.log(err);
   }
-  
   module.exports = {
     data: {
       keys: {
@@ -64,12 +64,7 @@
         android: 'db6a973159cb0c2639ad02c617a786ae'
       },
       pos: [116.397428, 39.90923],
-      path: [  
-        [116.368904, 39.913423],
-        [116.382122, 39.901176],
-        [116.387271, 39.912501],
-        [116.398258, 39.904600]],
-      zoom: 13
+      zoom: 9
     }
   }
 </script>

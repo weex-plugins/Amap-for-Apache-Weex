@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <navbar title="压力测试"></navbar>
     <weex-amap class="map" id="map2017" sdk-key={{keys}}  map-instance={{map}} zoom={{zoom}} center={{pos}}>
       <weex-amap-marker position="{{point.position}}" title="{{point.title}}" icon="{{point.icon}}" repeat="point in pointArr"  onclick="{{markerClick}}"></weex-amap-marker>
     </weex-amap>
@@ -77,7 +78,7 @@
 </style>
 
 <script>
- 
+  require('../include/navbar.we');
   var Amap = null;
   try {
     Amap = require('@weex-module/amap');

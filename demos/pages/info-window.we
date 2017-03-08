@@ -1,21 +1,22 @@
 <template>
   <div class="container">
+    <navbar title="设置自定义信息窗体"></navbar>
     <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
-      <weex-amap-marker position="{{marker1.position}}" title="{{marker1.title}}"></weex-amap-marker>
-      <weex-amap-marker position="{{marker2.position}}" title="{{marker2.title}}"></weex-amap-marker>
+      <weex-amap-marker onclick="open" position="{{marker.position}}" title="{{marker.title}}"></weex-amap-marker>
+      <weex-amap-info-window open="{{infoWindow.open}}" position="{{infoWindow.position}}" offset="{{infoWindow.offset}}" contents="This is a info window"><text>This is a info window</text></weex-amap-info-window>
     </weex-amap>
     <div class="map-control">
-      <text class="title">Methods: getDistanceBetweenMarkers</text> 
-      <text class="tips">getDistanceBetweenMarkers，可以获取地图上两个坐标点的巨鹿</text>
-      <div onclick="getDistance" class="btnbox"><text class="btn" >Get Distance</text></div>
-      <text class="distance" if="distance">{{distance}}</text>
+      <text class="title">Component: weex-amap-info-window</text> 
+      <text class="tips">在地图上显示自定义窗体</text> 
+      <div if="{{!infoWindow.open}}" onclick="open" class="btnbox"><text class="btn" >Open InfoWindow</text></div>
+      <div if="{{infoWindow.open}}" onclick="close" class="btnbox"><text class="btn" >Close InfoWindow</text></div>
     </div>
   </div>
 </template>
 
 <style>
   .container{
-    position: relative;
+    position: relative; 
     flex:1; 
     background-color: #fff;
   }
@@ -68,14 +69,14 @@
 </style>
 
 <script>
- // require('../include/navbar.we');
+  require('../include/navbar.we');
   var Amap = null;
   try {
     Amap = require('@weex-module/amap');
   } catch(err) {
     console.log(err);
   }
-  
+  var modal = require('@weex-module/modal');
   module.exports = {
     data: {
       keys: {
@@ -83,29 +84,27 @@
         ios: '',
         android: 'db6a973159cb0c2639ad02c617a786ae'
       },
-      marker1: { 
-        position: [116.368904, 39.923423],
-        title: '标记点1'
-      },
-      marker2: {
-        position: [116.387271, 39.922501],
-        title: '标记点2'
-      },
+      pos: [116.397428, 39.90923],
       zoom: 13,
-      pos: [116.387271, 39.922501],
-      distance: false
+      marker: {
+        position: [116.368904, 39.923423],
+        title: 'a marker'
+      },
+      infoWindow: {
+        position: [116.368904, 39.923423],
+        offset: [16,-45],
+        open: true
+      }
     },
     
     methods: {
-      getDistance() {
-        Amap.getLineDistance(this.marker1.position, this.marker2.position, (res) => {
-          if(res.result == 'success') {
-            this.distance = '两点相距' + res.data.distance + '米';
-          } else {
-            console.log('计算失败');
-          }
-        })    
-      }
+      open() {
+        this.infoWindow.open = true;
+      },
+      
+      close() {
+        this.infoWindow.open = false;
+      } 
     }
   }
 </script>

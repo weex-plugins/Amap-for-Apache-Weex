@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <navbar title="设置多边形"></navbar>
     <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
       <weex-amap-polygon path="{{path}}" fill-opacity="0.5" fill-color="#2ecc71" fill-width="4"></weex-amap-polygon>
     </weex-amap>
@@ -48,7 +49,7 @@
 </style>
 
 <script>
- // require('../include/navbar.we');
+  require('../include/navbar.we');
   var Amap = null;
   try {
     Amap = require('@weex-module/amap');

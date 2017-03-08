@@ -1,15 +1,15 @@
 <template>
   <div class="container">
+    <navbar title="计算距离"></navbar>
     <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
-      <weex-amap-polygon id="polygon-2017" path="{{path}}" fill-color="#2ecc71"></weex-amap-polygon>
-      <weex-amap-marker position="{{marker.position}}" title="{{marker.title}}"></weex-amap-marker>
+      <weex-amap-marker position="{{marker1.position}}" title="{{marker1.title}}"></weex-amap-marker>
       <weex-amap-marker position="{{marker2.position}}" title="{{marker2.title}}"></weex-amap-marker>
     </weex-amap>
     <div class="map-control">
-      <text class="title">Method: polygonContainsMarker</text> 
-      <text class="tips">判断多边形是不是包含某个点</text>
-      <div onclick="test" class="btnbox"><text class="btn" >Test Marker1</text></div>
-      <div onclick="test2" class="btnbox"><text class="btn" >Test Marker2</text></div>
+      <text class="title">Methods: getDistanceBetweenMarkers</text> 
+      <text class="tips">getDistanceBetweenMarkers，可以获取地图上两个坐标点的巨鹿</text>
+      <div onclick="getDistance" class="btnbox"><text class="btn" >Get Distance</text></div>
+      <text class="distance" if="distance">{{distance}}</text>
     </div>
   </div>
 </template>
@@ -69,20 +69,14 @@
 </style>
 
 <script>
- // require('../include/navbar.we');
+  require('../include/navbar.we');
   var Amap = null;
   try {
     Amap = require('@weex-module/amap');
   } catch(err) {
     console.log(err);
   }
-  var modal = require('@weex-module/modal');
-  var path = [
-    [116.403322, 39.920255],
-    [116.410703, 39.897555],
-    [116.402292, 39.892353],
-    [116.389846, 39.891365]
-  ];
+  
   module.exports = {
     data: {
       keys: {
@@ -90,42 +84,28 @@
         ios: '',
         android: 'db6a973159cb0c2639ad02c617a786ae'
       },
-      pos: [116.397428, 39.90923],
-      path: path,
-      zoom: 13,
-      marker: {
+      marker1: { 
         position: [116.368904, 39.923423],
-        title: 'a marker'
+        title: '标记点1'
       },
       marker2: {
-        position: [116.403322, 39.897555],
-        title: 'another marker'
-      }
+        position: [116.387271, 39.922501],
+        title: '标记点2'
+      },
+      zoom: 13,
+      pos: [116.387271, 39.922501],
+      distance: false
     },
     
     methods: {
-      test() {
-        Amap.polygonContainsMarker(this.marker.position, this.$el('polygon-2017').ref, (res) => {
-          this.handleRes(res);
-        });
-      },
-      
-      test2() {
-        Amap.polygonContainsMarker(this.marker2.position, this.$el('polygon-2017').ref, (res) => {
-          this.handleRes(res);
-        });
-      },
-      
-      handleRes(res) {
-        let msg = '标记点';
-        if(res.result === 'success' && res.data) {
-          msg += '存在';
-        } else {
-          msg += '不存在';
-        }
-        modal.alert({
-          message: '标记点' + msg
-        }); 
+      getDistance() {
+        Amap.getLineDistance(this.marker1.position, this.marker2.position, (res) => {
+          if(res.result == 'success') {
+            this.distance = '两点相距' + res.data.distance + '米';
+          } else {
+            console.log('计算失败');
+          }
+        })    
       }
     }
   }
