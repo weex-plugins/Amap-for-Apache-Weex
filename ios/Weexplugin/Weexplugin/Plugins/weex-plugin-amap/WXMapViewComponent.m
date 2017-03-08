@@ -11,6 +11,8 @@
 #import "WXMapPolylineComponent.h"
 #import "WXMapPolygonComponent.h"
 #import "WXMapCircleComponent.h"
+#import "WXMapInfoWindowComponent.h"
+#import "WXMapInfoWindow.h"
 #import "WXImgLoaderImpl.h"
 #import "NSArray+WXMap.h"
 #import "NSDictionary+WXMap.h"
@@ -20,31 +22,35 @@
 @interface MAPointAnnotation(imageAnnotation)
 
 @property(nonatomic, copy) NSString *iconImage;
-@property(nonatomic, copy) NSString *ref;
+@property(nonatomic, strong) WXComponent *component;
 
 @end
 
 static const void *iconImageKey = &iconImageKey;
-static const void *refKey = &refKey;
+static const void *componentAnnotationKey = &componentAnnotationKey;
 
 @implementation MAPointAnnotation (imageAnnotation)
 
 @dynamic iconImage;
 
-- (void)setIconImage:(NSString *)iconImage {
+- (void)setIconImage:(NSString *)iconImage
+{
     objc_setAssociatedObject(self, iconImageKey, iconImage, OBJC_ASSOCIATION_COPY_NONATOMIC);
 }
 
-- (NSString *)iconImage {
+- (NSString *)iconImage
+{
     return objc_getAssociatedObject(self, iconImageKey);
 }
 
-- (void)setRef:(NSString *)ref {
-    objc_setAssociatedObject(self, refKey, ref, OBJC_ASSOCIATION_COPY_NONATOMIC);
+- (void)setComponent:(WXComponent *)component
+{
+    objc_setAssociatedObject(self, componentAnnotationKey, component, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 }
 
-- (NSString *)ref {
-    return objc_getAssociatedObject(self, refKey);
+- (WXComponent *)component
+{
+    return objc_getAssociatedObject(self, componentAnnotationKey);
 }
 
 @end
@@ -237,13 +243,16 @@ static const void *componentKey = &componentKey;
 }
 
 - (void)convertMarker:(WXMapViewMarkerComponent *)marker onAnnotation:(MAPointAnnotation *)annotation {
-    CLLocationCoordinate2D coordinate;
-    coordinate.latitude = [marker.location[1] doubleValue];
-    coordinate.longitude = [marker.location[0] doubleValue];
-    annotation.coordinate = coordinate;
-    annotation.title      = [NSString stringWithFormat:@"%@", marker.title];
-    annotation.iconImage = marker.icon ? : nil;
-    annotation.ref = marker.ref;
+    if (marker.location && marker.location.count > 0) {
+        annotation.coordinate = [WXConvert CLLocationCoordinate2D:marker.location];
+    }
+    if (marker.title) {
+        annotation.title      = [NSString stringWithFormat:@"%@", marker.title];
+    }
+    if (marker.icon) {
+        annotation.iconImage = marker.icon ? : nil;
+    }
+    annotation.component = marker;
 }
 
 - (void)updateTitleMarker:(WXMapViewMarkerComponent *)marker {
@@ -321,7 +330,61 @@ static const void *componentKey = &componentKey;
     _annotations = nil;
 }
 
-#pragma mark -
+- (MAAnnotationView *)_generateAnnotationView:(MAMapView *)mapView viewForAnnotation:(MAPointAnnotation *)annotation
+{
+    if (annotation.iconImage){
+        static NSString *pointReuseIndetifier = @"customReuseIndetifier";
+        MAAnnotationView *annotationView = (MAAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:pointReuseIndetifier];
+        if (annotationView == nil)
+        {
+            annotationView = [[MAAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pointReuseIndetifier];
+        }
+        
+        annotationView.canShowCallout               = YES;
+        annotationView.draggable                    = YES;
+        annotationView.rightCalloutAccessoryView    = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+        [[self imageLoader] downloadImageWithURL:annotation.iconImage imageFrame:CGRectMake(0, 0, 25, 25) userInfo:nil completed:^(UIImage *image, NSError *error, BOOL finished) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                annotationView.image = image;
+            });
+        }];
+        return annotationView;
+    }else {
+        static NSString *pointReuseIndetifier = @"pointReuseIndetifier";
+        MAPinAnnotationView *annotationView = (MAPinAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:pointReuseIndetifier];
+        if (annotationView == nil)
+        {
+            annotationView = [[MAPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pointReuseIndetifier];
+        }
+        
+        annotationView.canShowCallout               = YES;
+        annotationView.draggable                    = YES;
+        annotationView.rightCalloutAccessoryView    = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+        return annotationView;
+    }
+}
+
+- (MAAnnotationView *)_generateCustomInfoWindow:(MAMapView *)mapView viewForAnnotation:(MAPointAnnotation *)annotation
+{
+    WXMapInfoWindowComponent *infoWindowComponent = (WXMapInfoWindowComponent *)annotation.component;
+    static NSString *customReuseIndetifier = @"customReuseIndetifier";
+    WXMapInfoWindow *annotationView = (WXMapInfoWindow*)[mapView dequeueReusableAnnotationViewWithIdentifier:customReuseIndetifier];
+    if (annotationView == nil) {
+        infoWindowComponent.annotation = annotation;
+        infoWindowComponent.identifier = customReuseIndetifier;
+        annotationView = infoWindowComponent.view;
+        if (infoWindowComponent.subcomponents.count > 0) {
+            for (WXComponent *component in annotation.component.subcomponents) {
+                [annotationView addCustomView:component.view];
+            }
+        }
+        annotationView.canShowCallout = NO;
+        annotationView.draggable = YES;
+        return annotationView;
+    }
+}
+
+#pragma mark - mapview delegate
 /*!
  @brief 根据anntation生成对应的View
  */
@@ -330,57 +393,15 @@ static const void *componentKey = &componentKey;
     if ([annotation isKindOfClass:[MAPointAnnotation class]])
     {
         MAPointAnnotation *pointAnnotation = (MAPointAnnotation *)annotation;
-        if (pointAnnotation.iconImage){
-            static NSString *pointReuseIndetifier = @"customReuseIndetifier";
-            MAAnnotationView *annotationView = (MAAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:pointReuseIndetifier];
-            if (annotationView == nil)
-            {
-                annotationView = [[MAAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pointReuseIndetifier];
-            }
+        if ([pointAnnotation.component isKindOfClass:[WXMapInfoWindowComponent class]]) {
+            return [self _generateCustomInfoWindow:mapView viewForAnnotation:pointAnnotation];
             
-            annotationView.canShowCallout               = YES;
-            annotationView.draggable                    = YES;
-            annotationView.rightCalloutAccessoryView    = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-            [[self imageLoader] downloadImageWithURL:pointAnnotation.iconImage imageFrame:CGRectMake(0, 0, 25, 25) userInfo:nil completed:^(UIImage *image, NSError *error, BOOL finished) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    annotationView.image = image;
-                });
-            }];
-            return annotationView;
         }else {
-            static NSString *pointReuseIndetifier = @"pointReuseIndetifier";
-            MAPinAnnotationView *annotationView = (MAPinAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:pointReuseIndetifier];
-            if (annotationView == nil)
-            {
-                annotationView = [[MAPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pointReuseIndetifier];
-            }
-            
-            annotationView.canShowCallout               = YES;
-            annotationView.draggable                    = YES;
-            annotationView.rightCalloutAccessoryView    = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
-            return annotationView;
+            return [self _generateAnnotationView:mapView viewForAnnotation:pointAnnotation];
         }
     }
     
     return nil;
-}
-
-/**
- * @brief 地图将要发生缩放时调用此接口
- */
-- (void)mapView:(MAMapView *)mapView mapWillZoomByUser:(BOOL)wasUserAction
-{
-    
-}
-
-/**
- * @brief 地图缩放结束后调用此接口
- */
-- (void)mapView:(MAMapView *)mapView mapDidZoomByUser:(BOOL)wasUserAction
-{
-    if (_zoomChanged) {
-        [self fireEvent:@"zoomchange" params:[NSDictionary dictionary]];
-    }
 }
 
 /**
@@ -393,7 +414,7 @@ static const void *componentKey = &componentKey;
     MAPointAnnotation *annotation = view.annotation;
     for (WXComponent *component in self.subcomponents) {
         if ([component isKindOfClass:[WXMapViewMarkerComponent class]] &&
-            [component.ref isEqualToString:annotation.ref]) {
+            [component.ref isEqualToString:annotation.component.ref]) {
             WXMapViewMarkerComponent *marker = (WXMapViewMarkerComponent *)component;
             if (marker.clickEvent) {
                 [marker fireEvent:marker.clickEvent params:[NSDictionary dictionary]];
