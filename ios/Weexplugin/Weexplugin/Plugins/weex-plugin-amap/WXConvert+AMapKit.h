@@ -11,7 +11,10 @@
 
 @interface WXConvert (AMapKit)
 
-+ (CLLocationCoordinate2D)CLLocationCoordinate2D:(id)json;
 + (BOOL)isLineDash:(id)json;
++ (CLLocationCoordinate2D)CLLocationCoordinate2D:(id)json;
++ (CGPoint)sizeToWXPixelType:(id)json withInstance:(WXSDKInstance *)instance;
++ (CGSize)offsetToContainRect:(CGRect)innerRect inRect:(CGRect)outerRect;
+
 
 @end

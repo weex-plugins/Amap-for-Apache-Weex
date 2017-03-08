@@ -28,6 +28,7 @@
         if (attributes[@"open"]) {
             _isOpen = [attributes[@"open"] boolValue];
         }
+        
     }
     return self;
 }
