@@ -9,6 +9,7 @@
 #import "WXMapViewMarkerComponent.h"
 #import "WXMapViewComponent.h"
 #import "NSDictionary+WXMap.h"
+#import "WXConvert+AMapKit.h"
 
 @implementation WXMapViewMarkerComponent
 
@@ -16,6 +17,7 @@
 @synthesize icon = _icon;
 @synthesize title = _title;
 @synthesize location = _location;
+@synthesize offset = _offset;
 
 
 - (instancetype)initWithRef:(NSString *)ref
@@ -29,6 +31,9 @@
     if (self) {
         if ([events containsObject:@"click"]) {
             _clickEvent = @"click";
+        }
+        if (attributes[@"offset"]) {
+            _offset = [WXConvert sizeToWXPixelType:attributes[@"offset"] withInstance:self.weexInstance];
         }
         _location = [attributes wxmap_safeObjectForKey:@"position"];
         _title = [attributes wxmap_safeObjectForKey:@"title"];

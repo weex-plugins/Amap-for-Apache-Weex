@@ -244,7 +244,8 @@ static const void *componentKey = &componentKey;
 
 - (void)convertMarker:(WXMapViewMarkerComponent *)marker onAnnotation:(MAPointAnnotation *)annotation {
     if (marker.location && marker.location.count > 0) {
-        annotation.coordinate = [WXConvert CLLocationCoordinate2D:marker.location];
+        CLLocationCoordinate2D position = [WXConvert CLLocationCoordinate2D:marker.location];
+        annotation.coordinate = [self _coordinate2D:position offset:marker.offset];
     }
     if (marker.title) {
         annotation.title      = [NSString stringWithFormat:@"%@", marker.title];
@@ -317,6 +318,12 @@ static const void *componentKey = &componentKey;
 }
 
 #pragma mark - private method
+- (CLLocationCoordinate2D)_coordinate2D:(CLLocationCoordinate2D)position offset:(CGPoint)offset
+{
+    CGPoint convertedPoint = [self.mapView convertCoordinate:position toPointToView:self.supercomponent.view];
+    return [self.mapView convertPoint:CGPointMake(convertedPoint.x + offset.x, convertedPoint.y + offset.y) toCoordinateFromView:self.supercomponent.view];
+}
+
 - (void)initPOIData
 {
     if (!_annotations) {

@@ -16,4 +16,6 @@
 
 @property (nonatomic, copy) NSString *clickEvent;
 
+@property (nonatomic, assign) CGPoint offset;
+
 @end

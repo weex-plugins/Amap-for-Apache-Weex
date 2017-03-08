@@ -36,4 +36,20 @@ WX_JSON_CONVERTER(NSString)
     return NO;
 }
 
++ (CGSize)offsetToContainRect:(CGRect)innerRect inRect:(CGRect)outerRect
+{
+    CGFloat nudgeRight = fmaxf(0, CGRectGetMinX(outerRect) - (CGRectGetMinX(innerRect)));
+    CGFloat nudgeLeft = fminf(0, CGRectGetMaxX(outerRect) - (CGRectGetMaxX(innerRect)));
+    CGFloat nudgeTop = fmaxf(0, CGRectGetMinY(outerRect) - (CGRectGetMinY(innerRect)));
+    CGFloat nudgeBottom = fminf(0, CGRectGetMaxY(outerRect) - (CGRectGetMaxY(innerRect)));
+    return CGSizeMake(nudgeLeft ?: nudgeRight, nudgeTop ?: nudgeBottom);
+}
+
++ (CGPoint)sizeToWXPixelType:(id)json withInstance:(WXSDKInstance *)instance
+{
+    json = [self NSArray:json];
+    return CGPointMake([WXConvert WXPixelType:[json wxmap_safeObjectForKey:0] scaleFactor:instance.pixelScaleFactor],
+                      [WXConvert WXPixelType:[json wxmap_safeObjectForKey:1] scaleFactor:instance.pixelScaleFactor]);
+}
+
 @end
