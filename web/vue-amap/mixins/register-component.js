@@ -10,7 +10,7 @@ export default {
       this.register();
     } else {
       this.$on(CONST.AMAP_READY_EVENT, map => {
-        console.log(123);
+        this.$amap = map;
         this.register();
       });
     }

@@ -1,8 +1,10 @@
-<template></template>
+<template>
+</template>
 <script>
 import registerMixin from '../mixins/register-component';
 import { toLngLat } from '../utils/convert-helper';
 import editorMixin from '../mixins/editor-component';
+
 export default {
   name: 'amap-circle',
   mixins: [registerMixin, editorMixin],
@@ -15,6 +17,7 @@ export default {
     'strokeColor',
     'strokeOpacity',
     'strokeWeight',
+    'strokeWidth',
     'editable',
     'fillColor',
     'fillOpacity',
@@ -49,9 +52,6 @@ export default {
   methods: {
     initComponent(options) {
       this.$amapComponent = new AMap.Circle(options);
-      console.log(options);
-      this.$amapComponent.editor = new AMap.CircleEditor(this.$amap, this.$amapComponent);
-      this.setEditorEvents();
     }
   }
 };

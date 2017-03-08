@@ -9,6 +9,8 @@
    import { toLngLat, toPixel } from '../utils/convert-helper';
    import registerMixin from '../mixins/register-component';
    import {lazyAMapApiLoaderInstance} from '../services/injected-amap-api-instance';
+   import findChildCustomComponent from '../utils/find-child-custom-component';
+  
    export default {
      name: 'amap',
      mixins: [registerMixin],
@@ -228,14 +230,9 @@
              this.mapManager.setMap(this.$amap);
            }
            this.$emit(CONST.AMAP_READY_EVENT, this.$amap);
-           
-           let childrenComs = [];
-           // weex define a div as a custom component 
-           if(this.$children.length > 0) {
-            childrenComs = this.$children[0]['$children'];
-           }
-           console.log(childrenComs.length);
-           this.$children.forEach(component => {
+           const childComs = findChildCustomComponent(this);
+           childComs.forEach(component => {
+             console.log(1);
              component.$emit(CONST.AMAP_READY_EVENT, this.$amap);
            });
            this.addPlugins();
