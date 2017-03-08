@@ -4,7 +4,7 @@
 import registerMixin from '../mixins/register-component';
 import editorMixin from '../mixins/editor-component';
 export default {
-  name: 'el-amap-polyline',
+  name: 'amap-polyline',
   mixins: [registerMixin, editorMixin],
   props: [
     'vid',

@@ -38,10 +38,10 @@ export default {
           this.setzIndex(index);
         },
         visible(flag) {
-          flag === false ? this.hide() : this.show();
+         // flag === false ? this.hide() : this.show();
         },
         editable(flag) {
-          flag === true ? this.editor.open() : this.editor.close();
+         // flag === true ? this.editor.open() : this.editor.close();
         }
       }
     };
@@ -49,6 +49,7 @@ export default {
   methods: {
     initComponent(options) {
       this.$amapComponent = new AMap.Circle(options);
+      console.log(options);
       this.$amapComponent.editor = new AMap.CircleEditor(this.$amap, this.$amapComponent);
       this.setEditorEvents();
     }

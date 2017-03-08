@@ -21,7 +21,8 @@ const VueAmap = {};
 VueAmap.install = function (Vue) {
   components.map((_component) => {
     VueAmap[upperCamelCase(_component.name).replace(/^WEEX/, '')] = _component;
-    return Vue.component('weex-' + _component.name, _component);
+    Vue.component('weex-' + _component.name, _component);
+    return true;
   });
 };
 export default VueAmap;

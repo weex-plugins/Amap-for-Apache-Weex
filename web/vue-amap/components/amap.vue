@@ -1,9 +1,7 @@
 <template>
-<div class="weex-vue-amap-container">
-    <div class="weex-vue-amap">
-      <slot></slot>
-    </div>
-</div>
+  <div class="weex-vue-amap">
+    <slot></slot>
+  </div>
 </template>
 <script>
    import guid from '../utils/guid';
@@ -59,7 +57,7 @@
         * convert plugin prop from 'plugin' to 'plugins'
         * unify plugin options
         * @return {Array}
-        */
+       **/
        plugins() {
          let plus = [];
          // amap plugin prefix reg
@@ -217,7 +215,7 @@
 
        createMap() {
          this._loadPromise.then(() => {
-           let mapElement = this.$el.querySelector('.weex-vue-amap');
+           let mapElement = this.$el;
            const elementID = this.vid || guid();
            mapElement.id = elementID;
            this.$amap = this.$amapComponent = new AMap.Map(elementID, this.convertProps());
@@ -226,8 +224,17 @@
                this.$emit(ev, {result: true});
              });
            });
-           if (this.mapManager) this.mapManager.setMap(this.$amap);
+           if (this.mapManager) {
+             this.mapManager.setMap(this.$amap);
+           }
            this.$emit(CONST.AMAP_READY_EVENT, this.$amap);
+           
+           let childrenComs = [];
+           // weex define a div as a custom component 
+           if(this.$children.length > 0) {
+            childrenComs = this.$children[0]['$children'];
+           }
+           console.log(childrenComs.length);
            this.$children.forEach(component => {
              component.$emit(CONST.AMAP_READY_EVENT, this.$amap);
            });
@@ -239,9 +246,6 @@
 </script>
 
 <style>
-.weex-vue-amap-container {
-  height: 100%;
-}
 .weex-vue-amap {
   flex: 1;
   height:100%;
