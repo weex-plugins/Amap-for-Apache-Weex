@@ -5,11 +5,14 @@
       <weex-amap-marker position="{{point.position}}" title="{{point.title}}" icon="{{point.icon}}" repeat="point in pointArr"  onclick="{{markerClick}}"></weex-amap-marker>
     </weex-amap>
     <div class="map-control">
-      <text class="title">Test </text> 
+      <text class="title">Marvel vs DC </text> 
       <text class="tips">地图压力测试</text>
       <div class="btn-group">
-        <div onclick="addPoints" class="btnbox"><text class="btn" >批量添加标记点</text></div>
-        <div onclick="removePoints" class="btnbox"><text class="btn btn-reverse" >批量移除标记点</text></div>
+        <div onclick="addMarvel" class="btnbox"><text class="btn btn-marvel" >+ Marvel Hero</text></div>
+        <div onclick="addDC" class="btnbox"><text class="btn btn-dc" > + DC Hero</text></div>
+      </div>
+      <div class="btn-group">
+        <div onclick="addPoints" class="btnbox"><text class="btn btn-reverse" >Clear Hero</text></div>
       </div>
       
     </div>
@@ -68,6 +71,12 @@
     cursor: pointer;
     font-size: 28px;
   }
+  .btn-marvel{
+    background-color: #e01a22;
+  }
+  .btn-dc{
+    background-color: #36548f;
+  }
   .btn-reverse{
     background-color: #fff;
     color: #444;
@@ -92,6 +101,13 @@
     'http://img1.vued.vanthink.cn/vued38b5320814135ab1d5e7eccb95ad61ac.png',
     'http://img1.vued.vanthink.cn/vued2c162076cf3e0c9b7047e4d761a99dab.png',
     'http://img1.vued.vanthink.cn/vued5a564cecfec72460eeebc628935e9cb9.png'
+  ];
+  const icons2 = [
+    'http://img1.vued.vanthink.cn/vued3b475600fd95b3609931ae8ec729448a.png',
+    'http://img1.vued.vanthink.cn/vued7ec1a8aaadab2a0840e656de35ae3947.png',
+    'http://img1.vued.vanthink.cn/vued96f7124a013b12bb6498b5cc7862ad9a.png',
+    'http://img1.vued.vanthink.cn/vued940e8ab79a5a6f45d29b7ec4cd26ebb4.png',
+    'http://img1.vued.vanthink.cn/vued49ae3f1383f76992f42aa2e79d643649.png'
   ];
   module.exports = {
     data: {
@@ -122,11 +138,23 @@
         });
       },
       
-      addPoints() {
-        for(let i=0; i<10; i++) {
-          const coor = [115.9 + Math.random()*1,39.5 + Math.random()*0.5];
+      addMarvel() {
+        for(let i=0; i<5; i++) {
+          const coor = [115.487 + Math.random()*1,39.5 + Math.random()*0.5];
           const n = i % 5;
           const icon = icons[n]
+          this.pointArr.push({
+            position:coor,
+            title:'坐标:' + coor.join(','),
+            icon:  icon
+          });
+        }
+      },
+      addDC() {
+        for(let i=0; i<5; i++) {
+          const coor = [116.487 + Math.random()*1, 39.5 + Math.random()*0.5];
+          const n = i % 5;
+          const icon = icons2[n]
           this.pointArr.push({
             position:coor,
             title:'坐标:' + coor.join(','),
