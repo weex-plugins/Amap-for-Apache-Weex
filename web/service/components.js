@@ -13,7 +13,6 @@ const components = {
       opts.map = mapIns;
       // options.center = new AMap.LngLat(options.center[0],options.center[1]);
       const className = vendor.setFirstLetterToUppercase(componentName);
-      console.log(opts.offset);
       if (opts.offset) {
         opts.offset = new AMap.Pixel(opts.offset[0], opts.offset[1]);
       } else {
@@ -27,6 +26,8 @@ const components = {
     });
   },
   getComponent(id) {
+    console.log(id);
+    console.log(this._components);
     if (!this._components) {
       return null;
     }

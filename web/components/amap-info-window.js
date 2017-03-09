@@ -8,7 +8,7 @@ const proto = {
     const node = document.createElement('div');
     node.style.opacity = 0;
     const data = this.data.attr;
-    const comId = data.ref || vendor.gengerateRandomId(componentName);
+    const comId = this.data.ref || vendor.gengerateRandomId(componentName);
     this.addAppendHandler(() => {
       if (data.position && Array.isArray(data.position)) {
         components.registerComponent(componentName, {
@@ -39,7 +39,7 @@ const proto = {
 
 const attr = {
   open(val) {
-    const com = components.getComponent(this._comId);
+    const com = components.getComponent(this.data.ref);
     const map = components.getComponentMap();
     if (com) {
       if (val) {
