@@ -2,12 +2,12 @@
   <div class="container">
     <navbar title="设置自定义信息窗体"></navbar>
     <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
-      <weex-amap-marker onclick="toggle" hide-callout="true" position="{{marker.position}}" title="{{marker.title}}"></weex-amap-marker>
-      <weex-amap-marker onclick="toggle2" hide-callout="true" position="{{marker2.position}}" title="{{marker2.title}}"></weex-amap-marker>
+      <weex-amap-marker style="z-index:1000"  onclick="toggle" hide-callout="true" position="{{marker.position}}" icon="{{marker.icon}}" title="{{marker.title}}"></weex-amap-marker>
+      <weex-amap-marker style="z-index:1000" onclick="toggle2" hide-callout="true" position="{{marker2.position}}" icon="{{marker.icon}}" title="{{marker2.title}}"></weex-amap-marker>
       <weex-amap-info-window open="{{infoWindow.open}}" position="{{infoWindow.position}}" offset="{{infoWindow.offset}}" >
-        <info-window src="http://img1.vued.vanthink.cn/vued2de302ef72ae921313a1fa1bbbbd9455.jpeg" title="Beijing South Railway Station" location="Fengtai, Beijing"></info-window>
+        <info-window  src="http://img1.vued.vanthink.cn/vued2de302ef72ae921313a1fa1bbbbd9455.jpeg" title="Beijing South Railway Station" location="Fengtai, Beijing"></info-window>
       </weex-amap-info-window>
-      <weex-amap-info-window  open="{{infoWindow2.open}}" position="{{infoWindow2.position}}">
+      <weex-amap-info-window  open="{{infoWindow2.open}}" position="{{infoWindow2.position}}" offset="{{infoWindow.offset}}">
         <info-window src="http://img1.vued.vanthink.cn/vued6dfd998fc0738f7e88d4b66bafc547ce.jpeg" title="The Palace Museum" location="4 Jingshan Front St, Dongcheng Qu, Beijing"></info-window>
       </weex-amap-info-window>
     </weex-amap>
@@ -87,11 +87,13 @@
       zoom: 11,
       marker: {
         position: [116.379278,39.865374],
-        title: 'a marker'
+        title: 'a marker',
+        icon: 'http://img1.vued.vanthink.cn/vuede8f1ae7b454267d75c31c6d46819b597.png'
       },
       marker2: {
         position: [116.397389, 39.908742],
-        title: 'a marker'
+        title: 'a marker',
+        icon: 'http://img1.vued.vanthink.cn/vuede8f1ae7b454267d75c31c6d46819b597.png',
       },
       infoWindow: {
         position: [116.379278,39.865374],
