@@ -8,11 +8,11 @@
       <text class="title">Marvel vs DC </text> 
       <text class="tips">地图压力测试</text>
       <div class="btn-group">
-        <div onclick="addMarvel" class="btnbox"><text class="btn btn-marvel" >+ Marvel Hero</text></div>
-        <div onclick="addDC" class="btnbox"><text class="btn btn-dc" > + DC Hero</text></div>
+        <div onclick="addMarvel" class="btnbox"><text class="btn btn-marvel" >Add Marvel Hero</text></div>
+        <div onclick="addDC" class="btnbox"><text class="btn btn-dc" > Add DC Hero</text></div>
       </div>
       <div class="btn-group">
-        <div onclick="addPoints" class="btnbox"><text class="btn btn-reverse" >Clear Hero</text></div>
+        <div onclick="removePoints" class="btnbox"><text class="btn btn-reverse" >Clear HeroS</text></div>
       </div>
       
     </div>
@@ -120,7 +120,7 @@
       zoom: 9,
       pointArr: [
         {
-          position:[116.3944071,39.9278548],
+          position:[116.3944071, 39.9278548],
           title: '北京市',
           events: {
             click: function() {
@@ -140,7 +140,7 @@
       
       addMarvel() {
         for(let i=0; i<5; i++) {
-          const coor = [115.487 + Math.random()*1,39.5 + Math.random()*0.5];
+          const coor = [115.487 + Math.random()*1, 39.7278548 + Math.random()];
           const n = i % 5;
           const icon = icons[n]
           this.pointArr.push({
@@ -152,7 +152,7 @@
       },
       addDC() {
         for(let i=0; i<5; i++) {
-          const coor = [116.487 + Math.random()*1, 39.5 + Math.random()*0.5];
+          const coor = [116.487 + Math.random()*1, 39.7278548 + Math.random()];
           const n = i % 5;
           const icon = icons2[n]
           this.pointArr.push({
