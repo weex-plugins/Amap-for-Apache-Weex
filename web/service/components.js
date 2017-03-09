@@ -13,11 +13,17 @@ const components = {
       opts.map = mapIns;
       // options.center = new AMap.LngLat(options.center[0],options.center[1]);
       const className = vendor.setFirstLetterToUppercase(componentName);
+      console.log(opts.offset);
       if (opts.offset) {
         opts.offset = new AMap.Pixel(opts.offset[0], opts.offset[1]);
+      } else {
+        // this is a sdk bug polyfill
+        opts.offset = new AMap.Pixel(0, 0);
       }
       this._components[id] = new AMap[className](opts);
-      callback && callback(this._components[id], mapIns);
+      if (typeof callback === 'function') {
+        callback(this._components[id], mapIns);
+      }
     });
   },
   getComponent(id) {

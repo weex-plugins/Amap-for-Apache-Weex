@@ -6,6 +6,7 @@ const componentName = 'infoWindow';
 const proto = {
   create() {
     const node = document.createElement('div');
+    node.style.opacity = 0;
     const data = this.data.attr;
     const comId = data.ref || vendor.gengerateRandomId(componentName);
     this.addAppendHandler(() => {
@@ -13,17 +14,18 @@ const proto = {
         components.registerComponent(componentName, {
           position: data.position,
           offset: data.offset,
-          open: data.open
+          open: data.open,
+          isCustom: true
         }, comId, (com, map) => {
+          let content = data.content;
+          if (this.node.innerHTML.length > 0) {
+            content = this.node.innerHTML;
+          }
+          if (content) {
+            com.setContent(content);
+          }
           if (data.open) {
-            let content = data.content;
-            if (this.node.children.length > 0) {
-              content = this.node.children[0].innerHTML;
-            }
-            if (content) {
-              com.setContent(content);
-              com.open(map, data.position);
-            }
+            com.open(map, data.position);
           }
         });
       } else {
