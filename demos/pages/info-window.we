@@ -2,23 +2,18 @@
   <div class="container">
     <navbar title="设置自定义信息窗体"></navbar>
     <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
-      <weex-amap-marker onclick="toggle" position="{{marker.position}}" title="{{marker.title}}"></weex-amap-marker>
+      <weex-amap-marker onclick="toggle" hide-callout="true" position="{{marker.position}}" title="{{marker.title}}"></weex-amap-marker>
+      <weex-amap-marker onclick="toggle2" hide-callout="true" position="{{marker2.position}}" title="{{marker2.title}}"></weex-amap-marker>
       <weex-amap-info-window open="{{infoWindow.open}}" position="{{infoWindow.position}}" offset="{{infoWindow.offset}}" >
-        <text class="desc">This is a info window</text>  
+        <info-window src="http://img1.vued.vanthink.cn/vued2de302ef72ae921313a1fa1bbbbd9455.jpeg" title="Beijing South Railway Station" location="Fengtai, Beijing"></info-window>
       </weex-amap-info-window>
-      <weex-amap-info-window open="{{infoWindow2.open}}" position="{{infoWindow2.position}}">
-        <div class="info-win2">
-          <image class="cover" src="http://img1.vued.vanthink.cn/vued6dfd998fc0738f7e88d4b66bafc547ce.jpeg"/>
-          <text class="desc">The Palace Museum</text>
-          <text class="address">4 Jingshan Front St, Dongcheng Qu, Beijing</text>
-        </div>
+      <weex-amap-info-window  open="{{infoWindow2.open}}" position="{{infoWindow2.position}}">
+        <info-window src="http://img1.vued.vanthink.cn/vued6dfd998fc0738f7e88d4b66bafc547ce.jpeg" title="The Palace Museum" location="4 Jingshan Front St, Dongcheng Qu, Beijing"></info-window>
       </weex-amap-info-window>
     </weex-amap>
     <div class="map-control">
       <text class="title">Component: weex-amap-info-window</text> 
       <text class="tips">在地图上显示自定义窗体</text> 
-      <div if="{{!infoWindow2.open}}" onclick="open" class="btnbox"><text class="btn" >Open InfoWindow</text></div>
-      <div if="{{infoWindow2.open}}" onclick="close" class="btnbox"><text class="btn" >Close InfoWindow</text></div>
     </div>
   </div>
 </template>
@@ -68,35 +63,12 @@
     cursor: pointer;
     font-size: 28px;
   }
-  .info-win2{
-    width: 500;
-    padding: 5;
-    background-color: #fff;
-    border-width: 1;
-    border-color: rgba(0,0,0,.1);
-    border-bottom-width: 2;
-    border-bottom-color: rgba(0,0,0,.25);
-  }
-  .cover{
-    flex: 1;
-    height: 180;
-  }
-  .desc{
-    font-size: 20;
-    background-color: #fff;
-    padding: 5;
-  }
-  .address{
-    font-size: 16;
-    color: #999;
-    background-color: #fff;
-    padding: 5;
-    padding-bottom: 10;
-  }
+  
 </style>
 
 <script>
   require('../include/navbar.we');
+  require('../include/info-window.we');
   var Amap = null;
   try {
     Amap = require('@weex-module/amap');
@@ -112,32 +84,33 @@
         android: 'db6a973159cb0c2639ad02c617a786ae'
       },
       pos: [116.397428, 39.90923],
-      zoom: 16,
+      zoom: 11,
       marker: {
-        position: [116.368904, 39.923423],
+        position: [116.379278,39.865374],
+        title: 'a marker'
+      },
+      marker2: {
+        position: [116.397389, 39.908742],
         title: 'a marker'
       },
       infoWindow: {
-        position: [116.368904, 39.923423],
+        position: [116.379278,39.865374],
         offset: [16,-45],
         open: false
       },
       infoWindow2: {
         position: [116.397389, 39.908742],
+        offset: [16,-45],
         open: true
       }
     },
     
     methods: {
-      open() {
-        this.infoWindow2.open = true;
-      },
-      
-      close() {
-        this.infoWindow2.open = false;
-      },
       toggle() {
         this.infoWindow.open = !this.infoWindow.open;
+      },
+      toggle2() {
+        this.infoWindow2.open = !this.infoWindow2.open;
       }
     }
   }
