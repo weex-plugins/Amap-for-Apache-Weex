@@ -18,7 +18,8 @@
 @synthesize title = _title;
 @synthesize location = _location;
 @synthesize offset = _offset;
-
+@synthesize hideCallout = _hideCallout;
+@synthesize zIndex = _zIndex;
 
 - (instancetype)initWithRef:(NSString *)ref
                        type:(NSString*)type
@@ -35,6 +36,10 @@
         if (attributes[@"offset"]) {
             _offset = [WXConvert sizeToWXPixelType:attributes[@"offset"] withInstance:self.weexInstance];
         }
+        if (attributes[@"zIndex"]) {
+            _zIndex = [attributes[@"zIndex"] integerValue];
+        }
+        _hideCallout = [[attributes wxmap_safeObjectForKey:@"hideCallout"] boolValue];
         _location = [attributes wxmap_safeObjectForKey:@"position"];
         _title = [attributes wxmap_safeObjectForKey:@"title"];
         _icon = [attributes wxmap_safeObjectForKey:@"icon"];

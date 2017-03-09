@@ -339,6 +339,7 @@ static const void *componentKey = &componentKey;
 
 - (MAAnnotationView *)_generateAnnotationView:(MAMapView *)mapView viewForAnnotation:(MAPointAnnotation *)annotation
 {
+    WXMapViewMarkerComponent *markerComponent = (WXMapViewMarkerComponent *)annotation.component;
     if (annotation.iconImage){
         static NSString *pointReuseIndetifier = @"customReuseIndetifier";
         MAAnnotationView *annotationView = (MAAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:pointReuseIndetifier];
@@ -347,9 +348,8 @@ static const void *componentKey = &componentKey;
             annotationView = [[MAAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pointReuseIndetifier];
         }
         
-        annotationView.canShowCallout               = YES;
-        annotationView.draggable                    = YES;
-        annotationView.rightCalloutAccessoryView    = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+        annotationView.canShowCallout               = !markerComponent.hideCallout;
+        annotationView.zIndex = markerComponent.zIndex;
         [[self imageLoader] downloadImageWithURL:annotation.iconImage imageFrame:CGRectMake(0, 0, 25, 25) userInfo:nil completed:^(UIImage *image, NSError *error, BOOL finished) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 annotationView.image = image;
@@ -364,9 +364,8 @@ static const void *componentKey = &componentKey;
             annotationView = [[MAPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pointReuseIndetifier];
         }
         
-        annotationView.canShowCallout               = NO;
-        annotationView.draggable                    = YES;
-        annotationView.rightCalloutAccessoryView    = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+        annotationView.canShowCallout               = !markerComponent.hideCallout;
+        annotationView.zIndex = markerComponent.zIndex;
         return annotationView;
     }
 }
@@ -380,7 +379,7 @@ static const void *componentKey = &componentKey;
         infoWindowComponent.annotation = annotation;
         infoWindowComponent.identifier = customReuseIndetifier;
         annotationView = infoWindowComponent.view;
-        annotationView.canShowCallout = NO;
+        annotationView.canShowCallout = infoWindowComponent.hideCallout;
         annotationView.draggable = YES;
     }
     annotationView.centerOffset = infoWindowComponent.offset;
@@ -389,6 +388,7 @@ static const void *componentKey = &componentKey;
             [annotationView addCustomView:component.view];
         }
     }
+    annotationView.zIndex = infoWindowComponent.zIndex;
     return annotationView;
 }
 
