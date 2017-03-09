@@ -245,7 +245,7 @@ static const void *componentKey = &componentKey;
 - (void)convertMarker:(WXMapViewMarkerComponent *)marker onAnnotation:(MAPointAnnotation *)annotation {
     if (marker.location && marker.location.count > 0) {
         CLLocationCoordinate2D position = [WXConvert CLLocationCoordinate2D:marker.location];
-        annotation.coordinate = [self _coordinate2D:position offset:marker.offset];
+        annotation.coordinate = position;//[self _coordinate2D:position offset:marker.offset];
     }
     if (marker.title) {
         annotation.title      = [NSString stringWithFormat:@"%@", marker.title];
@@ -320,8 +320,8 @@ static const void *componentKey = &componentKey;
 #pragma mark - private method
 - (CLLocationCoordinate2D)_coordinate2D:(CLLocationCoordinate2D)position offset:(CGPoint)offset
 {
-    CGPoint convertedPoint = [self.mapView convertCoordinate:position toPointToView:self.supercomponent.view];
-    return [self.mapView convertPoint:CGPointMake(convertedPoint.x + offset.x, convertedPoint.y + offset.y) toCoordinateFromView:self.supercomponent.view];
+    CGPoint convertedPoint = [self.mapView convertCoordinate:position toPointToView:self.weexInstance.rootView];
+    return [self.mapView convertPoint:CGPointMake(convertedPoint.x + offset.x, convertedPoint.y + offset.y) toCoordinateFromView:self.weexInstance.rootView];
 }
 
 - (void)initPOIData
@@ -364,7 +364,7 @@ static const void *componentKey = &componentKey;
             annotationView = [[MAPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pointReuseIndetifier];
         }
         
-        annotationView.canShowCallout               = YES;
+        annotationView.canShowCallout               = NO;
         annotationView.draggable                    = YES;
         annotationView.rightCalloutAccessoryView    = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
         return annotationView;
@@ -380,15 +380,16 @@ static const void *componentKey = &componentKey;
         infoWindowComponent.annotation = annotation;
         infoWindowComponent.identifier = customReuseIndetifier;
         annotationView = infoWindowComponent.view;
-        if (infoWindowComponent.subcomponents.count > 0) {
-            for (WXComponent *component in annotation.component.subcomponents) {
-                [annotationView addCustomView:component.view];
-            }
-        }
         annotationView.canShowCallout = NO;
         annotationView.draggable = YES;
-        return annotationView;
     }
+    annotationView.centerOffset = infoWindowComponent.offset;
+    if (infoWindowComponent.subcomponents.count > 0) {
+        for (WXComponent *component in annotation.component.subcomponents) {
+            [annotationView addCustomView:component.view];
+        }
+    }
+    return annotationView;
 }
 
 #pragma mark - mapview delegate
@@ -439,6 +440,7 @@ static const void *componentKey = &componentKey;
 {
     
 }
+
 
 /**
  * @brief 地图移动结束后调用此接口
