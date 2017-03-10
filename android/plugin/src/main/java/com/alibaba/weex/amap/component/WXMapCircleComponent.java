@@ -20,8 +20,6 @@ import com.taobao.weex.ui.component.WXVContainer;
 import org.json.JSONArray;
 import org.json.JSONException;
 
-import java.util.ArrayList;
-
 /**
  * Created by budao on 2017/3/3.
  */

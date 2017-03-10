@@ -96,6 +96,11 @@ public class WXMapMarkerComponent extends WXComponent<View> {
     setMarkerIcon(icon);
   }
 
+  @WXComponentProp(name = Constant.Name.HIDE_CALL_OUT)
+  public void setHideCallOut(Boolean hide) {
+    setMarkerHideCallOut(hide);
+  }
+
   @WXComponentProp(name = Constant.Name.POSITION)
   public void setPosition(String position) {
     setMarkerPosition(position);
@@ -207,6 +212,14 @@ public class WXMapMarkerComponent extends WXComponent<View> {
 //        adapter.setImage(icon, imageView, WXImageQuality.NORMAL, wxImageStrategy);
 //      }
 //    }
+  }
+
+  private void setMarkerHideCallOut(Boolean hide) {
+    if (mMarker != null) {
+      if (hide) {
+        mMarker.setClickable(!hide);
+      }
+    }
   }
 
   private void setMarkerPosition(String position) {

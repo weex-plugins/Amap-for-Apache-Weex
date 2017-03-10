@@ -31,6 +31,7 @@ public class Constant {
     String POSITION = "position";
     String ICON = "icon";
     String TITLE = "title";
+    String HIDE_CALL_OUT = "hideCallout";
 
     // polyline
     String PATH = "path";
