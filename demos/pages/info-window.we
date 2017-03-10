@@ -4,10 +4,10 @@
     <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
       <weex-amap-marker style="z-index:1000" hide-callout="true" position="{{marker.position}}" icon="{{marker.icon}}" title="{{marker.title}}"></weex-amap-marker>
       <weex-amap-marker style="z-index:1000" hide-callout="true" position="{{marker2.position}}" icon="{{marker.icon}}" title="{{marker2.title}}"></weex-amap-marker>
-      <weex-amap-info-window  open="{{palaceMuseum.open}}" position="{{palaceMuseum.position}}" offset="{{palaceMuseum.offset}}">
+      <weex-amap-info-window  open="{{palaceMuseum.open}}" position="{{palaceMuseum.position}}">
         <info-window src="http://img1.vued.vanthink.cn/vued6dfd998fc0738f7e88d4b66bafc547ce.jpeg" title="The Palace Museum" location="4 Jingshan Front St, Dongcheng Qu, Beijing"></info-window>
       </weex-amap-info-window>
-      <weex-amap-info-window open="{{southStation.open}}" position="{{southStation.position}}" offset="{{southStation.offset}}" >
+      <weex-amap-info-window open="{{southStation.open}}" position="{{southStation.position}}">
         <info-window  src="http://img1.vued.vanthink.cn/vued2de302ef72ae921313a1fa1bbbbd9455.jpeg" title="Beijing South Railway Station" location="Fengtai, Beijing"></info-window>
       </weex-amap-info-window>
     </weex-amap>
@@ -118,9 +118,16 @@
     methods: {
       toggleSta() {
         this.southStation.open = !this.southStation.open;
+        // only one info window can be opened in the map
+        if(this.southStation.open && this.palaceMuseum.open) {
+          this.palaceMuseum.open = false;  
+        }
       },
       toggleMus() {
         this.palaceMuseum.open = !this.palaceMuseum.open;
+        if(this.palaceMuseum.open && this.southStation.open) {
+          this.southStation.open = false;  
+        }
       }
     }
   }
