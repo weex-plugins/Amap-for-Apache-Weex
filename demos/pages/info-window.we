@@ -4,10 +4,10 @@
     <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
       <weex-amap-marker style="z-index:1000" hide-callout="true" position="{{marker.position}}" icon="{{marker.icon}}" title="{{marker.title}}"></weex-amap-marker>
       <weex-amap-marker style="z-index:1000" hide-callout="true" position="{{marker2.position}}" icon="{{marker.icon}}" title="{{marker2.title}}"></weex-amap-marker>
-      <weex-amap-info-window class="info-win"  open="{{palaceMuseum.open}}" position="{{palaceMuseum.position}}">
+      <weex-amap-info-window class="info-win" offset="palaceMuseum.offset"  open="{{palaceMuseum.open}}" position="{{palaceMuseum.position}}">
         <info-window src="http://img1.vued.vanthink.cn/vued6dfd998fc0738f7e88d4b66bafc547ce.jpeg" title="The Palace Museum" location="4 Jingshan Front St, Dongcheng Qu, Beijing"></info-window>
       </weex-amap-info-window>
-      <weex-amap-info-window class="info-win" open="{{southStation.open}}" position="{{southStation.position}}">
+      <weex-amap-info-window class="info-win" offset="southStation.offset" open="{{southStation.open}}" position="{{southStation.position}}">
         <info-window  src="http://img1.vued.vanthink.cn/vued2de302ef72ae921313a1fa1bbbbd9455.jpeg" title="Beijing South Railway Station" location="Fengtai, Beijing"></info-window>
       </weex-amap-info-window>
     </weex-amap>
@@ -114,12 +114,12 @@
       },
       palaceMuseum: {
         position: [116.397389, 39.908742],
-        offset: [0,-120],
+        offset: [0, -80],
         open: false
       },
       southStation: {
         position: [116.379278,39.865374],
-        offset: [0,-120],
+        offset: [0, -80],
         open: true
       },
     },

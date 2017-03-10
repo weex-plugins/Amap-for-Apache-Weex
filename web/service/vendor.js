@@ -10,5 +10,11 @@ module.exports = {
       return obj[Object.keys(obj)[0]]
     }
     return null;
+  },
+  // offset polyfill
+  calcOffset(x, y) {
+    var halfY = y / 2;
+    var newX = x - halfY;
+    return [newX, y];
   }
 };
