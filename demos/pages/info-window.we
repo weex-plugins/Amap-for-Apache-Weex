@@ -4,24 +4,27 @@
     <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
       <weex-amap-marker style="z-index:1000" hide-callout="true" position="{{marker.position}}" icon="{{marker.icon}}" title="{{marker.title}}"></weex-amap-marker>
       <weex-amap-marker style="z-index:1000" hide-callout="true" position="{{marker2.position}}" icon="{{marker.icon}}" title="{{marker2.title}}"></weex-amap-marker>
-      <weex-amap-info-window class="info-win" offset="palaceMuseum.offset"  open="{{palaceMuseum.open}}" position="{{palaceMuseum.position}}">
+      <weex-amap-info-window class="info-win" offset="{{palaceMuseum.offset}}"  open="{{palaceMuseum.open}}" position="{{palaceMuseum.position}}">
         <info-window src="http://img1.vued.vanthink.cn/vued6dfd998fc0738f7e88d4b66bafc547ce.jpeg" title="The Palace Museum" location="4 Jingshan Front St, Dongcheng Qu, Beijing"></info-window>
       </weex-amap-info-window>
-      <weex-amap-info-window class="info-win" offset="southStation.offset" open="{{southStation.open}}" position="{{southStation.position}}">
+      <weex-amap-info-window class="info-win" offset="{{southStation.offset}}" open="{{southStation.open}}" position="{{southStation.position}}">
         <info-window  src="http://img1.vued.vanthink.cn/vued2de302ef72ae921313a1fa1bbbbd9455.jpeg" title="Beijing South Railway Station" location="Fengtai, Beijing"></info-window>
       </weex-amap-info-window>
     </weex-amap>
     <div class="map-control">
       <text class="title">Component: weex-amap-info-window</text> 
       <text class="tips">在地图上显示自定义窗体</text> 
+      <div class="btn-group">
+        <div onclick="toggleSta" class="btnbox">
+        <text if="{{!southStation.open}}" class="btn" >打开南站信息</text>
+        <text if="{{southStation.open}}" class="btn" >关闭南站信息</text>
+      </div>
       <div onclick="toggleMus" class="btnbox">
         <text if="{{!palaceMuseum.open}}" class="btn" >打开故宫信息</text>
         <text if="{{palaceMuseum.open}}" class="btn" >关闭故宫信息</text>
       </div>
-      <div onclick="toggleSta" class="btnbox">
-        <text if="{{!southStation.open}}" class="btn" >打开南站信息</text>
-        <text if="{{southStation.open}}" class="btn" >关闭南站信息</text>
       </div>
+      
     </div>
   </div>
 </template>
@@ -61,7 +64,11 @@
     color:#666;
     font-size: 20px;
   }
+  .btn-group{
+    flex-direction: row;
+  }
   .btn{
+    flex: 1;
     margin: 20;
     padding: 20;
     background-color: #1ba1e2;
