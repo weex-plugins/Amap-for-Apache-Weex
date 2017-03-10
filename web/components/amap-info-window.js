@@ -1,7 +1,7 @@
 import components from '../service/components';
 import vendor from '../service/vendor';
 
-const componentName = 'infoWindow';
+const componentName = 'Marker';
 // prototype methods.
 const proto = {
   create() {
@@ -14,18 +14,20 @@ const proto = {
         components.registerComponent(componentName, {
           position: data.position,
           offset: data.offset,
-          open: data.open,
-          isCustom: true
-        }, comId, (com, map) => {
+          isCustom: true,
+        }, comId, (com) => {
           let content = data.content;
+          console.log(content);
           if (this.node.innerHTML.length > 0) {
             content = this.node.innerHTML;
           }
           if (content) {
             com.setContent(content);
           }
-          if (data.open) {
-            com.open(map, data.position);
+          if (data.open && content) {
+            com.show();
+          } else {
+            com.hide();
           }
         });
       } else {
@@ -40,12 +42,11 @@ const proto = {
 const attr = {
   open(val) {
     const com = components.getComponent(this.data.ref);
-    const map = components.getComponentMap();
     if (com) {
       if (val) {
-        com.open(map, this.data.attr.position);
+        com.show();
       } else {
-        com.close();
+        com.hide();
       }
     }
   }

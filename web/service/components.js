@@ -26,8 +26,6 @@ const components = {
     });
   },
   getComponent(id) {
-    console.log(id);
-    console.log(this._components);
     if (!this._components) {
       return null;
     }

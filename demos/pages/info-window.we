@@ -2,8 +2,8 @@
   <div class="container">
     <navbar title="设置自定义信息窗体"></navbar>
     <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
-      <weex-amap-marker style="z-index:1000"  onclick="toggleSta" hide-callout="true" position="{{marker.position}}" icon="{{marker.icon}}" title="{{marker.title}}"></weex-amap-marker>
-      <weex-amap-marker style="z-index:1000" onclick="toggleMus" hide-callout="true" position="{{marker2.position}}" icon="{{marker.icon}}" title="{{marker2.title}}"></weex-amap-marker>
+      <weex-amap-marker style="z-index:1000" hide-callout="true" position="{{marker.position}}" icon="{{marker.icon}}" title="{{marker.title}}"></weex-amap-marker>
+      <weex-amap-marker style="z-index:1000" hide-callout="true" position="{{marker2.position}}" icon="{{marker.icon}}" title="{{marker2.title}}"></weex-amap-marker>
       <weex-amap-info-window  open="{{palaceMuseum.open}}" position="{{palaceMuseum.position}}" offset="{{palaceMuseum.offset}}">
         <info-window src="http://img1.vued.vanthink.cn/vued6dfd998fc0738f7e88d4b66bafc547ce.jpeg" title="The Palace Museum" location="4 Jingshan Front St, Dongcheng Qu, Beijing"></info-window>
       </weex-amap-info-window>
@@ -14,6 +14,14 @@
     <div class="map-control">
       <text class="title">Component: weex-amap-info-window</text> 
       <text class="tips">在地图上显示自定义窗体</text> 
+      <div onclick="toggleMus" class="btnbox">
+        <text if="{{!palaceMuseum.open}}" class="btn" >打开故宫信息</text>
+        <text if="{{palaceMuseum.open}}" class="btn" >关闭故宫信息</text>
+      </div>
+      <div onclick="toggleSta" class="btnbox">
+        <text if="{{!southStation.open}}" class="btn" >打开南站信息</text>
+        <text if="{{southStation.open}}" class="btn" >关闭南站信息</text>
+      </div>
     </div>
   </div>
 </template>
