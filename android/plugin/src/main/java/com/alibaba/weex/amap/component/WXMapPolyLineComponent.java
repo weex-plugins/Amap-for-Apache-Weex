@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * Created by budao on 2017/3/3.
  */
 
-public class WxMapPolyLineComponent extends WXComponent<View> {
+public class WXMapPolyLineComponent extends WXComponent<View> {
   ArrayList<LatLng> mPosition = new ArrayList<>();
   private MapView mMapView;
   private AMap mMap;
@@ -35,7 +35,7 @@ public class WxMapPolyLineComponent extends WXComponent<View> {
   private String mStyle;
   private float mWeight = 1.0f;
 
-  public WxMapPolyLineComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
+  public WXMapPolyLineComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
     super(instance, dom, parent);
   }
 

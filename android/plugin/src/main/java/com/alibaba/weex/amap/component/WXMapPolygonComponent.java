@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * Created by budao on 2017/3/3.
  */
 
-public class WxMapPolygonComponent extends WXComponent<View> {
+public class WXMapPolygonComponent extends WXComponent<View> {
   ArrayList<LatLng> mPosition = new ArrayList<>();
   private MapView mMapView;
   private AMap mMap;
@@ -35,7 +35,7 @@ public class WxMapPolygonComponent extends WXComponent<View> {
   private int mFillColor = 0;
   private float mWidth = 1.0f;
 
-  public WxMapPolygonComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
+  public WXMapPolygonComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
     super(instance, dom, parent);
   }
 

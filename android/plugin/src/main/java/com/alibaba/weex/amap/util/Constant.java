@@ -42,6 +42,10 @@ public class Constant {
     // circle
     String RADIUS = "radius";
     String FILL_COLOR = "fillColor";
+
+    // offset
+    String OFFSET = "offset";
+    String OPEN = "open";
   }
 
 
