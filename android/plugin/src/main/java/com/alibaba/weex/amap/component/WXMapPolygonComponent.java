@@ -76,7 +76,7 @@ public class WXMapPolygonComponent extends WXComponent<View> {
   @WXComponentProp(name = Constant.Name.FILL_COLOR)
   public void setFillColor(String param) {
     mFillColor = Color.parseColor(param);
-    mPolygon.setStrokeColor(mFillColor);
+    mPolygon.setFillColor(mFillColor);
   }
 
   @WXComponentProp(name = Constant.Name.STROKE_WIDTH)
