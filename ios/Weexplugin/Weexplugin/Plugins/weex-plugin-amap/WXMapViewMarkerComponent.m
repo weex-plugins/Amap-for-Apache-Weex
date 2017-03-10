@@ -36,8 +36,8 @@
         if (attributes[@"offset"]) {
             _offset = [WXConvert sizeToWXPixelType:attributes[@"offset"] withInstance:self.weexInstance];
         }
-        if (attributes[@"zIndex"]) {
-            _zIndex = [attributes[@"zIndex"] integerValue];
+        if (styles[@"zIndex"]) {
+            _zIndex = [styles[@"zIndex"] integerValue];
         }
         _hideCallout = [[attributes wxmap_safeObjectForKey:@"hideCallout"] boolValue];
         _location = [attributes wxmap_safeObjectForKey:@"position"];
@@ -45,13 +45,6 @@
         _icon = [attributes wxmap_safeObjectForKey:@"icon"];
     }
     return self;
-}
-
-- (void)addEvent:(NSString *)eventName
-{
-    if ([eventName isEqualToString:@"open"]) {
-        
-    }
 }
 
 - (void)updateAttributes:(NSDictionary *)attributes
