@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * Created by budao on 2017/3/3.
  */
 
-public class WxMapCircleComponent extends WXComponent<View> {
+public class WXMapCircleComponent extends WXComponent<View> {
   private MapView mMapView;
   private AMap mMap;
   private Circle mCircle;
@@ -35,7 +35,7 @@ public class WxMapCircleComponent extends WXComponent<View> {
   private float mWeight = 1.0f;
   private float mRadius = 1.0f;
 
-  public WxMapCircleComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
+  public WXMapCircleComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
     super(instance, dom, parent);
   }
 

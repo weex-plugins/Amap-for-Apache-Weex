@@ -19,6 +19,8 @@
 #import "WXConvert+AMapKit.h"
 #import <objc/runtime.h>
 
+#define WX_CUSTOM_MARKER @"wx_custom_marker";
+
 @interface MAPointAnnotation(imageAnnotation)
 
 @property(nonatomic, copy) NSString *iconImage;
@@ -245,7 +247,7 @@ static const void *componentKey = &componentKey;
 - (void)convertMarker:(WXMapViewMarkerComponent *)marker onAnnotation:(MAPointAnnotation *)annotation {
     if (marker.location && marker.location.count > 0) {
         CLLocationCoordinate2D position = [WXConvert CLLocationCoordinate2D:marker.location];
-        annotation.coordinate = position;//[self _coordinate2D:position offset:marker.offset];
+        annotation.coordinate = position;
     }
     if (marker.title) {
         annotation.title      = [NSString stringWithFormat:@"%@", marker.title];
@@ -339,6 +341,7 @@ static const void *componentKey = &componentKey;
 
 - (MAAnnotationView *)_generateAnnotationView:(MAMapView *)mapView viewForAnnotation:(MAPointAnnotation *)annotation
 {
+    WXMapViewMarkerComponent *markerComponent = (WXMapViewMarkerComponent *)annotation.component;
     if (annotation.iconImage){
         static NSString *pointReuseIndetifier = @"customReuseIndetifier";
         MAAnnotationView *annotationView = (MAAnnotationView*)[mapView dequeueReusableAnnotationViewWithIdentifier:pointReuseIndetifier];
@@ -347,9 +350,8 @@ static const void *componentKey = &componentKey;
             annotationView = [[MAAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pointReuseIndetifier];
         }
         
-        annotationView.canShowCallout               = YES;
-        annotationView.draggable                    = YES;
-        annotationView.rightCalloutAccessoryView    = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+        annotationView.canShowCallout               = markerComponent.hideCallout;
+        annotationView.zIndex = markerComponent.zIndex;
         [[self imageLoader] downloadImageWithURL:annotation.iconImage imageFrame:CGRectMake(0, 0, 25, 25) userInfo:nil completed:^(UIImage *image, NSError *error, BOOL finished) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 annotationView.image = image;
@@ -364,9 +366,8 @@ static const void *componentKey = &componentKey;
             annotationView = [[MAPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pointReuseIndetifier];
         }
         
-        annotationView.canShowCallout               = NO;
-        annotationView.draggable                    = YES;
-        annotationView.rightCalloutAccessoryView    = [UIButton buttonWithType:UIButtonTypeDetailDisclosure];
+        annotationView.canShowCallout               = markerComponent.hideCallout;
+        annotationView.zIndex = markerComponent.zIndex;
         return annotationView;
     }
 }
@@ -374,22 +375,24 @@ static const void *componentKey = &componentKey;
 - (MAAnnotationView *)_generateCustomInfoWindow:(MAMapView *)mapView viewForAnnotation:(MAPointAnnotation *)annotation
 {
     WXMapInfoWindowComponent *infoWindowComponent = (WXMapInfoWindowComponent *)annotation.component;
-    static NSString *customReuseIndetifier = @"customReuseIndetifier";
-    WXMapInfoWindow *annotationView = (WXMapInfoWindow*)[mapView dequeueReusableAnnotationViewWithIdentifier:customReuseIndetifier];
-    if (annotationView == nil) {
+    static NSString *customReuseIndetifier = WX_CUSTOM_MARKER;
+    WXMapInfoWindow *infoView = (WXMapInfoWindow*)[mapView dequeueReusableAnnotationViewWithIdentifier:customReuseIndetifier];
+    if (infoView == nil || ![infoView isKindOfClass:[WXMapInfoWindow class]]) {
         infoWindowComponent.annotation = annotation;
         infoWindowComponent.identifier = customReuseIndetifier;
-        annotationView = infoWindowComponent.view;
-        annotationView.canShowCallout = NO;
-        annotationView.draggable = YES;
+        infoView = infoWindowComponent.view;
+        infoView.canShowCallout = infoWindowComponent.hideCallout;
     }
-    annotationView.centerOffset = infoWindowComponent.offset;
     if (infoWindowComponent.subcomponents.count > 0) {
         for (WXComponent *component in annotation.component.subcomponents) {
-            [annotationView addCustomView:component.view];
+            if ([infoView respondsToSelector:@selector(addCustomInfoWindow:)]) {
+                [infoView addCustomInfoWindow:component.view];
+            }
         }
     }
-    return annotationView;
+    infoView.centerOffset = infoWindowComponent.offset;
+    infoView.zIndex = infoWindowComponent.zIndex;
+    return infoView;
 }
 
 #pragma mark - mapview delegate

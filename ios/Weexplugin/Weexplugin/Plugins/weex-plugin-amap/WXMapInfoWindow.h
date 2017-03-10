@@ -10,6 +10,6 @@
 
 @interface WXMapInfoWindow : MAAnnotationView
 
-- (void)addCustomView:(UIView *)view;
+- (void)addCustomInfoWindow:(UIView *)view;
 
 @end

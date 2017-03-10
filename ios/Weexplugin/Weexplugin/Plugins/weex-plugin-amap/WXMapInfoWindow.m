@@ -19,7 +19,7 @@
     return self;
 }
 
-- (void)addCustomView:(UIView *)view;
+- (void)addCustomInfoWindow:(UIView *)view;
 {
     [self addSubview:view];
 }

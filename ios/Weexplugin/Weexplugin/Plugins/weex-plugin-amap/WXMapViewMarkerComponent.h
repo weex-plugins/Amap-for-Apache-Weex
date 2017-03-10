@@ -18,4 +18,8 @@
 
 @property (nonatomic, assign) CGPoint offset;
 
+@property (nonatomic, assign) BOOL hideCallout;
+
+@property (nonatomic, assign) NSInteger zIndex;
+
 @end

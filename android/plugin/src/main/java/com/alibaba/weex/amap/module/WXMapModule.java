@@ -3,7 +3,7 @@ package com.alibaba.weex.amap.module;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.alibaba.weex.amap.component.WxMapPolygonComponent;
+import com.alibaba.weex.amap.component.WXMapPolygonComponent;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -71,8 +71,8 @@ public class WXMapModule extends WXModule {
 
       WXComponent component = findComponent(id);
 
-      if (component != null && component instanceof WxMapPolygonComponent) {
-        contains = ((WxMapPolygonComponent) component).contains(latLng);
+      if (component != null && component instanceof WXMapPolygonComponent) {
+        contains = ((WXMapPolygonComponent) component).contains(latLng);
         success = true;
       }
     } catch (JSONException e) {
