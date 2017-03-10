@@ -8,6 +8,7 @@
 
 #import "WXMapCircleComponent.h"
 #import "NSDictionary+WXMap.h"
+#import "WXConvert+AMapKit.h"
 
 @implementation WXMapCircleComponent
 
@@ -23,7 +24,10 @@
 {
     self = [super initWithRef:ref type:type styles:styles attributes:attributes events:events weexInstance:weexInstance];
     if (self) {
-        _center = [attributes wxmap_safeObjectForKey:@"center"];
+        NSArray *centerArray = [attributes wxmap_safeObjectForKey:@"center"];
+        if ([WXConvert isValidatedArray:centerArray]) {
+            _center = centerArray;
+        }
         _radius = [[attributes wxmap_safeObjectForKey:@"radius"] doubleValue];
     }
     return self;

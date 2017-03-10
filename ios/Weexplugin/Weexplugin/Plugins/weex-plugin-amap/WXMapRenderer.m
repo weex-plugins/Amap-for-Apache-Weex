@@ -10,6 +10,7 @@
 #import "WXMapViewComponent.h"
 #import "NSDictionary+WXMap.h"
 #import "NSArray+WXMap.h"
+#import "WXConvert+AMapKit.h"
 
 static const void *shapeKey = &shapeKey;
 
@@ -47,7 +48,10 @@ static const void *shapeKey = &shapeKey;
 {
     self = [super initWithRef:ref type:type styles:styles attributes:attributes events:events weexInstance:weexInstance];
     if (self) {
-        _path = [attributes wxmap_safeObjectForKey:@"path"];
+        NSArray * pathArray = [attributes wxmap_safeObjectForKey:@"path"];
+        if ([WXConvert isValidatedArray:pathArray]) {
+            _path = pathArray;
+        }
         _strokeColor = [attributes wxmap_safeObjectForKey:@"strokeColor"];
         _strokeWidth = [[attributes wxmap_safeObjectForKey:@"strokeWidth"] doubleValue];
         _strokeOpacity = [[attributes wxmap_safeObjectForKey:@"strokeOpacity"] doubleValue];
@@ -56,16 +60,13 @@ static const void *shapeKey = &shapeKey;
     _viewLoaded = NO;
     return self;
 }
- 
-- (void)updateAttributes:(NSDictionary *)attributes
-{
-    WXMapViewComponent *mapComponent = (WXMapViewComponent *)self.supercomponent;
-}
+
 
 - (void)removeFromSuperview;
 {
     [super removeFromSuperview];
-    [(WXMapViewComponent *)self.supercomponent removeMarker:self];
+    WXMapViewComponent *parentComponent = (WXMapViewComponent *)self.supercomponent;
+    [parentComponent removeMarker:self];
 }
 
 - (void)dealloc

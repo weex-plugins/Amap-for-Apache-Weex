@@ -118,8 +118,9 @@ static const void *componentKey = &componentKey;
     self = [super initWithRef:ref type:type styles:styles attributes:attributes events:events weexInstance:weexInstance];
     if (self) {
         NSArray *center = [attributes wxmap_safeObjectForKey:@"center"];
-        _centerCoordinate.latitude = [[center wxmap_safeObjectForKey:1] doubleValue];
-        _centerCoordinate.longitude = [[center wxmap_safeObjectForKey:0] doubleValue];
+        if ([WXConvert isValidatedArray:center]) {
+            _centerCoordinate = [WXConvert CLLocationCoordinate2D:center];
+        }
         _zoomLevel = [[attributes wxmap_safeObjectForKey:@"zoom"] floatValue];
         _showScale = [[attributes wxmap_safeObjectForKey:@"scale"] boolValue];
         _showGeolocation = [[attributes wxmap_safeObjectForKey:@"geolocation"] boolValue];
@@ -163,19 +164,10 @@ static const void *componentKey = &componentKey;
         WXMapRenderer *overlayRenderer = (WXMapRenderer *)subcomponent;
         [self addOverlay:overlayRenderer];
     }else if ([subcomponent isKindOfClass:[WXMapViewMarkerComponent class]]) {
-        [self addMarker:subcomponent];
+        [self addMarker:(WXMapViewMarkerComponent *)subcomponent];
     }
 }
 
-- (void)layoutDidFinish
-{
-    
-}
-
-- (void)viewWillUnload
-{
-    
-}
 
 - (void)dealloc
 {
@@ -184,7 +176,7 @@ static const void *componentKey = &componentKey;
 
 - (void)updateAttributes:(NSDictionary *)attributes
 {
-    if (attributes[@"center"]) {
+    if ([WXConvert isValidatedArray:attributes[@"center"]]) {
         [self setCenter:attributes[@"center"]];
     }
     
@@ -194,24 +186,20 @@ static const void *componentKey = &componentKey;
     
 }
 
-- (void)addEvent:(NSString *)eventName
-{
-    
-}
-
-- (void)removeEvent:(NSString *)eventName
-{
-    
-}
-
 #pragma mark - mark
 - (void)addOverlay:(WXMapRenderer *)overlayRenderer
 {
     MAShape *shape;
     if (!overlayRenderer.path && [overlayRenderer isKindOfClass:[WXMapCircleComponent class]]) {
         WXMapCircleComponent *circle = (WXMapCircleComponent *)overlayRenderer;
+        if (!circle.center) {
+            return;
+        }
         CLLocationCoordinate2D centerCoordinate = [WXConvert CLLocationCoordinate2D:circle.center];
         shape = [MACircle circleWithCenterCoordinate:centerCoordinate radius:circle.radius];
+        shape.component = overlayRenderer;
+        overlayRenderer.shape = shape;
+        [self.mapView addOverlay:(MACircle *)shape];
     }else {
         NSInteger count = overlayRenderer.path.count;
         if (count <= 0) {
@@ -219,24 +207,32 @@ static const void *componentKey = &componentKey;
         }
         CLLocationCoordinate2D shapePoints[count];
         for (NSInteger i = 0; i < count; i++) {
+            if (!overlayRenderer.path) {
+                return;
+            }
             CLLocationCoordinate2D coordinate = [WXConvert CLLocationCoordinate2D:[overlayRenderer.path wxmap_safeObjectForKey:i]];
             shapePoints[i].latitude = coordinate.latitude;
             shapePoints[i].longitude = coordinate.longitude;
         }
-        
         if ([overlayRenderer isKindOfClass:[WXMapPolylineComponent class]]) {
             shape = [MAPolyline polylineWithCoordinates:shapePoints count:count];
+            shape.component = overlayRenderer;
+            overlayRenderer.shape = shape;
+            [self.mapView addOverlay:(MAPolyline *)shape];
         }else if ([overlayRenderer isKindOfClass:[WXMapPolygonComponent class]]) {
             shape = [MAPolygon polygonWithCoordinates:shapePoints count:count];
+            shape.component = overlayRenderer;
+            overlayRenderer.shape = shape;
+            [self.mapView addOverlay:(MAPolygon *)shape];
         }
     }
-    shape.component = overlayRenderer;
-    overlayRenderer.shape = shape;
-    [self.mapView addOverlay:shape];
 }
 
 #pragma mark - mark
 - (void)addMarker:(WXMapViewMarkerComponent *)marker {
+    if ([marker isKindOfClass:[WXMapInfoWindowComponent class]] && !((WXMapInfoWindowComponent *)marker).isOpen) {
+        return;
+    }
     [self initPOIData];
     MAPointAnnotation *a1 = [[MAPointAnnotation alloc] init];
     [self convertMarker:marker onAnnotation:a1];
@@ -245,10 +241,11 @@ static const void *componentKey = &componentKey;
 }
 
 - (void)convertMarker:(WXMapViewMarkerComponent *)marker onAnnotation:(MAPointAnnotation *)annotation {
-    if (marker.location && marker.location.count > 0) {
-        CLLocationCoordinate2D position = [WXConvert CLLocationCoordinate2D:marker.location];
-        annotation.coordinate = position;
+    if (!marker.location) {
+        return;
     }
+    CLLocationCoordinate2D position = [WXConvert CLLocationCoordinate2D:marker.location];
+    annotation.coordinate = position;
     if (marker.title) {
         annotation.title      = [NSString stringWithFormat:@"%@", marker.title];
     }
@@ -272,15 +269,16 @@ static const void *componentKey = &componentKey;
 
 - (void)updateLocationMarker:(WXMapViewMarkerComponent *)marker {
     MAPointAnnotation *a1 = _annotations[marker.ref];
-    CLLocationCoordinate2D coordinate;
-    coordinate.latitude = [marker.location[1] doubleValue];
-    coordinate.longitude = [marker.location[0] doubleValue];
+    if (!marker.location) {
+        return;
+    }
+    CLLocationCoordinate2D coordinate = [WXConvert CLLocationCoordinate2D:marker.location];
     a1.coordinate = coordinate;
     [self.mapView addAnnotation:a1];
 }
 
 
-- (void)removeMarker:(WXMapViewMarkerComponent *)marker {
+- (void)removeMarker:(WXComponent *)marker {
     if (_annotations[marker.ref]) {
         [self.mapView removeAnnotation:_annotations[marker.ref]];
         [_annotations removeObjectForKey:marker.ref];
@@ -296,9 +294,10 @@ static const void *componentKey = &componentKey;
 
 - (void)setCenter:(NSArray *)center
 {
-    CLLocationCoordinate2D centerCoordinate;
-    centerCoordinate.latitude = [center[1] doubleValue];
-    centerCoordinate.longitude = [center[0] doubleValue];
+    if (!center) {
+        return;
+    }
+    CLLocationCoordinate2D centerCoordinate = [WXConvert CLLocationCoordinate2D:center];
     [self.mapView setCenterCoordinate:centerCoordinate];
 }
 
@@ -350,11 +349,16 @@ static const void *componentKey = &componentKey;
             annotationView = [[MAAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pointReuseIndetifier];
         }
         
-        annotationView.canShowCallout               = markerComponent.hideCallout;
+        annotationView.canShowCallout               = !markerComponent.hideCallout;
         annotationView.zIndex = markerComponent.zIndex;
         [[self imageLoader] downloadImageWithURL:annotation.iconImage imageFrame:CGRectMake(0, 0, 25, 25) userInfo:nil completed:^(UIImage *image, NSError *error, BOOL finished) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                annotationView.image = image;
+                if (image) {
+                    annotationView.image = image;
+                    
+                }else {
+                    annotationView.image = [UIImage imageNamed:@"greenPin"];
+                }
             });
         }];
         return annotationView;
@@ -366,7 +370,7 @@ static const void *componentKey = &componentKey;
             annotationView = [[MAPinAnnotationView alloc] initWithAnnotation:annotation reuseIdentifier:pointReuseIndetifier];
         }
         
-        annotationView.canShowCallout               = markerComponent.hideCallout;
+        annotationView.canShowCallout               = !markerComponent.hideCallout;
         annotationView.zIndex = markerComponent.zIndex;
         return annotationView;
     }
@@ -380,8 +384,8 @@ static const void *componentKey = &componentKey;
     if (infoView == nil || ![infoView isKindOfClass:[WXMapInfoWindow class]]) {
         infoWindowComponent.annotation = annotation;
         infoWindowComponent.identifier = customReuseIndetifier;
-        infoView = infoWindowComponent.view;
-        infoView.canShowCallout = infoWindowComponent.hideCallout;
+        infoView = (WXMapInfoWindow *)infoWindowComponent.view;
+        infoView.canShowCallout = !infoWindowComponent.hideCallout;
     }
     if (infoWindowComponent.subcomponents.count > 0) {
         for (WXComponent *component in annotation.component.subcomponents) {
@@ -463,17 +467,17 @@ static const void *componentKey = &componentKey;
     if ([overlay isKindOfClass:[MAPolyline class]])
     {
         MAPolyline *polyline = (MAPolyline *)overlay;
-        WXMapPolylineComponent *component = polyline.component;
+        WXMapPolylineComponent *component = (WXMapPolylineComponent *)polyline.component;
         MAPolylineRenderer *polylineRenderer = [[MAPolylineRenderer alloc] initWithPolyline:overlay];
         polylineRenderer.strokeColor = [WXConvert UIColor:component.strokeColor];
         polylineRenderer.lineWidth   = component.strokeWidth;
-        polylineRenderer.lineCapType = kCGLineCapSquare;
+        polylineRenderer.lineCapType = kCGLineCapButt;
         polylineRenderer.lineDash = [WXConvert isLineDash:component.strokeStyle];
         return polylineRenderer;
     }else if ([overlay isKindOfClass:[MAPolygon class]])
     {
         MAPolygon *polygon = (MAPolygon *)overlay;
-        WXMapPolygonComponent *component = polygon.component;
+        WXMapPolygonComponent *component = (WXMapPolygonComponent *)polygon.component;
         MAPolygonRenderer *polygonRenderer = [[MAPolygonRenderer alloc] initWithPolygon:overlay];
         polygonRenderer.lineWidth   = component.strokeWidth;;
         polygonRenderer.strokeColor = [WXConvert UIColor:component.strokeColor];
@@ -483,7 +487,7 @@ static const void *componentKey = &componentKey;
     }else if ([overlay isKindOfClass:[MACircle class]])
     {
         MACircle *circle = (MACircle *)overlay;
-        WXMapCircleComponent *component = circle.component;
+        WXMapCircleComponent *component = (WXMapCircleComponent *)circle.component;
         MACircleRenderer *circleRenderer = [[MACircleRenderer alloc] initWithCircle:overlay];
         circleRenderer.lineWidth   = component.strokeWidth;
         circleRenderer.strokeColor = [WXConvert UIColor:component.strokeColor];

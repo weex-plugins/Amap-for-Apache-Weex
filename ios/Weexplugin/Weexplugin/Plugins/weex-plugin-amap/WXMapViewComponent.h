@@ -26,7 +26,7 @@
 
 - (void)updateLocationMarker:(WXMapViewMarkerComponent *)marker;
 
-- (void)removeMarker:(WXMapViewMarkerComponent *)marker;
+- (void)removeMarker:(WXComponent *)marker;
 
 #pragma - Overlay
 //- (void)addOverlay:(id)overlay;

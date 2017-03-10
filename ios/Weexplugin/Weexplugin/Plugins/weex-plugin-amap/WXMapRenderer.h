@@ -10,7 +10,7 @@
 #import <MAMapKit/MAMapKit.h>
 @interface WXComponent(WXMapShape)
 
-@property(nonatomic, strong) MAMultiPoint *shape;
+@property(nonatomic, strong) MAShape *shape;
 
 @end
 

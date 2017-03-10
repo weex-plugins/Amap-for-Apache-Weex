@@ -47,7 +47,15 @@ WX_EXPORT_METHOD_SYNC(@selector(polygonContainsMarker:ref:callback:))
         CLLocationCoordinate2D loc1 = [WXConvert CLLocationCoordinate2D:position];
         MAMapPoint p1 = MAMapPointForCoordinate(loc1);
         NSDictionary *userDic;
-        if(MAPolygonContainsPoint(p1, WXMapRenderer.shape.points, WXMapRenderer.shape.pointCount)) {
+
+        if (![WXMapRenderer.shape isKindOfClass:[MAMultiPoint class]]) {
+            userDic = @{@"result":@"false",@"data":[NSNumber numberWithBool:NO]};
+            return;
+        }
+        MAMapPoint *points = ((MAMultiPoint *)WXMapRenderer.shape).points;
+        NSUInteger pointCount = ((MAMultiPoint *)WXMapRenderer.shape).pointCount;
+        
+        if(MAPolygonContainsPoint(p1, points, pointCount)) {
              userDic = @{@"result":@"success",@"data":[NSNumber numberWithBool:YES]};
         } else {
             userDic = @{@"result":@"false",@"data":[NSNumber numberWithBool:NO]};

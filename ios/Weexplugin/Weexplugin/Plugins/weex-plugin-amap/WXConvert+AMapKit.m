@@ -11,12 +11,17 @@
 
 @implementation WXConvert (AMapKit)
 
+
 #define WX_JSON_CONVERTER(type)           \
 + (type *)type:(id)json { return json; }
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
 WX_JSON_CONVERTER(NSArray)
 WX_JSON_CONVERTER(NSDictionary)
 WX_JSON_CONVERTER(NSString)
+#pragma clang diagnostic pop
+
 
 + (CLLocationCoordinate2D)CLLocationCoordinate2D:(id)json
 {
@@ -50,6 +55,15 @@ WX_JSON_CONVERTER(NSString)
     json = [self NSArray:json];
     return CGPointMake([WXConvert WXPixelType:[json wxmap_safeObjectForKey:0] scaleFactor:instance.pixelScaleFactor],
                       [WXConvert WXPixelType:[json wxmap_safeObjectForKey:1] scaleFactor:instance.pixelScaleFactor]);
+}
+
++ (BOOL)isValidatedArray:(id)json
+{
+    NSArray *convertedjson = [self NSArray:json];
+    if (convertedjson && convertedjson.count > 1) {
+        return YES;
+    }
+    return NO;
 }
 
 @end
