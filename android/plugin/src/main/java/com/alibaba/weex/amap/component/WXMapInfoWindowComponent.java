@@ -29,7 +29,7 @@ import org.json.JSONException;
 public class WXMapInfoWindowComponent extends WXVContainer<LinearLayout> {
   private Marker mMarker;
   private MapView mMapView;
-  private WXMapViewComponent mParent;
+  private WXMapViewComponent mWxMapViewComponent;
 
   public WXMapInfoWindowComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
     super(instance, dom, parent);
@@ -42,7 +42,7 @@ public class WXMapInfoWindowComponent extends WXVContainer<LinearLayout> {
 //    // frameLayout.setLayoutParams(new LinearLayout.LayoutParams(1, 1));
 //    // frameLayout.setBackgroundColor(Color.TRANSPARENT);
     if (getParent() != null && getParent() instanceof WXMapViewComponent) {
-      mParent = (WXMapViewComponent) getParent();
+      mWxMapViewComponent = (WXMapViewComponent) getParent();
       mMapView = ((WXMapViewComponent) getParent()).getHostView();
       boolean open = (Boolean) getDomObject().getAttrs().get(Constant.Name.OPEN);
       String offset = (String) getDomObject().getAttrs().get(Constant.Name.ICON);
@@ -88,8 +88,8 @@ public class WXMapInfoWindowComponent extends WXVContainer<LinearLayout> {
   public void destroy() {
     super.destroy();
     if (mMarker != null) {
-      if (mParent != null) {
-        mParent.getCachedInfoWindow().remove(mMarker.getId());
+      if (mWxMapViewComponent != null) {
+        mWxMapViewComponent.getCachedInfoWindow().remove(mMarker.getId());
       }
       mMarker.remove();
     }
@@ -99,12 +99,13 @@ public class WXMapInfoWindowComponent extends WXVContainer<LinearLayout> {
     final MarkerOptions markerOptions = new MarkerOptions();
     //设置Marker可拖动, 将Marker设置为贴地显示，可以双指下拉地图查看效果
     markerOptions.setFlat(true);
+    markerOptions.infoWindowEnable(true);
+    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.infowindow_marker_icon));
+    markerOptions.title("");
     AMap mMap = mMapView.getMap();
     mMarker = mMap.addMarker(markerOptions);
-    mParent.getCachedInfoWindow().put(mMarker.getId(), this);
+    mWxMapViewComponent.getCachedInfoWindow().put(mMarker.getId(), this);
     mMarker.setClickable(false);
-    mMarker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.infowindow_marker_icon));
-    setMarkerTitle("");
     setMarkerPosition(position);
     if (open) {
       mMarker.showInfoWindow();
@@ -130,13 +131,11 @@ public class WXMapInfoWindowComponent extends WXVContainer<LinearLayout> {
     try {
       JSONArray jsonArray = new JSONArray(position);
       LatLng latLng = new LatLng(jsonArray.optDouble(1), jsonArray.optDouble(0));
-      mMarker.setPosition(latLng);
+      MarkerOptions markerOptions = mMarker.getOptions();
+      markerOptions.position(latLng);
+      mMarker.setMarkerOptions(markerOptions);
     } catch (JSONException e) {
       e.printStackTrace();
     }
-  }
-
-  private void setMarkerTitle(String title) {
-    mMarker.setTitle(title);
   }
 }
