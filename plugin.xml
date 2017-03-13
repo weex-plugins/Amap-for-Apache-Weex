@@ -48,6 +48,38 @@
                 <param name="api" value="weex-amap-marker"/>
             </feature>
         </config-file>
+        
+        <config-file parent="/*" target="WeexpluginConfig.xml">
+            <feature name="WXMapPolylineComponent">
+                <param name="category" value="component" />
+                <param name="ios-package" value="WXMapPolylineComponent" />
+                <param name="api" value="weex-amap-polyline" />
+            </feature>
+        </config-file>
+        
+        <config-file parent="/*" target="WeexpluginConfig.xml">
+            <feature name="WXMapPolygonComponent">
+                <param name="category" value="component" />
+                <param name="ios-package" value="WXMapPolygonComponent" />
+                <param name="api" value="weex-amap-polygon" />
+            </feature>
+        </config-file>
+        
+        <config-file parent="/*" target="WeexpluginConfig.xml">
+            <feature name="WXMapCircleComponent">
+                <param name="category" value="component" />
+                <param name="ios-package" value="WXMapCircleComponent" />
+                <param name="api" value="weex-amap-circle" />
+            </feature>
+        </config-file>
+        
+        <config-file parent="/*" target="WeexpluginConfig.xml">
+            <feature name="WXMapInfoWindowComponent">
+                <param name="category" value="component" />
+                <param name="ios-package" value="WXMapInfoWindowComponent" />
+                <param name="api" value="weex-amap-info-window" />
+            </feature>
+        </config-file>
 
         <config-file parent="/*" target="WeexpluginConfig.xml">
             <feature name="WXMapViewModule">
@@ -66,6 +98,26 @@
             src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapViewMarkerComponent.m"/>
         <header-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapViewModule.h"/>
         <source-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapViewModule.m"/>
+        <header-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/NSArray+WXMap.h"/>
+        <source-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/NSArray+WXMap.m"/>
+        <header-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/NSDictionary+WXMap.h"/>
+        <source-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/NSDictionary+WXMap.m"/>
+        <header-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/NSString+WXMap.h"/>
+        <source-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/NSString+WXMap.m"/>
+        <header-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXConvert+AMapKit.h"/>
+        <source-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXConvert+AMapKit.m"/>
+        <header-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapCircleComponent.h"/>
+        <source-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapCircleComponent.m"/>
+        <header-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapInfoWindow.h"/>
+        <source-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapInfoWindow.m"/>
+        <header-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapInfoWindowComponent.h"/>
+        <source-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapInfoWindowComponent.m"/>
+        <header-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapPolygonComponent.h"/>
+        <source-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapPolygonComponent.m"/>
+        <header-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapPolylineComponent.h"/>
+        <source-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapPolylineComponent.m"/>
+        <header-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapRenderer.h"/>
+        <source-file src="ios/Weexplugin/Weexplugin/Plugins/weex-plugin-amap/WXMapRenderer.m"/>
 
         <framework src="ImageIO.framework" weak="true"/>
         <framework src="CoreLocation.framework"/>
