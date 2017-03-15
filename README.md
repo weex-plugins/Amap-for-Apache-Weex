@@ -299,7 +299,7 @@ weexpack plugin add /users/abcd/Code/weex-plugins/weex-amap  (这后面是地图
 
 ios demo 如下所示
 
-<img src="https://img.alicdn.com/tps/TB1lJ51PpXXXXX5aFXXXXXXXXXX-429-687.gif">
+<img src="https://img.alicdn.com/tps/TB1c5BKQXXXXXckXpXXXXXXXXXX-367-633.gif">
 
 
 
