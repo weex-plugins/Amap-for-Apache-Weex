@@ -3,7 +3,7 @@
 <img width="320" src="https://img.alicdn.com/tps/TB19sYlPFXXXXaRaXXXXXXXXXXX-600-450.png" />
 
 
-一款高德地图weex插件，当前版本支持定位，缩放等地图常用操作。
+一款高德地图weex插件，当前版本支持定位，缩放，显示信息窗体等地图常用操作。
 
 ### 快速开始
 
@@ -62,7 +62,7 @@
 | geolocation  | boolean | true | 添加定位控件
 | sdkKey   | object | {ios:'xxx',android: 'xxx',h5: 'xxx'} | 指定开发者的 SDK 密匙 
 
-**建议你前往[高德开发者社区](http://lbs.amap.com/)申明你对应产品的Key，保证地图正常工作**
+*建议你前往[高德开发者社区](http://lbs.amap.com/)申请你对应产品的Key，保证地图正常工作*
 
 #### weex-amap 事件
 |事件    |     描述   |
