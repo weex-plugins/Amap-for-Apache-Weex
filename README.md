@@ -188,11 +188,11 @@ module.exports = {
 
 该方法接收三个参数 进行计算比如:
 
-@param coor1 坐标1
+@param `coor1` 坐标1
 
-@param coor2 坐标2
+@param `coor2` 坐标2
 
-@param callback 计算完成后的回调 会返回一个计算出的具体距离，单位 米
+@param `callback` 计算完成后的回调 会返回一个计算出的具体距离，单位 米
 
 ``` js
 //...
@@ -212,11 +212,11 @@ amap.getLineDistance(this.marker1.position, this.marker2.position, (res) => {
 
 该方法接收两个参数，返回一个boolean值
 
-@param coor 点的坐标
+@param `coor` 点的坐标
 
-@param polygonRef 多边形的ref
+@param `polygonRef` 多边形的ref
 
-@param  callbcak 计算完成后的回调 会返回一个运算的结果,其中data字段是个boolean，表示是否包含
+@param  `callbcak` 计算完成后的回调 会返回一个运算的结果,其中data字段是个boolean，表示是否包含
 
 
 ``` 
@@ -262,10 +262,11 @@ amap.polygonContainsMarker([114.23423, 43.2222], this.$ref('polygon2017'), (res)
 
 ### Demo
 
-####H5 demo 
+#### H5 demo 
+
 直接点击[Demo](https://weex-plugins.github.io/weex-amap/)可以演示当前版本支持的功能
 
-####用weexpack运行demo(Android／iOS／H5)
+#### 用weexpack运行demo(Android／iOS／H5)
 
 参考weexpack命令([网址](https://github.com/weexteam/weex-pack))来测试地图组件demo:
 
