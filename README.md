@@ -21,13 +21,14 @@
 <style>
   .container{
     position: relative;
-    height: 100%;
-    
+    flex:1; 
+    background-color: #fff;
   }
   .map{
-    width:100%;
-    height: 600;
-    background-color: #000;
+    flex: 1;
+    position: relative;
+    background-color: #fff;
+    min-height: 600;
   }
 </style>
 
@@ -40,10 +41,6 @@
         position: [112,36],
         title: 'this is a marker'
       }
-    },
-    
-    created () {
-
     },
     
   }
@@ -64,6 +61,7 @@
 | marker |  array | [`{position:[116,12]}]` |  点标记物的属性
 | geolocation  | boolean | true | 添加定位控件
 | sdkKey   | object | {ios:'xxx',android: 'xxx',h5: 'xxx'} | 指定开发者的 SDK 密匙 
+
 **建议你前往[高德开发者社区](http://lbs.amap.com/)申明你对应产品的Key，保证地图正常工作**
 
 #### weex-amap 事件
