@@ -13,7 +13,7 @@ public class Constant {
     int ROTATEGESTURE = 0x1 << 3;
   }
 
-  public static interface Name {
+  public interface Name {
 
     // mapview
     String SCALECONTROL = "scale";
@@ -31,7 +31,25 @@ public class Constant {
     String POSITION = "position";
     String ICON = "icon";
     String TITLE = "title";
+    String HIDE_CALL_OUT = "hideCallout";
+
+    // polyline
+    String PATH = "path";
+    String STROKE_COLOR = "strokeColor";
+    String STROKE_WIDTH = "strokeWidth";
+    String STROKE_OPACITY = "strokeOpacity";
+    String STROKE_STYLE = "strokeStyle";
+
+    // circle
+    String RADIUS = "radius";
+    String FILL_COLOR = "fillColor";
+
+    // offset
+    String OFFSET = "offset";
+    String OPEN = "open";
   }
+
+
 
   public static interface EVENT {
     String ZOOM_CHANGE = "zoomchange";

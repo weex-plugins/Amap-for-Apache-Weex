@@ -9,6 +9,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Toast;
 
 import com.alibaba.weex.amap.util.Constant;
@@ -36,6 +37,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.util.HashMap;
+
 public class WXMapViewComponent extends WXVContainer<MapView> implements LocationSource,
     AMapLocationListener {
   private static final int REQUEST_CODE_MAPVIEW = 10000001;
@@ -58,10 +61,10 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
   private OnLocationChangedListener mLocationChangedListener;
   private AMapLocationClient mLocationClient;
   private AMapLocationClientOption mLocationOption;
+  private HashMap<String, WXMapInfoWindowComponent> mInfoWindowHashMap = new HashMap<>();
 
   public WXMapViewComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
     super(instance, dom, parent, isLazy);
-    registerActivityStateListener();
   }
 
   @Override
@@ -79,6 +82,7 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
     if (mAMap == null) {
       mAMap = mMapView.getMap();
 
+      mAMap.setInfoWindowAdapter(new InfoWindowAdapter(this));
       mAMap.setOnMapLoadedListener(new AMap.OnMapLoadedListener() {
         @Override
         public void onMapLoaded() {
@@ -284,17 +288,6 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
     }
   }
 
-  @WXComponentProp(name = Constant.Name.CENTER)
-  public void setCenter(String location) {
-    try {
-      JSONArray jsonArray = new JSONArray(location);
-      LatLng latLng = new LatLng(jsonArray.optDouble(1), jsonArray.optDouble(0));
-      mAMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
-    } catch (JSONException e) {
-      e.printStackTrace();
-    }
-  }
-
 //  @WXComponentProp(name = Constant.Name.MARKER)
 //  public void setMarker(String markers) {
 //    try {
@@ -350,6 +343,17 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
 //      e.printStackTrace();
 //    }
 //  }
+
+  @WXComponentProp(name = Constant.Name.CENTER)
+  public void setCenter(String location) {
+    try {
+      JSONArray jsonArray = new JSONArray(location);
+      LatLng latLng = new LatLng(jsonArray.optDouble(1), jsonArray.optDouble(0));
+      mAMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
+    } catch (JSONException e) {
+      e.printStackTrace();
+    }
+  }
 
   @WXComponentProp(name = Constant.Name.GESTURE)
   public void setGesture(int gesture) {
@@ -451,5 +455,37 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
     }
 
     return granted;
+  }
+
+  public HashMap<String, WXMapInfoWindowComponent> getCachedInfoWindow() {
+    return mInfoWindowHashMap;
+  }
+
+  private static class InfoWindowAdapter implements AMap.InfoWindowAdapter {
+
+    private WXMapViewComponent mWXMapViewComponent;
+
+    InfoWindowAdapter(WXMapViewComponent wxMapViewComponent) {
+      mWXMapViewComponent = wxMapViewComponent;
+    }
+
+    @Override
+    public View getInfoWindow(Marker marker) {
+      return render(marker);
+    }
+
+    @Override
+    public View getInfoContents(Marker marker) {
+      return render(marker);
+    }
+
+    private View render(Marker marker) {
+      WXMapInfoWindowComponent wxMapInfoWindowComponent = mWXMapViewComponent.mInfoWindowHashMap.get(marker.getId());
+      if (wxMapInfoWindowComponent != null) {
+        mWXMapViewComponent.getHostView().removeView(wxMapInfoWindowComponent.getHostView());
+        return wxMapInfoWindowComponent.getHostView();
+      }
+      return null;
+    }
   }
 }

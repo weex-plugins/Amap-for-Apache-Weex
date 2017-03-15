@@ -4,7 +4,7 @@
     "platform": [
         "web"
     ],
-    "main": "./vue-amap/index.js",
+    "main": "./index.js",
     "description": "weex amap component",
     "keywords": [
         "weex",

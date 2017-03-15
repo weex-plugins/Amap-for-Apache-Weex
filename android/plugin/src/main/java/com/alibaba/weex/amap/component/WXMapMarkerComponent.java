@@ -96,6 +96,11 @@ public class WXMapMarkerComponent extends WXComponent<View> {
     setMarkerIcon(icon);
   }
 
+  @WXComponentProp(name = Constant.Name.HIDE_CALL_OUT)
+  public void setHideCallOut(Boolean hide) {
+    setMarkerHideCallOut(hide);
+  }
+
   @WXComponentProp(name = Constant.Name.POSITION)
   public void setPosition(String position) {
     setMarkerPosition(position);
@@ -209,18 +214,30 @@ public class WXMapMarkerComponent extends WXComponent<View> {
 //    }
   }
 
+  private void setMarkerHideCallOut(Boolean hide) {
+    if (mMarker != null) {
+      if (hide) {
+        mMarker.setClickable(!hide);
+      }
+    }
+  }
+
   private void setMarkerPosition(String position) {
     try {
       JSONArray jsonArray = new JSONArray(position);
       LatLng latLng = new LatLng(jsonArray.optDouble(1), jsonArray.optDouble(0));
-      mMarker.setPosition(latLng);
+      MarkerOptions markerOptions = mMarker.getOptions();
+      markerOptions.position(latLng);
+      mMarker.setMarkerOptions(markerOptions);
     } catch (JSONException e) {
       e.printStackTrace();
     }
   }
 
   private void setMarkerTitle(String title) {
-    mMarker.setTitle(title);
+    MarkerOptions markerOptions = mMarker.getOptions();
+    markerOptions.title(title);
+    mMarker.setMarkerOptions(markerOptions);
   }
 
   private Uri fetchIcon(String path, File cache) {
