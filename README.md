@@ -86,7 +86,7 @@
 |click | 用户点击标记物 | 
 
 
-#### 折线组件 weex-amap-polyline
+#### weex-amap-polyline 属性
 
 在地图上绘制折线
 
@@ -98,7 +98,7 @@
 | stroke-opacity | number  | 0.5  | 线条透明度[0-1]
 | stroke-style   | string  | solid | 线条的样式 实线:solid，虚线:dashed
 
-#### code example
+code example：
 
 ``` bash
 <weex-amap-polyline path="path" stroke-color="#000" stroke-weight="2"></weex-amap-polyline>
@@ -119,7 +119,7 @@ module.exports = {
 ```
 
 
-#### 多边形组件 weex-amap-polygon
+#### weex-amap-polygon 属性
 
 在地图上绘制多边形
 
@@ -135,7 +135,7 @@ module.exports = {
 | stroke-style   | string  | solid | 线条的样式 实线:solid，虚线:dashed
 
 
-#### 圆形组件 weex-amap-circle
+#### weex-amap-circle 属性
 
 在地图上绘制圆形
 
@@ -152,7 +152,7 @@ module.exports = {
 | stroke-style   | string  | solid | 圆的轮廓线条的样式 实线:solid，虚线:dashed
 
 
-#### 自定义信息窗体 weex-amap-info-window
+####  weex-amap-info-window 属性
 
 在地图上显示自定义窗体
 
@@ -166,9 +166,13 @@ module.exports = {
 *SDK限制，一个地图只允许显示一个infoWindow*
 
 
-#### Amap 模块
+#### amap 模块
+
+它支持下面的方法：
 
 #####  getUserLocation(completeFunc,errorFunc)
+
+获取用户的位置信息
 
 + completeFunc 定位成功后的回调函数，返回的数据:
 ```
@@ -179,7 +183,7 @@ module.exports = {
   result: 'success' 
 }
 ```
-##### getLineDistance
+##### getLineDistance(coor1, coor2, callback)
 
 计算两个标记点的距离
 
@@ -203,7 +207,7 @@ amap.getLineDistance(this.marker1.position, this.marker2.position, (res) => {
 })   
 ```
 
-##### polygonContainsMarker
+##### polygonContainsMarker(coor, polygonRef, callbcak)
 
 判断几何形是否包含某个点 
 
@@ -225,7 +229,7 @@ amap.polygonContainsMarker([114.23423, 43.2222], this.$ref('polygon2017'), (res)
 
 ```
 
-##### 使用Amap模块
+##### 如何使用amap模块
 
 ``` html 
 <template>
