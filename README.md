@@ -3,7 +3,7 @@
 <img width="320" src="https://img.alicdn.com/tps/TB19sYlPFXXXXaRaXXXXXXXXXXX-600-450.png" />
 
 
-一款高德地图weex插件，当前版本支持定位，缩放等地图常用操作。
+一款高德地图weex插件，当前版本支持定位，缩放，显示信息窗体等地图常用操作。
 
 ### 快速开始
 
@@ -21,13 +21,14 @@
 <style>
   .container{
     position: relative;
-    height: 100%;
-    
+    flex:1; 
+    background-color: #fff;
   }
   .map{
-    width:100%;
-    height: 600;
-    background-color: #000;
+    flex: 1;
+    position: relative;
+    background-color: #fff;
+    min-height: 600;
   }
 </style>
 
@@ -40,10 +41,6 @@
         position: [112,36],
         title: 'this is a marker'
       }
-    },
-    
-    created () {
-
     },
     
   }
@@ -64,7 +61,8 @@
 | marker |  array | [`{position:[116,12]}]` |  点标记物的属性
 | geolocation  | boolean | true | 添加定位控件
 | sdkKey   | object | {ios:'xxx',android: 'xxx',h5: 'xxx'} | 指定开发者的 SDK 密匙 
-**建议你前往[高德开发者社区](http://lbs.amap.com/)申明你对应产品的Key，保证地图正常工作**
+
+*建议你前往[高德开发者社区](http://lbs.amap.com/)申请你对应产品的Key，保证地图正常工作*
 
 #### weex-amap 事件
 |事件    |     描述   |
@@ -88,9 +86,93 @@
 |click | 用户点击标记物 | 
 
 
-#### Amap 模块
+#### weex-amap-polyline 属性
+
+在地图上绘制折线
+
+| 属性        | 类型         | Demo  | 描述  |
+| ------------- |:-------------:| -----:|----------:|
+| path     | array | [[116.487, 40.00003],[113.487, 40.0002]...]| 折线的节点坐标数组 |
+| stroke-color | string     |    #000 | 线条颜色 |
+| stroke-width | number   |   2 | 线条宽度 |
+| stroke-opacity | number  | 0.5  | 线条透明度[0-1]
+| stroke-style   | string  | solid | 线条的样式 实线:solid，虚线:dashed
+
+code example：
+
+``` bash
+<weex-amap-polyline path="path" stroke-color="#000" stroke-weight="2"></weex-amap-polyline>
+
+<script>
+module.exports = {
+  data: {
+    path: [  
+      [116.368904, 39.913423],
+      [116.382122, 39.901176],
+      [116.387271, 39.912501],
+      [116.398258, 39.904600]
+    ],
+  
+  }
+}
+</script>
+```
+
+
+#### weex-amap-polygon 属性
+
+在地图上绘制多边形
+
+
+| 属性        | 类型         | Demo  | 描述  |
+| ------------- |:-------------:| -----:|----------:|
+| path     | array | [[116.487, 40.00003],[113.487, 40.0002]...]| 多边形轮廓线的节点坐标数组 |
+| fill-color | string     |    #000 | 多边形填充颜色 |
+| fill-opacity | string     |    #000 | 多边形填充透明度 |
+| stroke-color | string     |    #000 | 线条颜色 |
+| stroke-width | number   |   2 | 线条宽度 |
+| stroke-opacity | number  | 0.5  | 线条透明度[0-1]
+| stroke-style   | string  | solid | 线条的样式 实线:solid，虚线:dashed
+
+
+#### weex-amap-circle 属性
+
+在地图上绘制圆形
+
+
+| 属性        | 类型         | Demo  | 描述  |
+| ------------- |:-------------:| -----:|----------:|
+| center     | array | [116.346, 40.234234]| 圆形位置 |
+| radius | number     |    50 | 圆的半径 |
+| fill-color | string     |    #000 | 圆的填充颜色 |
+| fill-opacity | string     |    #000 | 圆的填充透明度 |
+| stroke-color | string     |    #000 | 圆的轮廓线条颜色 |
+| stroke-width | number   |   2 | 圆的轮廓线条宽度 |
+| stroke-opacity | number  | 0.5  | 圆的轮廓线条透明度[0-1]
+| stroke-style   | string  | solid | 圆的轮廓线条的样式 实线:solid，虚线:dashed
+
+
+####  weex-amap-info-window 属性
+
+在地图上显示自定义窗体
+
+| 属性        | 类型         | Demo  | 描述  |
+| ------------- |:-------------:| -----:|----------:|
+| position     | array | [[116.487, 40.00003]| 在地图上的位置 |
+| open | boolean     |    true | 是否在地图上打开 |
+| offset | array     |    偏移 | 相对定位点坐标偏移 |
+| children | weex comonnet     |    <text>This is a info window</text> | 窗体的内容 |
+
+*SDK限制，一个地图只允许显示一个infoWindow*
+
+
+#### amap 模块
+
+它支持下面的方法：
 
 #####  getUserLocation(completeFunc,errorFunc)
+
+获取用户的位置信息
 
 + completeFunc 定位成功后的回调函数，返回的数据:
 ```
@@ -101,7 +183,53 @@
   result: 'success' 
 }
 ```
-##### 使用Amap模块
+##### getLineDistance(coor1, coor2, callback)
+
+计算两个标记点的距离
+
+该方法接收三个参数 进行计算比如:
+
+@param `coor1` 坐标1
+
+@param `coor2` 坐标2
+
+@param `callback` 计算完成后的回调 会返回一个计算出的具体距离，单位 米
+
+``` js
+//...
+amap.getLineDistance(this.marker1.position, this.marker2.position, (res) => {
+  if (res.result == 'success') {
+    this.distance = '两点相距' + res.data + '米';
+    console.log(res.data.distance + '米');
+  } else {
+    console.log('计算失败');
+  }
+})   
+```
+
+##### polygonContainsMarker(coor, polygonRef, callbcak)
+
+判断几何形是否包含某个点 
+
+该方法接收两个参数，返回一个boolean值
+
+@param `coor` 点的坐标
+
+@param `polygonRef` 多边形的ref
+
+@param  `callbcak` 计算完成后的回调 会返回一个运算的结果,其中data字段是个boolean，表示是否包含
+
+
+``` 
+amap.polygonContainsMarker([114.23423, 43.2222], this.$ref('polygon2017'), (res) => {
+  if (res.result == 'success') {
+    console.log(res.data ? '存在' : '不存在' );
+  }
+})
+
+```
+
+##### 如何使用amap模块
 
 ``` html 
 <template>
@@ -135,10 +263,11 @@
 
 ### Demo
 
-####H5 demo 
+#### H5 demo 
+
 直接点击[Demo](https://weex-plugins.github.io/weex-amap/)可以演示当前版本支持的功能
 
-####用weexpack运行demo(Android／iOS／H5)
+#### 用weexpack运行demo(Android／iOS／H5)
 
 参考weexpack命令([网址](https://github.com/weexteam/weex-pack))来测试地图组件demo:
 
@@ -172,7 +301,9 @@ weexpack plugin add /users/abcd/Code/weex-plugins/weex-amap  (这后面是地图
 
 ios demo 如下所示
 
-<img src="https://img.alicdn.com/tps/TB1c5BKQXXXXXckXpXXXXXXXXXX-367-633.gif ">
+
+<img src="https://img.alicdn.com/tps/TB1c5BKQXXXXXckXpXXXXXXXXXX-367-633.gif">
+
 
 
 
