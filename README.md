@@ -88,7 +88,7 @@
 |click | 用户点击标记物 | 
 
 
-### 折线组件 weex-amap-polyline
+#### 折线组件 weex-amap-polyline
 
 在地图上绘制折线
 
@@ -121,7 +121,7 @@ module.exports = {
 ```
 
 
-### 多边形组件 weex-amap-polygon
+#### 多边形组件 weex-amap-polygon
 
 在地图上绘制多边形
 
@@ -137,7 +137,7 @@ module.exports = {
 | stroke-style   | string  | solid | 线条的样式 实线:solid，虚线:dashed
 
 
-### 圆形组件 weex-amap-circle
+#### 圆形组件 weex-amap-circle
 
 在地图上绘制圆形
 
@@ -164,7 +164,6 @@ module.exports = {
 | open | boolean     |    true | 是否在地图上打开 |
 | offset | array     |    偏移 | 相对定位点坐标偏移 |
 | children | weex comonnet     |    <text>This is a info window</text> | 窗体的内容 |
-||
 
 *SDK限制，一个地图只允许显示一个infoWindow*
 
