@@ -19,7 +19,6 @@
 #pragma clang diagnostic ignored "-Wobjc-protocol-method-implementation"
 WX_JSON_CONVERTER(NSArray)
 WX_JSON_CONVERTER(NSDictionary)
-WX_JSON_CONVERTER(NSString)
 #pragma clang diagnostic pop
 
 
