@@ -61,6 +61,29 @@ static const void *shapeKey = &shapeKey;
     return self;
 }
 
+- (void)updateAttributes:(NSDictionary *)attributes
+{
+    NSArray * pathArray = [attributes wxmap_safeObjectForKey:@"path"];
+    WXMapViewComponent *parentComponent = (WXMapViewComponent *)self.supercomponent;
+    if (pathArray) {
+        if ([WXConvert isValidatedArray:pathArray]) {
+            _path = pathArray;
+        }
+        [parentComponent removeOverlay:self];
+        [parentComponent addOverlay:self];
+        return;
+    }else if ([attributes wxmap_safeObjectForKey:@"strokeColor"]) {
+        _strokeColor = [attributes wxmap_safeObjectForKey:@"strokeColor"];
+    }else if ([[attributes wxmap_safeObjectForKey:@"strokeWidth"] doubleValue] >= 0) {
+        _strokeWidth = [[attributes wxmap_safeObjectForKey:@"strokeWidth"] doubleValue];
+    }else if ([[attributes wxmap_safeObjectForKey:@"strokeOpacity"] doubleValue] >= 0) {
+        _strokeOpacity = [[attributes wxmap_safeObjectForKey:@"strokeOpacity"] doubleValue];
+    }else if ([attributes wxmap_safeObjectForKey:@"strokeStyle"]) {
+        _strokeStyle = [attributes wxmap_safeObjectForKey:@"strokeStyle"];
+    }
+    [parentComponent updateOverlayAttributes:self];
+}
+
 
 - (void)removeFromSuperview;
 {

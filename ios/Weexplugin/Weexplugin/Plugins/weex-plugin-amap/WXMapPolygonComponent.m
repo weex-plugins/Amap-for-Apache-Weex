@@ -29,4 +29,15 @@
     return self;
 }
 
+- (void)updateAttributes:(NSDictionary *)attributes
+{
+    if ([attributes wxmap_safeObjectForKey:@"fillColor"]) {
+        _fillColor = [attributes wxmap_safeObjectForKey:@"fillColor"];
+    }else if ([attributes wxmap_safeObjectForKey:@"fillOpacity"]) {
+        _fillOpacity = [attributes wxmap_safeObjectForKey:@"fillOpacity"];
+    }else {
+        [super updateAttributes:attributes];
+    }
+}
+
 @end
