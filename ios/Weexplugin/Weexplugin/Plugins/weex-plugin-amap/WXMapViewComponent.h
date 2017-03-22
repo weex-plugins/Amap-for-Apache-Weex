@@ -29,8 +29,11 @@
 - (void)removeMarker:(WXComponent *)marker;
 
 #pragma - Overlay
-//- (void)addOverlay:(id)overlay;
+- (void)addOverlay:(id)overlay;
 
+- (void)removeOverlay:(id)overlay;
+
+- (void)updateOverlayAttributes:(id)overlay;
 @end
 
 

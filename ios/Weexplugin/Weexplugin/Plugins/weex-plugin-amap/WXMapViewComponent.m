@@ -90,6 +90,7 @@ static const void *componentKey = &componentKey;
 {
     CLLocationCoordinate2D _centerCoordinate;
     NSMutableDictionary *_annotations;
+    NSMutableDictionary *_overlays;
     CGFloat _zoomLevel;
     BOOL _showScale;
     BOOL _showGeolocation;
@@ -190,6 +191,7 @@ static const void *componentKey = &componentKey;
 - (void)addOverlay:(WXMapRenderer *)overlayRenderer
 {
     MAShape *shape;
+    [self initOverLays];
     if (!overlayRenderer.path && [overlayRenderer isKindOfClass:[WXMapCircleComponent class]]) {
         WXMapCircleComponent *circle = (WXMapCircleComponent *)overlayRenderer;
         if (!circle.center) {
@@ -199,6 +201,7 @@ static const void *componentKey = &componentKey;
         shape = [MACircle circleWithCenterCoordinate:centerCoordinate radius:circle.radius];
         shape.component = overlayRenderer;
         overlayRenderer.shape = shape;
+        [_overlays setObject:shape forKey:shape.component.ref];
         [self.mapView addOverlay:(MACircle *)shape];
     }else {
         NSInteger count = overlayRenderer.path.count;
@@ -225,6 +228,26 @@ static const void *componentKey = &componentKey;
             overlayRenderer.shape = shape;
             [self.mapView addOverlay:(MAPolygon *)shape];
         }
+        [_overlays setObject:shape forKey:shape.component.ref];
+    }
+}
+
+- (void)removeOverlay:(id)overlay
+{
+    WXComponent *component = (WXComponent*)overlay;
+    if ([_overlays objectForKey:component.ref])
+    {
+        [self.mapView removeOverlay:[_overlays objectForKey:component.ref]];
+        [_overlays removeObjectForKey:component.ref];
+    }
+}
+
+- (void)updateOverlayAttributes:(id)overlay;
+{
+    WXComponent *component = (WXComponent*)overlay;
+    if ([_overlays objectForKey:component.ref])
+    {
+        [self.mapView addOverlay:[_overlays objectForKey:component.ref]];
     }
 }
 
@@ -329,6 +352,13 @@ static const void *componentKey = &componentKey;
 {
     if (!_annotations) {
         _annotations = [NSMutableDictionary dictionaryWithCapacity:5];
+    }
+}
+
+- (void)initOverLays
+{
+    if (!_overlays) {
+        _overlays = [NSMutableDictionary dictionaryWithCapacity:10];
     }
 }
 
