@@ -186,7 +186,7 @@ weex run android
 
 ``` bash
 <weex-amap>
-	<weex-amap-polyline path="{{path}}" stroke-color="#000" stroke-wdith="2"></weex-amap-polyline>
+	 <weex-amap-polyline path="{{path}}" stroke-color="#000" stroke-wdith="2"></weex-amap-polyline>
 </weex-amap>
 ```
 
@@ -208,8 +208,8 @@ weex run android
 在地图上绘制多边形:
 ``` bash
 <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
-      <weex-amap-polygon path="{{path}}" fill-opacity="0.5" fill-color="#2ecc71" fill-width="4"></weex-amap-polygon>
-    </weex-amap>
+    <weex-amap-polygon path="{{path}}" fill-opacity="0.5" fill-color="#2ecc71" fill-width="4"></weex-amap-polygon>
+</weex-amap>
 ```
 <img src="https://gw.alicdn.com/tfs/TB1q53IQXXXXXXzaFXXXXXXXXXX-668-800.png" />
 
@@ -233,7 +233,7 @@ weex run android
 ``` html
 <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
     <weex-amap-circle center="{{pos}}" radius="7000" fill-color="#2ecc71" fill-width="4"></weex-amap-circle>
- </weex-amap>
+</weex-amap>
 ```
 <img src="https://gw.alicdn.com/tfs/TB1kjw5QXXXXXaAXVXXXXXXXXXX-656-724.png" />
 
@@ -255,15 +255,15 @@ weex run android
 
 ``` bash 
 <weex-amap class="map" id="map2017" sdk-key={{keys}} zoom={{zoom}} center={{pos}}>
-      <weex-amap-marker style="z-index:1000" hide-callout="true" position="{{marker.position}}" icon="{{marker.icon}}" title="{{marker.title}}"></weex-amap-marker>
-      <weex-amap-marker style="z-index:1000" hide-callout="true" position="{{marker2.position}}" icon="{{marker.icon}}" title="{{marker2.title}}"></weex-amap-marker>
-      <weex-amap-info-window class="info-win" offset="{{palaceMuseum.offset}}"  open="{{palaceMuseum.open}}" position="{{palaceMuseum.position}}">
+    <weex-amap-marker style="z-index:1000" hide-callout="true" position="{{marker.position}}" icon="{{marker.icon}}" title="{{marker.title}}"></weex-amap-marker>
+    <weex-amap-marker style="z-index:1000" hide-callout="true" position="{{marker2.position}}" icon="{{marker.icon}}" title="{{marker2.title}}"></weex-amap-marker>
+    <weex-amap-info-window class="info-win" offset="{{palaceMuseum.offset}}"  open="{{palaceMuseum.open}}" position="{{palaceMuseum.position}}">
         <info-window src="http://img1.vued.vanthink.cn/vued6dfd998fc0738f7e88d4b66bafc547ce.jpeg" title="The Palace Museum" location="4 Jingshan Front St, Dongcheng Qu, Beijing"></info-window>
-      </weex-amap-info-window>
-      <weex-amap-info-window class="info-win" offset="{{southStation.offset}}" open="{{southStation.open}}" position="{{southStation.position}}">
+    </weex-amap-info-window>
+    <weex-amap-info-window class="info-win" offset="{{southStation.offset}}" open="{{southStation.open}}" position="{{southStation.position}}">
         <info-window  src="http://img1.vued.vanthink.cn/vued2de302ef72ae921313a1fa1bbbbd9455.jpeg" title="Beijing South Railway Station" location="Fengtai, Beijing"></info-window>
-      </weex-amap-info-window>
-    </weex-amap>
+    </weex-amap-info-window>
+</weex-amap>
 ```
 <img src="https://gw.alicdn.com/tfs/TB1JugBQXXXXXczapXXXXXXXXXX-692-840.png" />
 
