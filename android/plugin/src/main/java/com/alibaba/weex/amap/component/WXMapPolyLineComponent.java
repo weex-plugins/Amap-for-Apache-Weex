@@ -4,8 +4,10 @@ import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.ViewStub;
 
 import com.alibaba.weex.amap.util.Constant;
+import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.LatLng;
@@ -25,7 +27,7 @@ import java.util.ArrayList;
 /**
  * Created by budao on 2017/3/3.
  */
-
+@WeexComponent(names={"weex-amap-polyline"})
 public class WXMapPolyLineComponent extends WXComponent<View> {
   ArrayList<LatLng> mPosition = new ArrayList<>();
   private MapView mMapView;
@@ -47,7 +49,7 @@ public class WXMapPolyLineComponent extends WXComponent<View> {
       initPolyLine();
     }
     // FixMe： 只是为了绕过updateProperties中的逻辑检查
-    return new View(context);
+    return new ViewStub(context);
   }
 
   @WXComponentProp(name = Constant.Name.PATH)

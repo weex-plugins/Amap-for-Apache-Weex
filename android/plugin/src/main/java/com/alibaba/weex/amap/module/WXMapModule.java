@@ -23,10 +23,13 @@ import org.json.JSONException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.alibaba.weex.plugin.annotation.WeexModule;
+
 /**
  * Created by budao on 2017/1/24.
  */
 
+@WeexModule(name="amap")
 public class WXMapModule extends WXModule {
   private static final String RESULT = "result";
   private static final String DATA = "data";

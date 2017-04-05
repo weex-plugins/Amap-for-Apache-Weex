@@ -7,10 +7,12 @@ import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.ViewStub;
 
 import com.alibaba.weex.amap.util.Constant;
 import com.alibaba.weex.amap.util.GifDecoder;
 import com.alibaba.weex.amap.util.Utils;
+import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
@@ -43,18 +45,10 @@ import java.util.ArrayList;
 /**
  * Created by budao on 2017/2/9.
  */
-
+@WeexComponent(names={"weex-amap-marker"})
 public class WXMapMarkerComponent extends WXComponent<View> {
   private Marker mMarker;
   private MapView mMapView;
-
-  public WXMapMarkerComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, String instanceId, boolean isLazy) {
-    super(instance, dom, parent, instanceId, isLazy);
-  }
-
-  public WXMapMarkerComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
-    super(instance, dom, parent, isLazy);
-  }
 
   public WXMapMarkerComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
     super(instance, dom, parent);
@@ -71,7 +65,7 @@ public class WXMapMarkerComponent extends WXComponent<View> {
       initMarker(title, position, icon);
     }
     // FixMe： 只是为了绕过updateProperties中的逻辑检查
-    return new View(context);
+    return new ViewStub(context);
   }
 
   @Override
@@ -183,7 +177,9 @@ public class WXMapMarkerComponent extends WXComponent<View> {
               }
 
             } else {
-              mMarker.setIcon(BitmapDescriptorFactory.fromPath(result.getPath()));
+              if (mMarker != null) {
+                mMarker.setIcon(BitmapDescriptorFactory.fromPath(result.getPath()));
+              }
             }
 
           }
@@ -226,18 +222,22 @@ public class WXMapMarkerComponent extends WXComponent<View> {
     try {
       JSONArray jsonArray = new JSONArray(position);
       LatLng latLng = new LatLng(jsonArray.optDouble(1), jsonArray.optDouble(0));
-      MarkerOptions markerOptions = mMarker.getOptions();
-      markerOptions.position(latLng);
-      mMarker.setMarkerOptions(markerOptions);
+      if (mMarker != null) {
+        MarkerOptions markerOptions = mMarker.getOptions();
+        markerOptions.position(latLng);
+        mMarker.setMarkerOptions(markerOptions);
+      }
     } catch (JSONException e) {
       e.printStackTrace();
     }
   }
 
   private void setMarkerTitle(String title) {
-    MarkerOptions markerOptions = mMarker.getOptions();
-    markerOptions.title(title);
-    mMarker.setMarkerOptions(markerOptions);
+    if (mMarker != null) {
+      MarkerOptions markerOptions = mMarker.getOptions();
+      markerOptions.title(title);
+      mMarker.setMarkerOptions(markerOptions);
+    }
   }
 
   private Uri fetchIcon(String path, File cache) {

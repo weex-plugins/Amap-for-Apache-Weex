@@ -6,6 +6,7 @@ import android.widget.LinearLayout;
 
 import com.alibaba.weex.amap.R;
 import com.alibaba.weex.amap.util.Constant;
+import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
@@ -26,6 +27,7 @@ import org.json.JSONException;
  * Created by budao on 2017/2/9.
  */
 
+@WeexComponent(names={"weex-amap-info-window"})
 public class WXMapInfoWindowComponent extends WXVContainer<LinearLayout> {
   private Marker mMarker;
   private MapView mMapView;
@@ -33,14 +35,10 @@ public class WXMapInfoWindowComponent extends WXVContainer<LinearLayout> {
 
   public WXMapInfoWindowComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
     super(instance, dom, parent);
-
   }
 
   @Override
   protected LinearLayout initComponentHostView(@NonNull Context context) {
-//    frameLayout = new LinearLayout(context);
-//    // frameLayout.setLayoutParams(new LinearLayout.LayoutParams(1, 1));
-//    // frameLayout.setBackgroundColor(Color.TRANSPARENT);
     if (getParent() != null && getParent() instanceof WXMapViewComponent) {
       mWxMapViewComponent = (WXMapViewComponent) getParent();
       mMapView = ((WXMapViewComponent) getParent()).getHostView();
@@ -131,9 +129,11 @@ public class WXMapInfoWindowComponent extends WXVContainer<LinearLayout> {
     try {
       JSONArray jsonArray = new JSONArray(position);
       LatLng latLng = new LatLng(jsonArray.optDouble(1), jsonArray.optDouble(0));
-      MarkerOptions markerOptions = mMarker.getOptions();
-      markerOptions.position(latLng);
-      mMarker.setMarkerOptions(markerOptions);
+      if (mMarker != null) {
+        MarkerOptions markerOptions = mMarker.getOptions();
+        markerOptions.position(latLng);
+        mMarker.setMarkerOptions(markerOptions);
+      }
     } catch (JSONException e) {
       e.printStackTrace();
     }
