@@ -27,7 +27,7 @@ import org.json.JSONException;
  * Created by budao on 2017/2/9.
  */
 
-@WeexComponent(names={"weex-amap-info-window"})
+@WeexComponent(names = {"weex-amap-info-window"})
 public class WXMapInfoWindowComponent extends WXVContainer<LinearLayout> {
   private Marker mMarker;
   private MapView mMapView;

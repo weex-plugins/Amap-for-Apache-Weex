@@ -40,7 +40,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
-@WeexComponent(names={"weex-amap"})
+
+@WeexComponent(names = {"weex-amap"})
 public class WXMapViewComponent extends WXVContainer<MapView> implements LocationSource,
     AMapLocationListener {
   private static final int REQUEST_CODE_MAPVIEW = 10000001;

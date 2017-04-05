@@ -45,7 +45,7 @@ import java.util.ArrayList;
 /**
  * Created by budao on 2017/2/9.
  */
-@WeexComponent(names={"weex-amap-marker"})
+@WeexComponent(names = {"weex-amap-marker"})
 public class WXMapMarkerComponent extends WXComponent<View> {
   private Marker mMarker;
   private MapView mMapView;

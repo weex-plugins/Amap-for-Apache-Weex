@@ -26,7 +26,7 @@ import org.json.JSONException;
  * Created by budao on 2017/3/3.
  */
 
-@WeexComponent(names={"weex-amap-circle"})
+@WeexComponent(names = {"weex-amap-circle"})
 public class WXMapCircleComponent extends WXComponent<View> {
   private MapView mMapView;
   private AMap mMap;

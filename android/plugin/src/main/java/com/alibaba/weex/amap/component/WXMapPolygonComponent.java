@@ -27,7 +27,7 @@ import java.util.ArrayList;
 /**
  * Created by budao on 2017/3/3.
  */
-@WeexComponent(names={"weex-amap-polygon"})
+@WeexComponent(names = {"weex-amap-polygon"})
 public class WXMapPolygonComponent extends WXComponent<View> {
   ArrayList<LatLng> mPosition = new ArrayList<>();
   private MapView mMapView;

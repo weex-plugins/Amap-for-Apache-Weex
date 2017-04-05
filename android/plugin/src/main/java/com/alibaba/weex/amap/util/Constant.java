@@ -50,7 +50,6 @@ public class Constant {
   }
 
 
-
   public static interface EVENT {
     String ZOOM_CHANGE = "zoomchange";
     String DRAG_CHANGE = "dragend";
