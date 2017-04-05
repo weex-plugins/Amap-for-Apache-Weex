@@ -40,7 +40,6 @@ public class GifDecoder {
   private static final byte TXT_EXT = (byte) 0x01;
   private static final int MIN_DELAY = 100;
   private static final int MIN_DELAY_ENFORCE_THRESHOLD = 20;
-  private final GifDecoder self = this;
   protected int mStatus;
   protected int mWidth; // full mCurrentImage mWidth
   protected int mHeight; // full mCurrentImage mHeight

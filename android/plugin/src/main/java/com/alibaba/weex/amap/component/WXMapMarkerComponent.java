@@ -11,7 +11,6 @@ import android.view.ViewStub;
 
 import com.alibaba.weex.amap.util.Constant;
 import com.alibaba.weex.amap.util.GifDecoder;
-import com.alibaba.weex.amap.util.Utils;
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptor;
@@ -53,6 +52,28 @@ public class WXMapMarkerComponent extends WXComponent<View> {
   public WXMapMarkerComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
     super(instance, dom, parent);
 
+  }
+
+  private static boolean isGif(String file) {
+    FileInputStream imgFile = null;
+    try {
+      imgFile = new FileInputStream(file);
+      byte[] header = new byte[3];
+      int length = imgFile.read(header);
+      return length == 3 && header[0] == (byte) 'G' && header[1] == (byte) 'I' && header[2] == (byte) 'F';
+    } catch (Exception e) {
+      // ignore
+    } finally {
+      if (imgFile != null) {
+        try {
+          imgFile.close();
+        } catch (IOException e) {
+          e.printStackTrace();
+        }
+      }
+    }
+
+    return false;
   }
 
   @Override
@@ -145,7 +166,7 @@ public class WXMapMarkerComponent extends WXComponent<View> {
         @Override
         protected void onPostExecute(Uri result) {
           if (result != null && new File(result.getPath()).exists()) {
-            if (Utils.isGif(result.getPath())) {
+            if (isGif(result.getPath())) {
               GifDecoder gifDecoder = new GifDecoder();
               FileInputStream imgFile = null;
               try {
