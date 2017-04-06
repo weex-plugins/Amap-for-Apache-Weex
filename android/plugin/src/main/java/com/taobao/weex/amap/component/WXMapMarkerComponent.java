@@ -1,4 +1,4 @@
-package com.alibaba.weex.amap.component;
+package com.taobao.weex.amap.component;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -9,8 +9,8 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewStub;
 
-import com.alibaba.weex.amap.util.Constant;
-import com.alibaba.weex.amap.util.GifDecoder;
+import com.taobao.weex.amap.util.Constant;
+import com.taobao.weex.amap.util.GifDecoder;
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptor;
