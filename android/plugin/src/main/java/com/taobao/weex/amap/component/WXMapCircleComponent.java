@@ -1,11 +1,13 @@
-package com.alibaba.weex.amap.component;
+package com.taobao.weex.amap.component;
 
 import android.content.Context;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.ViewStub;
 
-import com.alibaba.weex.amap.util.Constant;
+import com.taobao.weex.amap.util.Constant;
+import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.Circle;
@@ -24,6 +26,7 @@ import org.json.JSONException;
  * Created by budao on 2017/3/3.
  */
 
+@WeexComponent(names = {"weex-amap-circle"})
 public class WXMapCircleComponent extends WXComponent<View> {
   private MapView mMapView;
   private AMap mMap;
@@ -45,7 +48,7 @@ public class WXMapCircleComponent extends WXComponent<View> {
       initCircle();
     }
     // FixMe： 只是为了绕过updateProperties中的逻辑检查
-    return new View(context);
+    return new ViewStub(context);
   }
 
   @WXComponentProp(name = Constant.Name.CENTER)

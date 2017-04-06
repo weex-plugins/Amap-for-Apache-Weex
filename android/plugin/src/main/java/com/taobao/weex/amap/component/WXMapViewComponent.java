@@ -1,4 +1,4 @@
-package com.alibaba.weex.amap.component;
+package com.taobao.weex.amap.component;
 
 import android.app.Activity;
 import android.content.Context;
@@ -10,9 +10,11 @@ import android.support.v4.content.ContextCompat;
 import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.alibaba.weex.amap.util.Constant;
+import com.taobao.weex.amap.util.Constant;
+import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
@@ -39,6 +41,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 
+@WeexComponent(names = {"weex-amap"})
 public class WXMapViewComponent extends WXVContainer<MapView> implements LocationSource,
     AMapLocationListener {
   private static final int REQUEST_CODE_MAPVIEW = 10000001;
@@ -344,6 +347,11 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
 //    }
 //  }
 
+  @Override
+  protected void addSubView(View child, int index) {
+
+  }
+
   @WXComponentProp(name = Constant.Name.CENTER)
   public void setCenter(String location) {
     try {
@@ -482,7 +490,8 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
     private View render(Marker marker) {
       WXMapInfoWindowComponent wxMapInfoWindowComponent = mWXMapViewComponent.mInfoWindowHashMap.get(marker.getId());
       if (wxMapInfoWindowComponent != null) {
-        mWXMapViewComponent.getHostView().removeView(wxMapInfoWindowComponent.getHostView());
+        wxMapInfoWindowComponent.getHostView().setLayoutParams(new ViewGroup.LayoutParams
+            (ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         return wxMapInfoWindowComponent.getHostView();
       }
       return null;

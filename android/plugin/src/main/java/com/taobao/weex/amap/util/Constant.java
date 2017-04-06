@@ -1,4 +1,4 @@
-package com.alibaba.weex.amap.util;
+package com.taobao.weex.amap.util;
 
 /**
  * Created by aoxiao on 2017/1/4.
@@ -48,7 +48,6 @@ public class Constant {
     String OFFSET = "offset";
     String OPEN = "open";
   }
-
 
 
   public static interface EVENT {

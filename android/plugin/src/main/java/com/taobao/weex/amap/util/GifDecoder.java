@@ -1,4 +1,4 @@
-package com.alibaba.weex.amap.util;
+package com.taobao.weex.amap.util;
 
 /**
  * Created by budao on 2017/2/10.
@@ -17,15 +17,13 @@ import java.io.InputStream;
 import java.util.ArrayList;
 
 public class GifDecoder {
-  private static final String TAG = GifDecoder.class.getSimpleName();
-  private final GifDecoder self = this;
-
   // File read status: No errors.
   public static final int STATUS_OK = 0;
   // File read status: Error decoding file (may be partially decoded)
   public static final int STATUS_FORMAT_ERROR = 1;
   // File read status: Unable to open source.
   public static final int STATUS_OPEN_ERROR = 2;
+  private static final String TAG = GifDecoder.class.getSimpleName();
   // Trailer
   private static final byte TRR_CODE = (byte) 0x3B;
   // Image Block
@@ -40,10 +38,8 @@ public class GifDecoder {
   private static final byte CMT_EXT = (byte) 0xFE;
   // Plain Text Extension
   private static final byte TXT_EXT = (byte) 0x01;
-
   private static final int MIN_DELAY = 100;
   private static final int MIN_DELAY_ENFORCE_THRESHOLD = 20;
-
   protected int mStatus;
   protected int mWidth; // full mCurrentImage mWidth
   protected int mHeight; // full mCurrentImage mHeight
@@ -61,14 +57,33 @@ public class GifDecoder {
   private GraphicControlExtension mGcExt;
   private ImageBlock mImageBlock;
 
-  private static class GifFrame {
-    public GifFrame(Bitmap im, int del) {
-      image = im;
-      delay = del;
-    }
+  public static String toHex(int value, int length) {
+    String hex = Integer.toHexString(value);
+    hex = hex.toUpperCase();
 
-    public Bitmap image;
-    public int delay;
+    if (hex.length() < length) {
+      while (hex.length() < length)
+        hex = "0" + hex;
+    } else if (hex.length() > length) {
+      hex = hex.substring(hex.length() - length);
+    }
+    return hex;
+  }
+
+  public static byte[] streamToBytes(InputStream stream) throws IOException,
+      OutOfMemoryError {
+    byte[] buff = new byte[1024];
+    int read;
+    ByteArrayOutputStream bao = new ByteArrayOutputStream();
+    while ((read = stream.read(buff)) != -1) {
+      bao.write(buff, 0, read);
+    }
+    try {
+      stream.close();
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    return bao.toByteArray();
   }
 
   /**
@@ -262,6 +277,15 @@ public class GifDecoder {
 
     }
     return null;
+  }
+
+  private static class GifFrame {
+    public Bitmap image;
+    public int delay;
+    public GifFrame(Bitmap im, int del) {
+      image = im;
+      delay = del;
+    }
   }
 
   private class GifHeader {
@@ -559,35 +583,6 @@ public class GifDecoder {
       this.bytes = new byte[size];
       System.arraycopy(bytes, offset, this.bytes, 0, size);
     }
-  }
-
-  public static String toHex(int value, int length) {
-    String hex = Integer.toHexString(value);
-    hex = hex.toUpperCase();
-
-    if (hex.length() < length) {
-      while (hex.length() < length)
-        hex = "0" + hex;
-    } else if (hex.length() > length) {
-      hex = hex.substring(hex.length() - length);
-    }
-    return hex;
-  }
-
-  public static byte[] streamToBytes(InputStream stream) throws IOException,
-      OutOfMemoryError {
-    byte[] buff = new byte[1024];
-    int read;
-    ByteArrayOutputStream bao = new ByteArrayOutputStream();
-    while ((read = stream.read(buff)) != -1) {
-      bao.write(buff, 0, read);
-    }
-    try {
-      stream.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-    return bao.toByteArray();
   }
 }
 
