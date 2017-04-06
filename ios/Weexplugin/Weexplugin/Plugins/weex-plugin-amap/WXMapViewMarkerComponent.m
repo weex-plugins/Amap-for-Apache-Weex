@@ -8,17 +8,18 @@
 
 #import "WXMapViewMarkerComponent.h"
 #import "WXMapViewComponent.h"
+#import "NSDictionary+WXMap.h"
+#import "WXConvert+AMapKit.h"
 
 @implementation WXMapViewMarkerComponent
-{
-    @private BOOL _viewLoaded;
-}
 
 @synthesize clickEvent = _clickEvent;
 @synthesize icon = _icon;
 @synthesize title = _title;
 @synthesize location = _location;
-
+@synthesize offset = _offset;
+@synthesize hideCallout = _hideCallout;
+@synthesize zIndex = _zIndex;
 
 - (instancetype)initWithRef:(NSString *)ref
                        type:(NSString*)type
@@ -32,26 +33,25 @@
         if ([events containsObject:@"click"]) {
             _clickEvent = @"click";
         }
-        _location = attributes[@"position"];
-        _title = attributes[@"title"];
-        _icon = attributes[@"icon"];
+        NSArray *offset = attributes[@"offset"];
+        if ([WXConvert isValidatedArray:offset]) {
+            _offset = CGPointMake([WXConvert CGFloat:offset[0]],
+                                  [WXConvert CGFloat:offset[1]]);//[WXConvert sizeToWXPixelType:attributes[@"offset"] withInstance:self.weexInstance];
+        }
+        if (styles[@"zIndex"]) {
+            _zIndex = [styles[@"zIndex"] integerValue];
+        }
+        _hideCallout = [[attributes wxmap_safeObjectForKey:@"hideCallout"] boolValue];
+        NSArray *position = [attributes wxmap_safeObjectForKey:@"position"];
+        if ([WXConvert isValidatedArray:position]) {
+            _location = [attributes wxmap_safeObjectForKey:@"position"];
+        }
+        _title = [attributes wxmap_safeObjectForKey:@"title"];
+        _icon = [attributes wxmap_safeObjectForKey:@"icon"];
     }
-    _viewLoaded = NO;
     return self;
 }
 
-- (UIView *) loadView
-{
-    return nil;
-}
-
-- (void)viewDidLoad
-{
-    if (!_viewLoaded) {
-        [(WXMapViewComponent *)self.supercomponent addMarker:self];
-        _viewLoaded = YES;
-    }
-}
 - (void)updateAttributes:(NSDictionary *)attributes
 {
     WXMapViewComponent *mapComponent = (WXMapViewComponent *)self.supercomponent;
@@ -60,23 +60,25 @@
         [mapComponent updateTitleMarker:self];
     }
     
-    if (attributes[@"icon"]) {
+    if ([attributes wxmap_safeObjectForKey:@"icon"]) {
         _icon = attributes[@"icon"];
         [mapComponent updateIconMarker:self];
     }
     
-    if (attributes[@"position"]) {
-        _location = attributes[@"position"];
+    NSArray *position = [attributes wxmap_safeObjectForKey:@"position"];
+    if ([WXConvert isValidatedArray:position]) {
+        _location = position;
         [mapComponent updateLocationMarker:self];
         
     }
-    
 }
 
 - (void)removeFromSuperview;
 {
     [super removeFromSuperview];
-    [(WXMapViewComponent *)self.supercomponent removeMarker:self];
+    [super removeFromSuperview];
+    WXMapViewComponent *parentComponent = (WXMapViewComponent *)self.supercomponent;
+    [parentComponent removeMarker:self];
 }
 
 - (void)dealloc

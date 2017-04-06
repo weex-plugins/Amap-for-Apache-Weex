@@ -4,7 +4,10 @@
         "import"
     ],
     "globals":{
-      "AMap": 1
+      "AMap": true
+    },
+    "env": {
+      "browser": true
     },
     "rules": {
         "func-names": 0,
