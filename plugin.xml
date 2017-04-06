@@ -224,7 +224,7 @@
 
         <framework src="com.amap.api:map3d-native:4.1.3"/>
         <framework src="com.amap.api:map3d:4.1.3"/>
-        <framework src="com.amap.api.location:android_location:2.5.1"/>
+        <framework src="com.amap.api:location:3.3.0"/>
         <framework src="com.taobao.android:weex_amap:0.0.0.5"/>
         <framework src="org.weex.plugin:plugin-loader:1.0.0"/>
 
