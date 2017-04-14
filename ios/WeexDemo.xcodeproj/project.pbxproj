@@ -270,15 +270,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 775BEEA81C1E8ECC008D1629 /* Build configuration list for PBXNativeTarget "WeexDemo" */;
 			buildPhases = (
-				359BEE13DD78032A2CB791E8 /* [CP] Check Pods Manifest.lock */,
 				0A2546EC1E00EDC5008B7C9F /* Bundle deploy server */,
 				74CC7A221C2C13BF00829368 /* Start Samples */,
 				775BEE771C1E8ECC008D1629 /* Sources */,
 				775BEE781C1E8ECC008D1629 /* Frameworks */,
 				775BEE791C1E8ECC008D1629 /* Resources */,
-				0B3B6C05EE2F8A3B30DE551F /* [CP] Copy Pods Resources */,
-				5ED24D6A09B32268BB031206 /* [CP] Embed Pods Frameworks */,
-				DF01EFC53C38564300295215 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -417,36 +413,6 @@
 			shellPath = /bin/sh;
 			shellScript = "case \"$CONFIGURATION\" in\n  Debug)\n  # Speed up build times by skipping the creation of the offline package for debug\n  # builds on the simulator since the packager is supposed to be running anyways.\n    if [[ \"$PLATFORM_NAME\" == *simulator ]]; then\n      echo \"Skipping bundling for Simulator platform\"\n      exit 0;\n    fi\n\n    DEV=true\n    ;;\n  \"\")\n    echo \"$0 must be invoked by Xcode\"\n    exit 1\n    ;;\n  *)\n    DEV=false\n    ;;\nesac\n\nset -x\nDEST=$CONFIGURATION_BUILD_DIR/$UNLOCALIZED_RESOURCES_FOLDER_PATH\n\nif [[ \"$CONFIGURATION\" = \"Debug\" && ! \"$PLATFORM_NAME\" == *simulator ]];\nthen\n  PLISTBUDDY='/usr/libexec/PlistBuddy'\n  PLIST=$TARGET_BUILD_DIR/$INFOPLIST_PATH\n  IP=$(ipconfig getifaddr en0)\n  if [ -z \"$IP\" ]; then\n    IP=$(ifconfig | grep 'inet ' | grep -v 127.0.0.1 | cut -d\\   -f2  | awk 'NR==1{print $1}')\n  fi\n  $PLISTBUDDY -c \"Add NSAppTransportSecurity:NSExceptionDomains:localhost:NSTemporaryExceptionAllowsInsecureHTTPLoads bool true\" \"$PLIST\"\n  $PLISTBUDDY -c \"Add NSAppTransportSecurity:NSExceptionDomains:$IP.xip.io:NSTemporaryExceptionAllowsInsecureHTTPLoads bool true\" \"$PLIST\"\n  echo $IP > \"$DEST/ip.txt\"\nfi\n\n";
 		};
-		0B3B6C05EE2F8A3B30DE551F /* [CP] Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WeexDemo/Pods-WeexDemo-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		359BEE13DD78032A2CB791E8 /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
 		567369891CE436EB000A646C /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -473,21 +439,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WeexUITestDemo/Pods-WeexUITestDemo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		5ED24D6A09B32268BB031206 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WeexDemo/Pods-WeexDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		74CC7A221C2C13BF00829368 /* Start Samples */ = {
@@ -548,21 +499,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WeexUITestDemo/Pods-WeexUITestDemo-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		DF01EFC53C38564300295215 /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-WeexDemo/Pods-WeexDemo-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
