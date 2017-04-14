@@ -17,6 +17,7 @@
 #import "NSDictionary+WXMap.h"
 #import "WXConvert+AMapKit.h"
 #import <objc/runtime.h>
+#import <SDWebImage/SDWebImageManager.h>
 
 #define WX_CUSTOM_MARKER @"wx_custom_marker";
 
@@ -522,7 +523,7 @@ static const void *componentKey = &componentKey;
     if ([url hasPrefix:@"//"]) {
         url = [@"http:" stringByAppendingString:url];
     }
-    return (id<WXImageOperationProtocol>)[[SDWebImageManager sharedManager] downloadImageWithURL:[NSURL URLWithString:url] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+    [[SDWebImageManager sharedManager] downloadImageWithURL:[NSURL URLWithString:url] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
         
     } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
         if (completedBlock) {
