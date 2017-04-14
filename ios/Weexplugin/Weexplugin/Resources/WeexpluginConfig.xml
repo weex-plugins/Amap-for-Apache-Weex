@@ -30,11 +30,6 @@
     <preference name="PageLength" value="0" />
     <preference name="PaginationBreakingMode" value="page" />
     <preference name="PaginationMode" value="unpaginated" />
-    <feature name="WXImgLoaderImpl">
-        <param name="category" value="handler" />
-        <param name="ios-package" value="WXImgLoaderImpl" />
-        <param name="protocol" value="WXImgLoaderProtocol" />
-    </feature>
     <feature name="WXMapViewComponent">
         <param name="category" value="component" />
         <param name="ios-package" value="WXMapViewComponent" />

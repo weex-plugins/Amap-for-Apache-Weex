@@ -13,7 +13,6 @@
 #import "WXMapCircleComponent.h"
 #import "WXMapInfoWindowComponent.h"
 #import "WXMapInfoWindow.h"
-#import "WXImgLoaderImpl.h"
 #import "NSArray+WXMap.h"
 #import "NSDictionary+WXMap.h"
 #import "WXConvert+AMapKit.h"
@@ -97,17 +96,6 @@ static const void *componentKey = &componentKey;
     BOOL _zoomChanged;
     BOOL _isDragend;
 }
-
-- (id<WXImgLoaderProtocol>)imageLoader
-{
-    static id<WXImgLoaderProtocol> imageLoader;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        imageLoader = [WXImgLoaderImpl new];
-    });
-    return imageLoader; 
-}
-
 
 - (instancetype)initWithRef:(NSString *)ref
                        type:(NSString*)type
@@ -381,7 +369,7 @@ static const void *componentKey = &componentKey;
         
         annotationView.canShowCallout               = !markerComponent.hideCallout;
         annotationView.zIndex = markerComponent.zIndex;
-        [[self imageLoader] downloadImageWithURL:annotation.iconImage imageFrame:CGRectMake(0, 0, 25, 25) userInfo:nil completed:^(UIImage *image, NSError *error, BOOL finished) {
+        [self _downloadImageWithURL:annotation.iconImage imageFrame:CGRectMake(0, 0, 25, 25) completed:^(UIImage *image, NSError *error, BOOL finished) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (image) {
                     annotationView.image = image;
@@ -526,6 +514,21 @@ static const void *componentKey = &componentKey;
     }
     
     return nil;
+}
+
+#pragma mark - private method
+- (void)_downloadImageWithURL:(NSString *)url imageFrame:(CGRect)imageFrame completed:(void(^)(UIImage *image,  NSError *error, BOOL finished))completedBlock
+{
+    if ([url hasPrefix:@"//"]) {
+        url = [@"http:" stringByAppendingString:url];
+    }
+    return (id<WXImageOperationProtocol>)[[SDWebImageManager sharedManager] downloadImageWithURL:[NSURL URLWithString:url] options:0 progress:^(NSInteger receivedSize, NSInteger expectedSize) {
+        
+    } completed:^(UIImage *image, NSError *error, SDImageCacheType cacheType, BOOL finished, NSURL *imageURL) {
+        if (completedBlock) {
+            completedBlock(image, error, finished);
+        }
+    }];
 }
 
 @end
