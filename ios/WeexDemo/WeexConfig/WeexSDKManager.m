@@ -12,14 +12,15 @@
 #import <WeexSDK/WeexSDK.h>
 #import "WXDemoViewController.h"
 #import "WeexPluginManager.h"
+#import "WXImgLoaderDefaultImpl.h"
 
 @implementation WeexSDKManager
 
 + (void)setup;
 {
     NSURL *url = nil;
-    WeexBundleUrlLoder *loader = [WeexBundleUrlLoder new];
 #if DEBUG
+    WeexBundleUrlLoder *loader = [WeexBundleUrlLoder new];
     //If you are debugging in device , please change the host to current IP of your computer.
     url = [loader jsBundleURL];
     if (!url) {
@@ -46,6 +47,8 @@
     [WXAppConfiguration setExternalUserAgent:@"ExternalUA"];
     
     [WXSDKEngine initSDKEnvironment];
+    
+    [WXSDKEngine registerHandler:[WXImgLoaderDefaultImpl new] withProtocol:@protocol(WXImgLoaderProtocol)];
     
 #ifdef DEBUG
     [WXLog setLogLevel:WXLogLevelLog];
