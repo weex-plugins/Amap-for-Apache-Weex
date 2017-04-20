@@ -51,6 +51,8 @@
 
 ```
 
+*如果你使用的是 `vue`的项目，你可以前往这里参考 [Vue Demos](https://github.com/weex-plugins/weex-amap-vue-demos)*
+
 
 ### API
 
