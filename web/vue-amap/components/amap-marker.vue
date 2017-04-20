@@ -1,4 +1,6 @@
-<template></template>
+<template>
+  <div class="weex-amap-marker"></div>
+</template>
 <script>
 import registerMixin from '../mixins/register-component';
 import CONST from '../utils/constant';
@@ -60,7 +62,6 @@ export default {
           self.$emit(ev, {result: 'success'});
         };
       });
-      console.log('marker');
       this.$amapComponent = new AMap.Marker(options);
     }
   }

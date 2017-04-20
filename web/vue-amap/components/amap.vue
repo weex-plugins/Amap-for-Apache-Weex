@@ -8,7 +8,7 @@
    import CONST from '../utils/constant';
    import { toLngLat, toPixel } from '../utils/convert-helper';
    import registerMixin from '../mixins/register-component';
-   import {lazyAMapApiLoaderInstance} from '../services/injected-amap-api-instance';
+   import { initAMapApiLoader } from '../services/injected-amap-api-instance';
    import findChildCustomComponent from '../utils/find-child-custom-component';
   
    export default {
@@ -43,12 +43,9 @@
        'features',
        'geolocation',
        'scale',
-       'mapManager'  // 地图管理 manager
+       'mapManager',  // 地图管理 manager
+       'sdkKey'
      ],
-
-     beforeCreate() {
-       this._loadPromise = lazyAMapApiLoaderInstance.load();
-     },
 
      destroyed() {
        this.$amap && this.$amap.destroy();
@@ -131,7 +128,7 @@
        };
      },
 
-     mounted() {
+     created() {
        this.createMap();
      },
 
@@ -216,6 +213,9 @@
        },
 
        createMap() {
+         this._loadPromise = initAMapApiLoader({
+           key: this.sdkKey.h5,
+         });
          this._loadPromise.then(() => {
            let mapElement = this.$el;
            const elementID = this.vid || guid();
@@ -232,8 +232,7 @@
            this.$emit(CONST.AMAP_READY_EVENT, this.$amap);
            const childComs = findChildCustomComponent(this);
            childComs.forEach(component => {
-             console.log(1);
-             component.$emit(CONST.AMAP_READY_EVENT, this.$amap);
+              component.$emit(CONST.AMAP_READY_EVENT, this.$amap);
            });
            this.addPlugins();
          });

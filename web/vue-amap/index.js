@@ -6,6 +6,7 @@ import AMapMarker from './components/amap-marker.vue';
 import AMapPolygon from './components/amap-polygon.vue';
 import AMapPolyline from './components/amap-polyline.vue';
 import AMapCircle from './components/amap-circle.vue';
+import AmapInfoWindow from './components/amap-info-window.vue';
 import upperCamelCase from './utils/uppercamelcase';
 
 require('./module/amap');
@@ -15,7 +16,8 @@ const components = [
   AMapMarker,
   AMapPolygon,
   AMapPolyline,
-  AMapCircle
+  AMapCircle,
+  AmapInfoWindow
 ];
 const VueAmap = {};
 VueAmap.install = function (Vue) {

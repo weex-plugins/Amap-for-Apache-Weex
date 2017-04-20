@@ -4,8 +4,10 @@ import { toLngLat, toPixel, toBounds } from '../utils/convert-helper';
 import eventHelper from '../utils/event-helper';
 
 export default {
+  
   mounted() {
-    this.$amap = this.$amap || this.$parent.$amap;
+    // in weex DIV is a self component
+    this.$amap = this.$amap || this.$parent.$parent.$amap;
     if (this.$amap) {
       this.register();
     } else {
@@ -41,7 +43,6 @@ export default {
         }
         props[key] = propsValue;
       }
-      console.log(props);
       return props;
     },
 
@@ -89,7 +90,7 @@ export default {
           if (handleFun === this.$amapComponent.setOptions) {
             return handleFun.call(this.$amapComponent, {[prop]: this.convertSignalProp(prop, nv)});
           }
-          handleFun.call(this.$amapComponent, this.convertSignalProp(prop, nv));
+          handleFun.call(this.$amapComponent, this.convertSignalProp(prop, nv), this.$amap);
         });
       }
     },
