@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.taobao.weex.amap.util.Constant;
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -29,6 +28,7 @@ import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.taobao.weex.WXSDKInstance;
+import com.taobao.weex.amap.util.Constant;
 import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.ui.component.WXComponentProp;
@@ -490,8 +490,8 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
     private View render(Marker marker) {
       WXMapInfoWindowComponent wxMapInfoWindowComponent = mWXMapViewComponent.mInfoWindowHashMap.get(marker.getId());
       if (wxMapInfoWindowComponent != null) {
-        wxMapInfoWindowComponent.getHostView().setLayoutParams(new ViewGroup.LayoutParams
-            (ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        wxMapInfoWindowComponent.getHostView().getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+        wxMapInfoWindowComponent.getHostView().getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
         return wxMapInfoWindowComponent.getHostView();
       }
       return null;
