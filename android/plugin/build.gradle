@@ -14,6 +14,7 @@ buildscript {
 
 allprojects {
     repositories {
+        maven { url 'http://mvnrepo.alibaba-inc.com/mvn/repository' }
         mavenCentral()
         jcenter()
     }
@@ -60,6 +61,5 @@ dependencies {
     provided 'com.amap.api.location:android_location:2.5.1'
     //provided 'com.taobao.android:dynamicimport:1.0.4.18'
     // provided 'com.amap.api:location:3.3.0'
-    provided 'org.weex.plugin:plugin-loader:1.0.0'
-    provided 'org.weex.plugin:processor:1.0.0'
+    provided 'org.weex.plugin:processor:1.0.2'
 }
