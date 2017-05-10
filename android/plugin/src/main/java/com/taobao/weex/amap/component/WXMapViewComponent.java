@@ -44,6 +44,7 @@ import java.util.HashMap;
 @WeexComponent(names = {"weex-amap"})
 public class WXMapViewComponent extends WXVContainer<MapView> implements LocationSource,
     AMapLocationListener {
+  private static final String TAG  = "WXMapViewComponent";
   private static final int REQUEST_CODE_MAPVIEW = 10000001;
   private static String[] permissions = new String[]{
       "android.permission.ACCESS_FINE_LOCATION",
@@ -78,6 +79,7 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
       mActivity = (Activity) context;
     }
     initMap();
+    WXLogUtils.e(TAG, "Create MapView " + mMapView.toString());
     return mMapView;
   }
 
@@ -194,6 +196,7 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
         mUiSettings.setRotateGesturesEnabled(false);
       }
     }
+    WXLogUtils.e(TAG, "init map end");
   }
 
   @JSMethod
@@ -208,17 +211,20 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
   @Override
   public void onActivityCreate() {
     super.onActivityCreate();
+    WXLogUtils.e(TAG, "onActivityCreate");
   }
 
   @Override
   public void onActivityPause() {
     mMapView.onPause();
     deactivate();
+    WXLogUtils.e(TAG, "onActivityPause");
   }
 
   @Override
   public void onActivityResume() {
     mMapView.onResume();
+    WXLogUtils.e(TAG, "onActivityResume");
   }
 
   private boolean requestPermissions() {
@@ -242,6 +248,7 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
     if (mLocationClient != null) {
       mLocationClient.onDestroy();
     }
+    WXLogUtils.e(TAG, "onActivityDestroy");
   }
 
   @WXComponentProp(name = Constant.Name.KEYS)
