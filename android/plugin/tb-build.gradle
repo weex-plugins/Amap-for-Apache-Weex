@@ -73,7 +73,7 @@ dependencies {
     provided 'com.taobao.android:weex_sdk:0.10.0'
     // provided 'com.amap.api:map3d-native:4.1.3'
     // provided 'com.amap.api:map3d:4.1.3'
-    provided 'com.taobao.android:amp3d_sdk:5.0.8.test:aar'
+    provided 'com.taobao.android:amp3d_sdk:5.0.8.test@aar'
     provided 'com.amap.api.location:android_location:2.5.1'
     //provided 'com.taobao.android:dynamicimport:1.0.4.18'
     // provided 'com.amap.api:location:3.3.0'
