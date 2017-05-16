@@ -91,6 +91,7 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
       mAMap.setOnMapLoadedListener(new AMap.OnMapLoadedListener() {
         @Override
         public void onMapLoaded() {
+          WXLogUtils.e(TAG, "Map loaded");
           mZoomLevel = mAMap.getCameraPosition().zoom;
         }
       });
@@ -474,6 +475,12 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
 
   public HashMap<String, WXMapInfoWindowComponent> getCachedInfoWindow() {
     return mInfoWindowHashMap;
+  }
+
+  @Override
+  public MapView getHostView() {
+    WXLogUtils.e(TAG, "Trying to get MapView");
+    return super.getHostView();
   }
 
   private static class InfoWindowAdapter implements AMap.InfoWindowAdapter {
