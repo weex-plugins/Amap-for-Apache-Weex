@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewStub;
 
-import com.taobao.weex.amap.util.Constant;
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
@@ -14,8 +13,8 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Polygon;
 import com.amap.api.maps.model.PolygonOptions;
 import com.taobao.weex.WXSDKInstance;
+import com.taobao.weex.amap.util.Constant;
 import com.taobao.weex.dom.WXDomObject;
-import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 
@@ -28,7 +27,7 @@ import java.util.ArrayList;
  * Created by budao on 2017/3/3.
  */
 @WeexComponent(names = {"weex-amap-polygon"})
-public class WXMapPolygonComponent extends WXComponent<View> {
+public class WXMapPolygonComponent extends AbstractMapWidgetComponent {
   ArrayList<LatLng> mPosition = new ArrayList<>();
   private MapView mMapView;
   private AMap mMap;
@@ -66,33 +65,58 @@ public class WXMapPolygonComponent extends WXComponent<View> {
     } catch (JSONException e) {
       e.printStackTrace();
     }
-    mPolygon.setPoints(mPosition);
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        mPolygon.setPoints(mPosition);
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.STROKE_COLOR)
   public void setStrokeColor(String param) {
     mColor = Color.parseColor(param);
-    mPolygon.setStrokeColor(mColor);
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        mPolygon.setStrokeColor(mColor);
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.FILL_COLOR)
   public void setFillColor(String param) {
     mFillColor = Color.parseColor(param);
-    mPolygon.setFillColor(mFillColor);
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        mPolygon.setFillColor(mFillColor);
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.STROKE_WIDTH)
   public void setStrokeWidth(float param) {
     mWidth = param;
-    mPolygon.setStrokeWidth(mWidth);
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        mPolygon.setStrokeWidth(mWidth);
+      }
+    });
   }
 
   private void initPolygon() {
-    PolygonOptions polygonOptions = new PolygonOptions();
-    polygonOptions.addAll(mPosition);
-    polygonOptions.strokeColor(mColor);
-    polygonOptions.strokeWidth(mWidth);
-    mPolygon = mMap.addPolygon(polygonOptions);
+    postMapOperationTask((WXMapViewComponent) getParent(), new WXMapViewComponent.MapOperationTask() {
+      @Override
+      public void execute(MapView mapView) {
+        PolygonOptions polygonOptions = new PolygonOptions();
+        polygonOptions.addAll(mPosition);
+        polygonOptions.strokeColor(mColor);
+        polygonOptions.strokeWidth(mWidth);
+        mPolygon = mapView.getMap().addPolygon(polygonOptions);
+      }
+    });
   }
 
   public boolean contains(LatLng latLng) {

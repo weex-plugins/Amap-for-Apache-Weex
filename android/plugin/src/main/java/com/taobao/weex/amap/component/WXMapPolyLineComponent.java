@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewStub;
 
-import com.taobao.weex.amap.util.Constant;
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
@@ -14,8 +13,8 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.taobao.weex.WXSDKInstance;
+import com.taobao.weex.amap.util.Constant;
 import com.taobao.weex.dom.WXDomObject;
-import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 
@@ -28,7 +27,7 @@ import java.util.ArrayList;
  * Created by budao on 2017/3/3.
  */
 @WeexComponent(names = {"weex-amap-polyline"})
-public class WXMapPolyLineComponent extends WXComponent<View> {
+public class WXMapPolyLineComponent extends AbstractMapWidgetComponent {
   ArrayList<LatLng> mPosition = new ArrayList<>();
   private MapView mMapView;
   private AMap mMap;
@@ -66,33 +65,60 @@ public class WXMapPolyLineComponent extends WXComponent<View> {
     } catch (JSONException e) {
       e.printStackTrace();
     }
-    mPolyline.setPoints(mPosition);
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        mPolyline.setPoints(mPosition);
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.STROKE_COLOR)
   public void setStrokeColor(String param) {
     mColor = Color.parseColor(param);
-    mPolyline.setColor(mColor);
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        mPolyline.setColor(mColor);
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.STROKE_WIDTH)
   public void setStrokeWeight(float param) {
     mWeight = param;
-    mPolyline.setWidth(mWeight);
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        mPolyline.setWidth(mWeight);
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.STROKE_STYLE)
   public void setStrokeStyle(String param) {
     mStyle = param;
-    mPolyline.setDottedLine("dashed".equalsIgnoreCase(mStyle));
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        mPolyline.setDottedLine("dashed".equalsIgnoreCase(mStyle));
+      }
+    });
   }
 
   private void initPolyLine() {
-    PolylineOptions polylineOptions = new PolylineOptions();
-    polylineOptions.setPoints(mPosition);
-    polylineOptions.color(mColor);
-    polylineOptions.width(mWeight);
-    polylineOptions.setDottedLine("dashed".equalsIgnoreCase(mStyle));
-    mPolyline = mMap.addPolyline(polylineOptions);
+    if (getParent() != null && getParent() instanceof WXMapViewComponent) {
+      postMapOperationTask((WXMapViewComponent) getParent(), new WXMapViewComponent.MapOperationTask() {
+        @Override
+        public void execute(MapView mapView) {
+          PolylineOptions polylineOptions = new PolylineOptions();
+          polylineOptions.setPoints(mPosition);
+          polylineOptions.color(mColor);
+          polylineOptions.width(mWeight);
+          polylineOptions.setDottedLine("dashed".equalsIgnoreCase(mStyle));
+          mPolyline = mapView.getMap().addPolyline(polylineOptions);
+        }
+      });
+    }
   }
 }

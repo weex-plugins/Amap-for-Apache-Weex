@@ -40,6 +40,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.Queue;
 
 @WeexComponent(names = {"weex-amap"})
 public class WXMapViewComponent extends WXVContainer<MapView> implements LocationSource,
@@ -66,6 +68,8 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
   private AMapLocationClient mLocationClient;
   private AMapLocationClientOption mLocationOption;
   private HashMap<String, WXMapInfoWindowComponent> mInfoWindowHashMap = new HashMap<>();
+  private boolean isMapLoaded = false;
+  private Queue<MapOperationTask> paddingTasks = new LinkedList<>();
 
   public WXMapViewComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
     super(instance, dom, parent, isLazy);
@@ -84,6 +88,7 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
   }
 
   private void initMap() {
+    isMapLoaded = false;
     if (mAMap == null) {
       mAMap = mMapView.getMap();
 
@@ -92,7 +97,9 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
         @Override
         public void onMapLoaded() {
           WXLogUtils.e(TAG, "Map loaded");
+          isMapLoaded = true;
           mZoomLevel = mAMap.getCameraPosition().zoom;
+          execPaddingTasks();
         }
       });
 
@@ -483,6 +490,30 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
     return super.getHostView();
   }
 
+  private void execPaddingTasks() {
+    while (!paddingTasks.isEmpty()) {
+      MapOperationTask task = paddingTasks.poll();
+      if (task != null && mMapView != null) {
+        WXLogUtils.d(TAG, "Exec padding task " + task.toString());
+        task.execute(mMapView);
+      }
+    }
+  }
+
+  public void postTask(MapOperationTask task) {
+    if (mMapView != null) {
+      if (isMapLoaded) {
+        WXLogUtils.d(TAG, "Exec task " + task.toString());
+        task.execute(mMapView);
+      } else {
+        WXLogUtils.d(TAG, "Padding task " + task.toString());
+        paddingTasks.offer(task);
+      }
+    } else {
+      WXLogUtils.e(TAG, "MapView is null!");
+    }
+  }
+
   private static class InfoWindowAdapter implements AMap.InfoWindowAdapter {
 
     private WXMapViewComponent mWXMapViewComponent;
@@ -510,5 +541,9 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
       }
       return null;
     }
+  }
+
+  interface MapOperationTask {
+    void execute(MapView mapView);
   }
 }

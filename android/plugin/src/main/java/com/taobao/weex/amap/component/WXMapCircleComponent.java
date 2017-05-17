@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewStub;
 
-import com.taobao.weex.amap.util.Constant;
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
@@ -14,8 +13,8 @@ import com.amap.api.maps.model.Circle;
 import com.amap.api.maps.model.CircleOptions;
 import com.amap.api.maps.model.LatLng;
 import com.taobao.weex.WXSDKInstance;
+import com.taobao.weex.amap.util.Constant;
 import com.taobao.weex.dom.WXDomObject;
-import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 
@@ -27,7 +26,7 @@ import org.json.JSONException;
  */
 
 @WeexComponent(names = {"weex-amap-circle"})
-public class WXMapCircleComponent extends WXComponent<View> {
+public class WXMapCircleComponent extends AbstractMapWidgetComponent {
   private MapView mMapView;
   private AMap mMap;
   private Circle mCircle;
@@ -52,47 +51,77 @@ public class WXMapCircleComponent extends WXComponent<View> {
   }
 
   @WXComponentProp(name = Constant.Name.CENTER)
-  public void setPath(String param) {
-    try {
-      JSONArray center = new JSONArray(param);
-      if (center != null && center.length() == 2) {
-        mCircle.setCenter(new LatLng(center.getDouble(1), center.getDouble(0)));
+  public void setPath(final String param) {
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        try {
+          JSONArray center = new JSONArray(param);
+          if (center != null && center.length() == 2) {
+            mCircle.setCenter(new LatLng(center.getDouble(1), center.getDouble(0)));
+          }
+        } catch (JSONException e) {
+          e.printStackTrace();
+        }
       }
-    } catch (JSONException e) {
-      e.printStackTrace();
-    }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.STROKE_COLOR)
   public void setStrokeColor(String param) {
     mColor = Color.parseColor(param);
-    mCircle.setStrokeColor(mColor);
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        mCircle.setStrokeColor(mColor);
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.FILL_COLOR)
   public void setFillColor(String param) {
     mFillColor = Color.parseColor(param);
-    mCircle.setFillColor(mFillColor);
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        mCircle.setFillColor(mFillColor);
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.STROKE_WIDTH)
   public void setStrokeWeight(float param) {
     mWeight = param;
-    mCircle.setStrokeWidth(mWeight);
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        mCircle.setStrokeWidth(mWeight);
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.RADIUS)
   public void setRadius(float param) {
     mRadius = param;
-    mCircle.setRadius(mRadius);
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        mCircle.setRadius(mRadius);
+      }
+    });
   }
 
   private void initCircle() {
-    CircleOptions circleOptions = new CircleOptions();
-    circleOptions.strokeColor(mColor);
-    circleOptions.strokeWidth(mWeight);
-    circleOptions.radius(mRadius);
-    circleOptions.fillColor(mFillColor);
-    mCircle = mMap.addCircle(circleOptions);
+    postMapOperationTask((WXMapViewComponent) getParent(), new WXMapViewComponent.MapOperationTask() {
+      @Override
+      public void execute(MapView mapView) {
+        CircleOptions circleOptions = new CircleOptions();
+        circleOptions.strokeColor(mColor);
+        circleOptions.strokeWidth(mWeight);
+        circleOptions.radius(mRadius);
+        circleOptions.fillColor(mFillColor);
+        mCircle = mMap.addCircle(circleOptions);
+      }
+    });
   }
 }

@@ -4,8 +4,6 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.widget.LinearLayout;
 
-import com.taobao.weex.amap.R;
-import com.taobao.weex.amap.util.Constant;
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
@@ -14,6 +12,8 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.taobao.weex.WXSDKInstance;
+import com.taobao.weex.amap.R;
+import com.taobao.weex.amap.util.Constant;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.ui.component.WXComponentProp;
@@ -28,7 +28,7 @@ import org.json.JSONException;
  */
 
 @WeexComponent(names = {"weex-amap-info-window"})
-public class WXMapInfoWindowComponent extends WXVContainer<LinearLayout> {
+public class WXMapInfoWindowComponent extends AbstractMapWidgetComponent {
   private Marker mMarker;
   private MapView mMapView;
   private WXMapViewComponent mWxMapViewComponent;
@@ -64,22 +64,37 @@ public class WXMapInfoWindowComponent extends WXVContainer<LinearLayout> {
   }
 
   @WXComponentProp(name = Constant.Name.POSITION)
-  public void setPosition(String position) {
-    setMarkerPosition(position);
+  public void setPosition(final String position) {
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        setMarkerPosition(position);
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.OFFSET)
-  public void setOffset(String offset) {
-    setMarkerInfoWindowOffset(offset);
+  public void setOffset(final String offset) {
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        setMarkerInfoWindowOffset(offset);
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.OPEN)
-  public void setOpened(Boolean opened) {
-    if (opened) {
-      mMarker.showInfoWindow();
-    } else {
-      mMarker.hideInfoWindow();
-    }
+  public void setOpened(final Boolean opened) {
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        if (opened) {
+          mMarker.showInfoWindow();
+        } else {
+          mMarker.hideInfoWindow();
+        }
+      }
+    });
   }
 
   @Override
@@ -93,23 +108,28 @@ public class WXMapInfoWindowComponent extends WXVContainer<LinearLayout> {
     }
   }
 
-  private void initMarker(boolean open, String position, String icon) {
-    final MarkerOptions markerOptions = new MarkerOptions();
-    //设置Marker可拖动, 将Marker设置为贴地显示，可以双指下拉地图查看效果
-    markerOptions.setFlat(true);
-    markerOptions.infoWindowEnable(true);
-    markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.infowindow_marker_icon));
-    markerOptions.title("");
-    AMap mMap = mMapView.getMap();
-    mMarker = mMap.addMarker(markerOptions);
-    mWxMapViewComponent.getCachedInfoWindow().put(mMarker.getId(), this);
-    mMarker.setClickable(false);
-    setMarkerPosition(position);
-    if (open) {
-      mMarker.showInfoWindow();
-    } else {
-      mMarker.hideInfoWindow();
-    }
+  private void initMarker(final boolean open, final String position, String icon) {
+    postMapOperationTask(mWxMapViewComponent, new WXMapViewComponent.MapOperationTask() {
+      @Override
+      public void execute(MapView mapView) {
+        final MarkerOptions markerOptions = new MarkerOptions();
+        //设置Marker可拖动, 将Marker设置为贴地显示，可以双指下拉地图查看效果
+        markerOptions.setFlat(true);
+        markerOptions.infoWindowEnable(true);
+        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.infowindow_marker_icon));
+        markerOptions.title("");
+        AMap mMap = mMapView.getMap();
+        mMarker = mMap.addMarker(markerOptions);
+        mWxMapViewComponent.getCachedInfoWindow().put(mMarker.getId(), WXMapInfoWindowComponent.this);
+        mMarker.setClickable(false);
+        setMarkerPosition(position);
+        if (open) {
+          mMarker.showInfoWindow();
+        } else {
+          mMarker.hideInfoWindow();
+        }
+      }
+    });
   }
 
   private void setMarkerInfoWindowOffset(String position) {

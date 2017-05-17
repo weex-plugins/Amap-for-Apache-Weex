@@ -9,8 +9,6 @@ import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewStub;
 
-import com.taobao.weex.amap.util.Constant;
-import com.taobao.weex.amap.util.GifDecoder;
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.BitmapDescriptor;
@@ -19,9 +17,10 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.taobao.weex.WXSDKInstance;
+import com.taobao.weex.amap.util.Constant;
+import com.taobao.weex.amap.util.GifDecoder;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXDomObject;
-import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.utils.WXUtils;
@@ -45,7 +44,7 @@ import java.util.ArrayList;
  * Created by budao on 2017/2/9.
  */
 @WeexComponent(names = {"weex-amap-marker"})
-public class WXMapMarkerComponent extends WXComponent<View> {
+public class WXMapMarkerComponent extends AbstractMapWidgetComponent {
   private Marker mMarker;
   private MapView mMapView;
 
@@ -102,23 +101,43 @@ public class WXMapMarkerComponent extends WXComponent<View> {
   }
 
   @WXComponentProp(name = Constant.Name.TITLE)
-  public void setTitle(String title) {
-    setMarkerTitle(title);
+  public void setTitle(final String title) {
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        setMarkerTitle(title);
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.ICON)
-  public void setIcon(String icon) {
-    setMarkerIcon(icon);
+  public void setIcon(final String icon) {
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        setMarkerIcon(icon);
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.HIDE_CALL_OUT)
-  public void setHideCallOut(Boolean hide) {
-    setMarkerHideCallOut(hide);
+  public void setHideCallOut(final Boolean hide) {
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        setMarkerHideCallOut(hide);
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.POSITION)
-  public void setPosition(String position) {
-    setMarkerPosition(position);
+  public void setPosition(final String position) {
+    postTask(new Runnable() {
+      @Override
+      public void run() {
+        setMarkerPosition(position);
+      }
+    });
   }
 
   @Override
@@ -137,16 +156,21 @@ public class WXMapMarkerComponent extends WXComponent<View> {
     getInstance().fireEvent(getRef(), Constants.Event.CLICK);
   }
 
-  private void initMarker(String title, String position, String icon) {
-    final MarkerOptions markerOptions = new MarkerOptions();
-    //设置Marker可拖动
-    markerOptions.draggable(true);
-    // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-    markerOptions.setFlat(true);
-    mMarker = mMapView.getMap().addMarker(markerOptions);
-    setMarkerTitle(title);
-    setMarkerPosition(position);
-    setMarkerIcon(icon);
+  private void initMarker(final String title, final String position, final String icon) {
+    postMapOperationTask((WXMapViewComponent) getParent(), new WXMapViewComponent.MapOperationTask() {
+      @Override
+      public void execute(MapView mapView) {
+        final MarkerOptions markerOptions = new MarkerOptions();
+        //设置Marker可拖动
+        markerOptions.draggable(true);
+        // 将Marker设置为贴地显示，可以双指下拉地图查看效果
+        markerOptions.setFlat(true);
+        mMarker = mapView.getMap().addMarker(markerOptions);
+        setMarkerTitle(title);
+        setMarkerPosition(position);
+        setMarkerIcon(icon);
+      }
+    });
   }
 
   private void setMarkerIcon(final String icon) {
