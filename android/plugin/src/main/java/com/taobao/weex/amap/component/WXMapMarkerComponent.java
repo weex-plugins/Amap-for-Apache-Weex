@@ -46,7 +46,6 @@ import java.util.ArrayList;
 @WeexComponent(names = {"weex-amap-marker"})
 public class WXMapMarkerComponent extends AbstractMapWidgetComponent {
   private Marker mMarker;
-  private MapView mMapView;
 
   public WXMapMarkerComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
     super(instance, dom, parent);
@@ -78,7 +77,6 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent {
   @Override
   protected View initComponentHostView(@NonNull Context context) {
     if (getParent() != null && getParent() instanceof WXMapViewComponent) {
-      mMapView = ((WXMapViewComponent) getParent()).getHostView();
       String title = (String) getDomObject().getAttrs().get(Constant.Name.TITLE);
       String icon = (String) getDomObject().getAttrs().get(Constant.Name.ICON);
       String position = getDomObject().getAttrs().get(Constant.Name.POSITION).toString();

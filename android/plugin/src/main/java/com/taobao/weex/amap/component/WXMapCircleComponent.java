@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewStub;
 
 import com.alibaba.weex.plugin.annotation.WeexComponent;
-import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.Circle;
 import com.amap.api.maps.model.CircleOptions;
@@ -27,8 +26,6 @@ import org.json.JSONException;
 
 @WeexComponent(names = {"weex-amap-circle"})
 public class WXMapCircleComponent extends AbstractMapWidgetComponent {
-  private MapView mMapView;
-  private AMap mMap;
   private Circle mCircle;
   private int mColor = 0;
   private int mFillColor = 0;
@@ -42,8 +39,6 @@ public class WXMapCircleComponent extends AbstractMapWidgetComponent {
   @Override
   protected View initComponentHostView(@NonNull Context context) {
     if (getParent() != null && getParent() instanceof WXMapViewComponent) {
-      mMapView = ((WXMapViewComponent) getParent()).getHostView();
-      mMap = mMapView.getMap();
       initCircle();
     }
     // FixMe： 只是为了绕过updateProperties中的逻辑检查
@@ -120,7 +115,7 @@ public class WXMapCircleComponent extends AbstractMapWidgetComponent {
         circleOptions.strokeWidth(mWeight);
         circleOptions.radius(mRadius);
         circleOptions.fillColor(mFillColor);
-        mCircle = mMap.addCircle(circleOptions);
+        mCircle = mapView.getMap().addCircle(circleOptions);
       }
     });
   }

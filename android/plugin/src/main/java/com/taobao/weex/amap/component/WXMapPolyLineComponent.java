@@ -7,7 +7,6 @@ import android.view.View;
 import android.view.ViewStub;
 
 import com.alibaba.weex.plugin.annotation.WeexComponent;
-import com.amap.api.maps.AMap;
 import com.amap.api.maps.MapView;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Polyline;
@@ -29,8 +28,6 @@ import java.util.ArrayList;
 @WeexComponent(names = {"weex-amap-polyline"})
 public class WXMapPolyLineComponent extends AbstractMapWidgetComponent {
   ArrayList<LatLng> mPosition = new ArrayList<>();
-  private MapView mMapView;
-  private AMap mMap;
   private Polyline mPolyline;
   private int mColor = 0;
   private String mStyle;
@@ -43,8 +40,6 @@ public class WXMapPolyLineComponent extends AbstractMapWidgetComponent {
   @Override
   protected View initComponentHostView(@NonNull Context context) {
     if (getParent() != null && getParent() instanceof WXMapViewComponent) {
-      mMapView = ((WXMapViewComponent) getParent()).getHostView();
-      mMap = mMapView.getMap();
       initPolyLine();
     }
     // FixMe： 只是为了绕过updateProperties中的逻辑检查

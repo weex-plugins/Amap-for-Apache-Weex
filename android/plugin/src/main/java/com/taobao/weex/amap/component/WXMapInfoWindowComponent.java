@@ -30,7 +30,6 @@ import org.json.JSONException;
 @WeexComponent(names = {"weex-amap-info-window"})
 public class WXMapInfoWindowComponent extends AbstractMapWidgetComponent {
   private Marker mMarker;
-  private MapView mMapView;
   private WXMapViewComponent mWxMapViewComponent;
 
   public WXMapInfoWindowComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
@@ -41,7 +40,6 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetComponent {
   protected LinearLayout initComponentHostView(@NonNull Context context) {
     if (getParent() != null && getParent() instanceof WXMapViewComponent) {
       mWxMapViewComponent = (WXMapViewComponent) getParent();
-      mMapView = ((WXMapViewComponent) getParent()).getHostView();
       boolean open = (Boolean) getDomObject().getAttrs().get(Constant.Name.OPEN);
       String offset = (String) getDomObject().getAttrs().get(Constant.Name.ICON);
       String position = getDomObject().getAttrs().get(Constant.Name.POSITION).toString();
@@ -118,7 +116,7 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetComponent {
         markerOptions.infoWindowEnable(true);
         markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.infowindow_marker_icon));
         markerOptions.title("");
-        AMap mMap = mMapView.getMap();
+        AMap mMap = mapView.getMap();
         mMarker = mMap.addMarker(markerOptions);
         mWxMapViewComponent.getCachedInfoWindow().put(mMarker.getId(), WXMapInfoWindowComponent.this);
         mMarker.setClickable(false);
