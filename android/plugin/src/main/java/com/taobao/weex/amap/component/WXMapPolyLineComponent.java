@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewStub;
 
 import com.alibaba.weex.plugin.annotation.WeexComponent;
-import com.amap.api.maps.MapView;
+import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
@@ -105,7 +105,7 @@ public class WXMapPolyLineComponent extends AbstractMapWidgetComponent {
     if (getParent() != null && getParent() instanceof WXMapViewComponent) {
       postMapOperationTask((WXMapViewComponent) getParent(), new WXMapViewComponent.MapOperationTask() {
         @Override
-        public void execute(MapView mapView) {
+        public void execute(TextureMapView mapView) {
           PolylineOptions polylineOptions = new PolylineOptions();
           polylineOptions.setPoints(mPosition);
           polylineOptions.color(mColor);

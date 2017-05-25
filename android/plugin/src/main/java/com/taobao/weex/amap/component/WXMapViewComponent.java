@@ -21,8 +21,8 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
-import com.amap.api.maps.MapView;
 import com.amap.api.maps.MapsInitializer;
+import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
@@ -44,7 +44,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 @WeexComponent(names = {"weex-amap"})
-public class WXMapViewComponent extends WXVContainer<MapView> implements LocationSource,
+public class WXMapViewComponent extends WXVContainer<TextureMapView> implements LocationSource,
     AMapLocationListener {
   private static final String TAG  = "WXMapViewComponent";
   private static final int REQUEST_CODE_MAPVIEW = 10000001;
@@ -52,7 +52,7 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
       "android.permission.ACCESS_FINE_LOCATION",
       "android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"
   };
-  private MapView mMapView;
+  private TextureMapView mMapView;
   private AMap mAMap;
   private UiSettings mUiSettings;
   private Activity mActivity;
@@ -76,8 +76,8 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
   }
 
   @Override
-  protected MapView initComponentHostView(@NonNull Context context) {
-    mMapView = new MapView(context);
+  protected TextureMapView initComponentHostView(@NonNull Context context) {
+    mMapView = new TextureMapView(context);
     mMapView.onCreate(null);
     if (context instanceof Activity) {
       mActivity = (Activity) context;
@@ -85,6 +85,11 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
     initMap();
     WXLogUtils.e(TAG, "Create MapView " + mMapView.toString());
     return mMapView;
+  }
+
+  @Override
+  protected void setHostLayoutParams(TextureMapView host, int width, int height, int left, int right, int top, int bottom) {
+    super.setHostLayoutParams(host, width, height, left, right, top, bottom);
   }
 
   private void initMap() {
@@ -485,7 +490,7 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
   }
 
   @Override
-  public MapView getHostView() {
+  public TextureMapView getHostView() {
     WXLogUtils.e(TAG, "Trying to get MapView");
     return super.getHostView();
   }
@@ -544,6 +549,6 @@ public class WXMapViewComponent extends WXVContainer<MapView> implements Locatio
   }
 
   interface MapOperationTask {
-    void execute(MapView mapView);
+    void execute(TextureMapView mapView);
   }
 }

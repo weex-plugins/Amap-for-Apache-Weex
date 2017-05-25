@@ -2,7 +2,7 @@ package com.taobao.weex.amap.component;
 
 import android.view.View;
 
-import com.amap.api.maps.MapView;
+import com.amap.api.maps.TextureMapView;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.ui.component.WXComponent;
@@ -30,7 +30,7 @@ public abstract class AbstractMapWidgetComponent extends WXComponent<View> {
         if (parent != null) {
             WXMapViewComponent.MapOperationTask wrapper = new WXMapViewComponent.MapOperationTask() {
                 @Override
-                public void execute(MapView mapView) {
+                public void execute(TextureMapView mapView) {
                     try {
                         setMapLoaded(true);
                         task.execute(mapView);

@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewStub;
 
 import com.alibaba.weex.plugin.annotation.WeexComponent;
-import com.amap.api.maps.MapView;
+import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Polygon;
 import com.amap.api.maps.model.PolygonOptions;
@@ -104,7 +104,7 @@ public class WXMapPolygonComponent extends AbstractMapWidgetComponent {
   private void initPolygon() {
     postMapOperationTask((WXMapViewComponent) getParent(), new WXMapViewComponent.MapOperationTask() {
       @Override
-      public void execute(MapView mapView) {
+      public void execute(TextureMapView mapView) {
         PolygonOptions polygonOptions = new PolygonOptions();
         polygonOptions.addAll(mPosition);
         polygonOptions.strokeColor(mColor);

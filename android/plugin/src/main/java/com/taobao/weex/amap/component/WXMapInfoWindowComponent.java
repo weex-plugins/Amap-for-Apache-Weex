@@ -6,7 +6,7 @@ import android.widget.LinearLayout;
 
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.AMap;
-import com.amap.api.maps.MapView;
+import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
@@ -109,7 +109,7 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetComponent {
   private void initMarker(final boolean open, final String position, String icon) {
     postMapOperationTask(mWxMapViewComponent, new WXMapViewComponent.MapOperationTask() {
       @Override
-      public void execute(MapView mapView) {
+      public void execute(TextureMapView mapView) {
         final MarkerOptions markerOptions = new MarkerOptions();
         //设置Marker可拖动, 将Marker设置为贴地显示，可以双指下拉地图查看效果
         markerOptions.setFlat(true);

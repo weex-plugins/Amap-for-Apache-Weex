@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewStub;
 
 import com.alibaba.weex.plugin.annotation.WeexComponent;
-import com.amap.api.maps.MapView;
+import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.model.BitmapDescriptor;
 import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
@@ -157,7 +157,7 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent {
   private void initMarker(final String title, final String position, final String icon) {
     postMapOperationTask((WXMapViewComponent) getParent(), new WXMapViewComponent.MapOperationTask() {
       @Override
-      public void execute(MapView mapView) {
+      public void execute(TextureMapView mapView) {
         final MarkerOptions markerOptions = new MarkerOptions();
         //设置Marker可拖动
         markerOptions.draggable(true);

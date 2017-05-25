@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewStub;
 
 import com.alibaba.weex.plugin.annotation.WeexComponent;
-import com.amap.api.maps.MapView;
+import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.model.Circle;
 import com.amap.api.maps.model.CircleOptions;
 import com.amap.api.maps.model.LatLng;
@@ -109,7 +109,7 @@ public class WXMapCircleComponent extends AbstractMapWidgetComponent {
   private void initCircle() {
     postMapOperationTask((WXMapViewComponent) getParent(), new WXMapViewComponent.MapOperationTask() {
       @Override
-      public void execute(MapView mapView) {
+      public void execute(TextureMapView mapView) {
         CircleOptions circleOptions = new CircleOptions();
         circleOptions.strokeColor(mColor);
         circleOptions.strokeWidth(mWeight);
