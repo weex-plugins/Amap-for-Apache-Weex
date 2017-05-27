@@ -73,6 +73,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   private boolean isMapLoaded = false;
   private Queue<MapOperationTask> paddingTasks = new LinkedList<>();
   private FrameLayout mapContainer;
+  private int fakeBackgroundColor = Color.rgb(242, 238, 232);
 
   public WXMapViewComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
     super(instance, dom, parent, isLazy);
@@ -81,7 +82,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   @Override
   protected FrameLayout initComponentHostView(@NonNull Context context) {
     mapContainer = new FrameLayout(context);
-    mapContainer.setBackgroundColor(Color.LTGRAY);
+    mapContainer.setBackgroundColor(fakeBackgroundColor);
     if (context instanceof Activity) {
       mActivity = (Activity) context;
     }
@@ -96,11 +97,12 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
         @Override
         public void run() {
           mMapView = new TextureMapView(getContext());
-          mapContainer.addView(mMapView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+          mapContainer.addView(mMapView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                  ViewGroup.LayoutParams.MATCH_PARENT));
           WXLogUtils.e(TAG, "Create MapView " + mMapView.toString());
           initMap();
         }
-      }, 100);
+      },0);
     }
   }
 
