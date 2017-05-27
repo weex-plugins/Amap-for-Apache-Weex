@@ -215,7 +215,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
         mUiSettings.setRotateGesturesEnabled(false);
       }
     }
-    WXLogUtils.e(TAG, "init map end");
+    WXLogUtils.e(TAG, "init map end ");
   }
 
   @JSMethod
