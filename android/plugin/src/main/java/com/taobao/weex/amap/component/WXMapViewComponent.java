@@ -91,8 +91,8 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
     super.setHostLayoutParams(host, width, height, left, right, top, bottom);
     if (!isMapLoaded) {
       mMapView = new TextureMapView(host.getContext());
+      mapContainer.addView(mMapView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
       WXLogUtils.e(TAG, "Create MapView " + mMapView.toString());
-      mMapView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
       initMap();
     }
   }
