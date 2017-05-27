@@ -83,7 +83,6 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
     if (context instanceof Activity) {
       mActivity = (Activity) context;
     }
-    WXLogUtils.e(TAG, "Create MapView " + mMapView.toString());
     return mapContainer;
   }
 
@@ -92,6 +91,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
     super.setHostLayoutParams(host, width, height, left, right, top, bottom);
     if (!isMapLoaded) {
       mMapView = new TextureMapView(host.getContext());
+      WXLogUtils.e(TAG, "Create MapView " + mMapView.toString());
       mMapView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
       initMap();
     }
