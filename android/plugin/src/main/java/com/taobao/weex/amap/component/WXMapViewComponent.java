@@ -78,11 +78,9 @@ public class WXMapViewComponent extends WXVContainer<TextureMapView> implements 
   @Override
   protected TextureMapView initComponentHostView(@NonNull Context context) {
     mMapView = new TextureMapView(context);
-    mMapView.onCreate(null);
     if (context instanceof Activity) {
       mActivity = (Activity) context;
     }
-    initMap();
     WXLogUtils.e(TAG, "Create MapView " + mMapView.toString());
     return mMapView;
   }
@@ -90,9 +88,13 @@ public class WXMapViewComponent extends WXVContainer<TextureMapView> implements 
   @Override
   protected void setHostLayoutParams(TextureMapView host, int width, int height, int left, int right, int top, int bottom) {
     super.setHostLayoutParams(host, width, height, left, right, top, bottom);
+    if (!isMapLoaded) {
+      initMap();
+    }
   }
 
   private void initMap() {
+    mMapView.onCreate(null);
     isMapLoaded = false;
     if (mAMap == null) {
       mAMap = mMapView.getMap();
