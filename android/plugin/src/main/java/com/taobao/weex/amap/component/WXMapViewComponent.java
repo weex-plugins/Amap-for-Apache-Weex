@@ -11,6 +11,7 @@ import android.text.TextUtils;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.alibaba.weex.plugin.annotation.WeexComponent;
@@ -44,7 +45,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 
 @WeexComponent(names = {"weex-amap"})
-public class WXMapViewComponent extends WXVContainer<TextureMapView> implements LocationSource,
+public class WXMapViewComponent extends WXVContainer<FrameLayout> implements LocationSource,
     AMapLocationListener {
   private static final String TAG  = "WXMapViewComponent";
   private static final int REQUEST_CODE_MAPVIEW = 10000001;
@@ -70,25 +71,28 @@ public class WXMapViewComponent extends WXVContainer<TextureMapView> implements 
   private HashMap<String, WXMapInfoWindowComponent> mInfoWindowHashMap = new HashMap<>();
   private boolean isMapLoaded = false;
   private Queue<MapOperationTask> paddingTasks = new LinkedList<>();
+  private FrameLayout mapContainer;
 
   public WXMapViewComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
     super(instance, dom, parent, isLazy);
   }
 
   @Override
-  protected TextureMapView initComponentHostView(@NonNull Context context) {
-    mMapView = new TextureMapView(context);
+  protected FrameLayout initComponentHostView(@NonNull Context context) {
+    mapContainer = new FrameLayout(context);
     if (context instanceof Activity) {
       mActivity = (Activity) context;
     }
     WXLogUtils.e(TAG, "Create MapView " + mMapView.toString());
-    return mMapView;
+    return mapContainer;
   }
 
   @Override
-  protected void setHostLayoutParams(TextureMapView host, int width, int height, int left, int right, int top, int bottom) {
+  protected void setHostLayoutParams(FrameLayout host, int width, int height, int left, int right, int top, int bottom) {
     super.setHostLayoutParams(host, width, height, left, right, top, bottom);
     if (!isMapLoaded) {
+      mMapView = new TextureMapView(host.getContext());
+      mMapView.setLayoutParams(new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT));
       initMap();
     }
   }
@@ -492,7 +496,7 @@ public class WXMapViewComponent extends WXVContainer<TextureMapView> implements 
   }
 
   @Override
-  public TextureMapView getHostView() {
+  public FrameLayout getHostView() {
     WXLogUtils.e(TAG, "Trying to get MapView");
     return super.getHostView();
   }
