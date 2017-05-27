@@ -3,6 +3,7 @@ package com.taobao.weex.amap.component;
 import android.app.Activity;
 import android.content.Context;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Build;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -80,6 +81,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   @Override
   protected FrameLayout initComponentHostView(@NonNull Context context) {
     mapContainer = new FrameLayout(context);
+    mapContainer.setBackgroundColor(Color.LTGRAY);
     if (context instanceof Activity) {
       mActivity = (Activity) context;
     }
@@ -90,10 +92,15 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   protected void setHostLayoutParams(FrameLayout host, int width, int height, int left, int right, int top, int bottom) {
     super.setHostLayoutParams(host, width, height, left, right, top, bottom);
     if (!isMapLoaded) {
-      mMapView = new TextureMapView(host.getContext());
-      mapContainer.addView(mMapView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
-      WXLogUtils.e(TAG, "Create MapView " + mMapView.toString());
-      initMap();
+      mapContainer.postDelayed(new Runnable() {
+        @Override
+        public void run() {
+          mMapView = new TextureMapView(getContext());
+          mapContainer.addView(mMapView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT));
+          WXLogUtils.e(TAG, "Create MapView " + mMapView.toString());
+          initMap();
+        }
+      }, 100);
     }
   }
 
