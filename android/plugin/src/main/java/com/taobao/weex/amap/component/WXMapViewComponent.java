@@ -235,14 +235,18 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
 
   @Override
   public void onActivityPause() {
-    mMapView.onPause();
-    deactivate();
+    if (mMapView != null) {
+      mMapView.onPause();
+      deactivate();
+    }
     WXLogUtils.e(TAG, "onActivityPause");
   }
 
   @Override
   public void onActivityResume() {
-    mMapView.onResume();
+    if (mMapView != null) {
+      mMapView.onResume();
+    }
     WXLogUtils.e(TAG, "onActivityResume");
   }
 
@@ -263,7 +267,9 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
 
   @Override
   public void onActivityDestroy() {
-    mMapView.onDestroy();
+    if (mMapView != null) {
+      mMapView.onDestroy();
+    }
     if (mLocationClient != null) {
       mLocationClient.onDestroy();
     }
