@@ -44,6 +44,7 @@ import org.json.JSONObject;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @WeexComponent(names = {"weex-amap"})
 public class WXMapViewComponent extends WXVContainer<FrameLayout> implements LocationSource,
@@ -70,7 +71,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   private AMapLocationClient mLocationClient;
   private AMapLocationClientOption mLocationOption;
   private HashMap<String, WXMapInfoWindowComponent> mInfoWindowHashMap = new HashMap<>();
-  private boolean isMapLoaded = false;
+  private AtomicBoolean isMapLoaded = new AtomicBoolean(false);
   private Queue<MapOperationTask> paddingTasks = new LinkedList<>();
   private FrameLayout mapContainer;
   private int fakeBackgroundColor = Color.rgb(242, 238, 232);
@@ -92,7 +93,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   @Override
   protected void setHostLayoutParams(FrameLayout host, int width, int height, int left, int right, int top, int bottom) {
     super.setHostLayoutParams(host, width, height, left, right, top, bottom);
-    if (!isMapLoaded) {
+    if (!isMapLoaded.get()) {
       mapContainer.postDelayed(new Runnable() {
         @Override
         public void run() {
@@ -108,7 +109,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
 
   private void initMap() {
     mMapView.onCreate(null);
-    isMapLoaded = false;
+    isMapLoaded.set(false);
     if (mAMap == null) {
       mAMap = mMapView.getMap();
 
@@ -117,7 +118,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
         @Override
         public void onMapLoaded() {
           WXLogUtils.e(TAG, "Map loaded");
-          isMapLoaded = true;
+          isMapLoaded.set(true);
           mZoomLevel = mAMap.getCameraPosition().zoom;
           execPaddingTasks();
         }
@@ -505,7 +506,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   }
 
   public void postTask(MapOperationTask task) {
-    if (mMapView != null && isMapLoaded) {
+    if (mMapView != null && isMapLoaded.get()) {
       WXLogUtils.d(TAG, "Exec task " + task.toString());
       task.execute(mMapView);
     } else {
