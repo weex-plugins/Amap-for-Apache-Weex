@@ -2,7 +2,7 @@ package com.taobao.weex.amap.component;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.widget.LinearLayout;
+import android.widget.FrameLayout;
 
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.AMap;
@@ -30,21 +30,20 @@ import org.json.JSONException;
  */
 
 @WeexComponent(names = {"weex-amap-info-window"})
-public class WXMapInfoWindowComponent extends AbstractMapWidgetComponent<Marker> {
+public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker> {
   public WXMapInfoWindowComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
     super(instance, dom, parent);
   }
 
   @Override
-  protected LinearLayout initComponentHostView(@NonNull Context context) {
+  protected FrameLayout initComponentHostView(@NonNull Context context) {
     if (getParent() != null && getParent() instanceof WXMapViewComponent) {
       boolean open = (Boolean) getDomObject().getAttrs().get(Constant.Name.OPEN);
       String icon = (String) getDomObject().getAttrs().get(Constant.Name.ICON);
       String position = getDomObject().getAttrs().get(Constant.Name.POSITION).toString();
       initMarker(open, position, icon);
     }
-    // FixMe： 只是为了绕过updateProperties中的逻辑检查
-    return new LinearLayout(context);
+    return new FrameLayout(context);
   }
 
   @Override
