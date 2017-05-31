@@ -5,6 +5,7 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewStub;
@@ -44,8 +45,7 @@ import java.util.ArrayList;
  * Created by budao on 2017/2/9.
  */
 @WeexComponent(names = {"weex-amap-marker"})
-public class WXMapMarkerComponent extends AbstractMapWidgetComponent {
-  private Marker mMarker;
+public class WXMapMarkerComponent extends AbstractMapWidgetComponent<Marker> {
 
   public WXMapMarkerComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
     super(instance, dom, parent);
@@ -100,40 +100,40 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent {
 
   @WXComponentProp(name = Constant.Name.TITLE)
   public void setTitle(final String title) {
-    postTask("setTitle", new Runnable() {
+    execAfterWidgetReady("setTitle", new Runnable() {
       @Override
       public void run() {
-        setMarkerTitle(title);
+        setMarkerTitle(getWidget(), title);
       }
     });
   }
 
   @WXComponentProp(name = Constant.Name.ICON)
   public void setIcon(final String icon) {
-    postTask("setIcon", new Runnable() {
+    execAfterWidgetReady("setIcon", new Runnable() {
       @Override
       public void run() {
-        setMarkerIcon(icon);
+        setMarkerIcon(getWidget(), icon);
       }
     });
   }
 
   @WXComponentProp(name = Constant.Name.HIDE_CALL_OUT)
   public void setHideCallOut(final Boolean hide) {
-    postTask("setHideCallOut", new Runnable() {
+    execAfterWidgetReady("setHideCallOut", new Runnable() {
       @Override
       public void run() {
-        setMarkerHideCallOut(hide);
+        setMarkerHideCallOut(getWidget(), hide);
       }
     });
   }
 
   @WXComponentProp(name = Constant.Name.POSITION)
   public void setPosition(final String position) {
-    postTask("setPosition", new Runnable() {
+    execAfterWidgetReady("setPosition", new Runnable() {
       @Override
       public void run() {
-        setMarkerPosition(position);
+        setMarkerPosition(getWidget(), position);
       }
     });
   }
@@ -141,13 +141,13 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent {
   @Override
   public void destroy() {
     super.destroy();
-    if (mMarker != null) {
-      mMarker.remove();
+    if (getWidget() != null) {
+      getWidget().remove();
     }
   }
 
   public Marker getMarker() {
-    return mMarker;
+    return getWidget();
   }
 
   public void onClick() {
@@ -163,16 +163,17 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent {
         markerOptions.draggable(true);
         // 将Marker设置为贴地显示，可以双指下拉地图查看效果
         markerOptions.setFlat(true);
-        mMarker = mapView.getMap().addMarker(markerOptions);
-        setMarkerTitle(title);
-        setMarkerPosition(position);
-        setMarkerIcon(icon);
+        Marker marker = mapView.getMap().addMarker(markerOptions);
+        setMarkerTitle(marker, title);
+        setMarkerPosition(marker, position);
+        setMarkerIcon(marker, icon);
+        setWidget(marker);
       }
     });
   }
 
-  private void setMarkerIcon(final String icon) {
-    if (!TextUtils.isEmpty(icon)) {
+  private void setMarkerIcon(@Nullable final Marker mMarker, final String icon) {
+    if (!TextUtils.isEmpty(icon) && mMarker != null) {
       new AsyncTask<Void, String, Uri>() {
 
         @Override
@@ -231,7 +232,7 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent {
     }
   }
 
-  private void setMarkerHideCallOut(Boolean hide) {
+  private void setMarkerHideCallOut(@Nullable final Marker mMarker, Boolean hide) {
     if (mMarker != null) {
       if (hide) {
         mMarker.setClickable(!hide);
@@ -239,7 +240,7 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent {
     }
   }
 
-  private void setMarkerPosition(String position) {
+  private void setMarkerPosition(@Nullable final Marker mMarker, String position) {
     try {
       JSONArray jsonArray = new JSONArray(position);
       LatLng latLng = new LatLng(jsonArray.optDouble(1), jsonArray.optDouble(0));
@@ -253,7 +254,7 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent {
     }
   }
 
-  private void setMarkerTitle(String title) {
+  private void setMarkerTitle(@Nullable final Marker mMarker, String title) {
     if (mMarker != null) {
       MarkerOptions markerOptions = mMarker.getOptions();
       markerOptions.title(title);

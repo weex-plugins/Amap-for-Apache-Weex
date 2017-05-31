@@ -25,8 +25,7 @@ import org.json.JSONException;
  */
 
 @WeexComponent(names = {"weex-amap-circle"})
-public class WXMapCircleComponent extends AbstractMapWidgetComponent {
-  private Circle mCircle;
+public class WXMapCircleComponent extends AbstractMapWidgetComponent<Circle> {
   private int mColor = 0;
   private int mFillColor = 0;
   private float mWeight = 1.0f;
@@ -47,13 +46,16 @@ public class WXMapCircleComponent extends AbstractMapWidgetComponent {
 
   @WXComponentProp(name = Constant.Name.CENTER)
   public void setPath(final String param) {
-    postTask("setPath", new Runnable() {
+    execAfterWidgetReady("setPath", new Runnable() {
       @Override
       public void run() {
         try {
           JSONArray center = new JSONArray(param);
-          if (center != null && center.length() == 2) {
-            mCircle.setCenter(new LatLng(center.getDouble(1), center.getDouble(0)));
+          if (center.length() == 2) {
+            Circle circle = getWidget();
+            if (circle != null) {
+              circle.setCenter(new LatLng(center.getDouble(1), center.getDouble(0)));
+            }
           }
         } catch (JSONException e) {
           e.printStackTrace();
@@ -65,10 +67,13 @@ public class WXMapCircleComponent extends AbstractMapWidgetComponent {
   @WXComponentProp(name = Constant.Name.STROKE_COLOR)
   public void setStrokeColor(String param) {
     mColor = Color.parseColor(param);
-    postTask("setStrokeColor", new Runnable() {
+    execAfterWidgetReady("setStrokeColor", new Runnable() {
       @Override
       public void run() {
-        mCircle.setStrokeColor(mColor);
+        Circle circle = getWidget();
+        if (circle != null) {
+          circle.setStrokeColor(mColor);
+        }
       }
     });
   }
@@ -76,10 +81,13 @@ public class WXMapCircleComponent extends AbstractMapWidgetComponent {
   @WXComponentProp(name = Constant.Name.FILL_COLOR)
   public void setFillColor(String param) {
     mFillColor = Color.parseColor(param);
-    postTask("setFillColor", new Runnable() {
+    execAfterWidgetReady("setFillColor", new Runnable() {
       @Override
       public void run() {
-        mCircle.setFillColor(mFillColor);
+        Circle circle = getWidget();
+        if (circle != null) {
+          circle.setFillColor(mFillColor);
+        }
       }
     });
   }
@@ -87,10 +95,13 @@ public class WXMapCircleComponent extends AbstractMapWidgetComponent {
   @WXComponentProp(name = Constant.Name.STROKE_WIDTH)
   public void setStrokeWeight(float param) {
     mWeight = param;
-    postTask("setStrokeWeight", new Runnable() {
+    execAfterWidgetReady("setStrokeWeight", new Runnable() {
       @Override
       public void run() {
-        mCircle.setStrokeWidth(mWeight);
+        Circle circle = getWidget();
+        if (circle != null) {
+          circle.setStrokeWidth(mWeight);
+        }
       }
     });
   }
@@ -98,10 +109,13 @@ public class WXMapCircleComponent extends AbstractMapWidgetComponent {
   @WXComponentProp(name = Constant.Name.RADIUS)
   public void setRadius(float param) {
     mRadius = param;
-    postTask("setRadius", new Runnable() {
+    execAfterWidgetReady("setRadius", new Runnable() {
       @Override
       public void run() {
-        mCircle.setRadius(mRadius);
+        Circle circle = getWidget();
+        if (circle != null) {
+          circle.setRadius(mRadius);
+        }
       }
     });
   }
@@ -115,7 +129,7 @@ public class WXMapCircleComponent extends AbstractMapWidgetComponent {
         circleOptions.strokeWidth(mWeight);
         circleOptions.radius(mRadius);
         circleOptions.fillColor(mFillColor);
-        mCircle = mapView.getMap().addCircle(circleOptions);
+        setWidget(mapView.getMap().addCircle(circleOptions));
       }
     });
   }

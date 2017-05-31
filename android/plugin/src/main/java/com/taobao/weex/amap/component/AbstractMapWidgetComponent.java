@@ -17,11 +17,12 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created by moxun on 17/5/17.
  */
 
-public abstract class AbstractMapWidgetComponent extends WXComponent<View> {
+public abstract class AbstractMapWidgetComponent<Widget> extends WXComponent<View> {
 
     protected static final String TAG = "WXMapViewComponent";
-    private List<Runnable> mPaddingTasks = new ArrayList<>();
+    private List<Runnable> mPaddingWidgetTasks = new ArrayList<>();
     private AtomicBoolean mIsMapLoaded = new AtomicBoolean(false);
+    private Widget mWidget;
 
     public AbstractMapWidgetComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
         super(instance, dom, parent);
@@ -35,7 +36,6 @@ public abstract class AbstractMapWidgetComponent extends WXComponent<View> {
                     try {
                         setMapLoaded(true);
                         task.execute(mapView);
-                        execPaddingTasks();
                     } catch (Throwable t) {
                         WXLogUtils.w(TAG, t);
                     }
@@ -49,16 +49,22 @@ public abstract class AbstractMapWidgetComponent extends WXComponent<View> {
         mIsMapLoaded.set(loaded);
     }
 
-    protected void execPaddingTasks() {
-        for (Runnable task : mPaddingTasks) {
+    protected void execPaddingWidgetTasks() {
+        for (Runnable task : mPaddingWidgetTasks) {
             task.run();
             WXLogUtils.d(TAG, "Exec padding widget task " + task.toString());
         }
-        mPaddingTasks.clear();
+        mPaddingWidgetTasks.clear();
     }
 
-    protected void postTask(final String friendlyName, final Runnable task) {
+    protected void setWidget(Widget widget) {
+        mWidget = widget;
+        if (mWidget != null) {
+            execPaddingWidgetTasks();
+        }
+    }
 
+    protected void execAfterWidgetReady(final String friendlyName, final Runnable task) {
         Runnable wrapper = new Runnable() {
             @Override
             public void run() {
@@ -75,17 +81,17 @@ public abstract class AbstractMapWidgetComponent extends WXComponent<View> {
             }
         };
 
-        if (mIsMapLoaded.get()) {
-            WXLogUtils.d(TAG, "Map loaded, exec task " + task.toString() + "immediately");
+        if (mWidget != null) {
             wrapper.run();
         } else {
-            mPaddingTasks.add(wrapper);
-            WXLogUtils.d(TAG, "Map not ready, cache task " + task.toString());
+            mPaddingWidgetTasks.add(wrapper);
         }
     }
 
-    @Deprecated
-    protected void postTask(final Runnable task) {
-        postTask(task.toString(), task);
+    protected Widget getWidget() {
+        if (mWidget == null) {
+            WXLogUtils.w(TAG, new Throwable("Widget is null"));
+        }
+        return mWidget;
     }
 }

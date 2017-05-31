@@ -26,9 +26,8 @@ import java.util.ArrayList;
  * Created by budao on 2017/3/3.
  */
 @WeexComponent(names = {"weex-amap-polyline"})
-public class WXMapPolyLineComponent extends AbstractMapWidgetComponent {
+public class WXMapPolyLineComponent extends AbstractMapWidgetComponent<Polyline> {
   ArrayList<LatLng> mPosition = new ArrayList<>();
-  private Polyline mPolyline;
   private int mColor = 0;
   private String mStyle;
   private float mWeight = 1.0f;
@@ -60,10 +59,13 @@ public class WXMapPolyLineComponent extends AbstractMapWidgetComponent {
     } catch (JSONException e) {
       e.printStackTrace();
     }
-    postTask("setPath", new Runnable() {
+    execAfterWidgetReady("setPath", new Runnable() {
       @Override
       public void run() {
-        mPolyline.setPoints(mPosition);
+        Polyline polyline = getWidget();
+        if (polyline != null) {
+          polyline.setPoints(mPosition);
+        }
       }
     });
   }
@@ -71,10 +73,13 @@ public class WXMapPolyLineComponent extends AbstractMapWidgetComponent {
   @WXComponentProp(name = Constant.Name.STROKE_COLOR)
   public void setStrokeColor(String param) {
     mColor = Color.parseColor(param);
-    postTask("setStrokeColor", new Runnable() {
+    execAfterWidgetReady("setStrokeColor", new Runnable() {
       @Override
       public void run() {
-        mPolyline.setColor(mColor);
+        Polyline polyline = getWidget();
+        if (polyline != null) {
+          polyline.setColor(mColor);
+        }
       }
     });
   }
@@ -82,10 +87,13 @@ public class WXMapPolyLineComponent extends AbstractMapWidgetComponent {
   @WXComponentProp(name = Constant.Name.STROKE_WIDTH)
   public void setStrokeWeight(float param) {
     mWeight = param;
-    postTask("setStrokeWeight", new Runnable() {
+    execAfterWidgetReady("setStrokeWeight", new Runnable() {
       @Override
       public void run() {
-        mPolyline.setWidth(mWeight);
+        Polyline polyline = getWidget();
+        if (polyline != null) {
+          polyline.setWidth(mWeight);
+        }
       }
     });
   }
@@ -93,10 +101,13 @@ public class WXMapPolyLineComponent extends AbstractMapWidgetComponent {
   @WXComponentProp(name = Constant.Name.STROKE_STYLE)
   public void setStrokeStyle(String param) {
     mStyle = param;
-    postTask("setStrokeStyle", new Runnable() {
+    execAfterWidgetReady("setStrokeStyle", new Runnable() {
       @Override
       public void run() {
-        mPolyline.setDottedLine("dashed".equalsIgnoreCase(mStyle));
+        Polyline polyline = getWidget();
+        if (polyline != null) {
+          polyline.setDottedLine("dashed".equalsIgnoreCase(mStyle));
+        }
       }
     });
   }
@@ -111,7 +122,7 @@ public class WXMapPolyLineComponent extends AbstractMapWidgetComponent {
           polylineOptions.color(mColor);
           polylineOptions.width(mWeight);
           polylineOptions.setDottedLine("dashed".equalsIgnoreCase(mStyle));
-          mPolyline = mapView.getMap().addPolyline(polylineOptions);
+          setWidget(mapView.getMap().addPolyline(polylineOptions));
         }
       });
     }

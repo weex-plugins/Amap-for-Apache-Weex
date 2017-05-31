@@ -16,6 +16,7 @@ import com.taobao.weex.amap.R;
 import com.taobao.weex.amap.util.Constant;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXDomObject;
+import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.utils.WXLogUtils;
@@ -29,10 +30,7 @@ import org.json.JSONException;
  */
 
 @WeexComponent(names = {"weex-amap-info-window"})
-public class WXMapInfoWindowComponent extends AbstractMapWidgetComponent {
-  private Marker mMarker;
-  private WXMapViewComponent mWxMapViewComponent;
-
+public class WXMapInfoWindowComponent extends AbstractMapWidgetComponent<Marker> {
   public WXMapInfoWindowComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
     super(instance, dom, parent);
   }
@@ -40,7 +38,6 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetComponent {
   @Override
   protected LinearLayout initComponentHostView(@NonNull Context context) {
     if (getParent() != null && getParent() instanceof WXMapViewComponent) {
-      mWxMapViewComponent = (WXMapViewComponent) getParent();
       boolean open = (Boolean) getDomObject().getAttrs().get(Constant.Name.OPEN);
       String icon = (String) getDomObject().getAttrs().get(Constant.Name.ICON);
       String position = getDomObject().getAttrs().get(Constant.Name.POSITION).toString();
@@ -64,33 +61,36 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetComponent {
 
   @WXComponentProp(name = Constant.Name.POSITION)
   public void setPosition(final String position) {
-    postTask("setPosition", new Runnable() {
+    execAfterWidgetReady("setPosition", new Runnable() {
       @Override
       public void run() {
-        setMarkerPosition(position);
+        setMarkerPosition(getWidget(), position);
       }
     });
   }
 
   @WXComponentProp(name = Constant.Name.OFFSET)
   public void setOffset(final String offset) {
-    postTask("setOffset", new Runnable() {
+    execAfterWidgetReady("setOffset", new Runnable() {
       @Override
       public void run() {
-        setMarkerInfoWindowOffset(offset);
+        setMarkerInfoWindowOffset(getWidget(), offset);
       }
     });
   }
 
   @WXComponentProp(name = Constant.Name.OPEN)
   public void setOpened(final Boolean opened) {
-    postTask("setOpened", new Runnable() {
+    execAfterWidgetReady("setOpened", new Runnable() {
       @Override
       public void run() {
-        if (opened) {
-          mMarker.showInfoWindow();
-        } else {
-          mMarker.hideInfoWindow();
+        Marker marker = getWidget();
+        if (marker != null) {
+          if (opened) {
+            marker.showInfoWindow();
+          } else {
+            marker.hideInfoWindow();
+          }
         }
       }
     });
@@ -99,47 +99,53 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetComponent {
   @Override
   public void destroy() {
     super.destroy();
-    if (mMarker != null) {
-      if (mWxMapViewComponent != null) {
-        mWxMapViewComponent.getCachedInfoWindow().remove(mMarker.getId());
+    if (getWidget() != null) {
+      Marker marker = getWidget();
+      if (getParent() != null && getParent() instanceof WXMapViewComponent) {
+        ((WXMapViewComponent) getParent()).getCachedInfoWindow().remove(marker.getId());
       }
-      mMarker.remove();
+      marker.remove();
     } else {
       WXLogUtils.e(TAG, "Marker is null");
     }
   }
 
   private void initMarker(final boolean open, final String position, String icon) {
-    postMapOperationTask(mWxMapViewComponent, new WXMapViewComponent.MapOperationTask() {
-      @Override
-      public void execute(TextureMapView mapView) {
-        final MarkerOptions markerOptions = new MarkerOptions();
-        //设置Marker可拖动, 将Marker设置为贴地显示，可以双指下拉地图查看效果
-        markerOptions.setFlat(true);
-        markerOptions.infoWindowEnable(true);
-        markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.infowindow_marker_icon));
-        markerOptions.title("");
-        AMap mMap = mapView.getMap();
-        mMarker = mMap.addMarker(markerOptions);
-        mWxMapViewComponent.getCachedInfoWindow().put(mMarker.getId(), WXMapInfoWindowComponent.this);
-        mMarker.setClickable(false);
-        setMarkerPosition(position);
-        if (open) {
-          mMarker.showInfoWindow();
-        } else {
-          mMarker.hideInfoWindow();
+    final WXComponent parent = getParent();
+    if (parent != null && parent instanceof WXMapViewComponent) {
+      final WXMapViewComponent wxMapViewComponent = (WXMapViewComponent) parent;
+      postMapOperationTask(wxMapViewComponent, new WXMapViewComponent.MapOperationTask() {
+        @Override
+        public void execute(TextureMapView mapView) {
+          final MarkerOptions markerOptions = new MarkerOptions();
+          //设置Marker可拖动, 将Marker设置为贴地显示，可以双指下拉地图查看效果
+          markerOptions.setFlat(true);
+          markerOptions.infoWindowEnable(true);
+          markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.infowindow_marker_icon));
+          markerOptions.title("");
+          AMap mMap = mapView.getMap();
+          Marker marker = mMap.addMarker(markerOptions);
+          setWidget(marker);
+          wxMapViewComponent.getCachedInfoWindow().put(marker.getId(), WXMapInfoWindowComponent.this);
+          marker.setClickable(false);
+          setMarkerPosition(marker, position);
+          if (open) {
+            marker.showInfoWindow();
+          } else {
+            marker.hideInfoWindow();
+          }
         }
-      }
-    });
+      });
+    }
   }
 
-  private void setMarkerInfoWindowOffset(String position) {
+  private void setMarkerInfoWindowOffset(Marker marker, String position) {
     try {
       JSONArray jsonArray = new JSONArray(position);
-      if (mMarker != null) {
-        MarkerOptions markerOptions = mMarker.getOptions();
+      if (marker != null) {
+        MarkerOptions markerOptions = marker.getOptions();
         markerOptions.setInfoWindowOffset(jsonArray.optInt(0), jsonArray.optInt(1));
-        mMarker.setMarkerOptions(markerOptions);
+        marker.setMarkerOptions(markerOptions);
       } else {
         WXLogUtils.e(TAG, "Marker is null!");
       }
@@ -148,14 +154,14 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetComponent {
     }
   }
 
-  private void setMarkerPosition(String position) {
+  private void setMarkerPosition(Marker marker, String position) {
     try {
       JSONArray jsonArray = new JSONArray(position);
       LatLng latLng = new LatLng(jsonArray.optDouble(1), jsonArray.optDouble(0));
-      if (mMarker != null) {
-        MarkerOptions markerOptions = mMarker.getOptions();
+      if (marker != null) {
+        MarkerOptions markerOptions = marker.getOptions();
         markerOptions.position(latLng);
-        mMarker.setMarkerOptions(markerOptions);
+        marker.setMarkerOptions(markerOptions);
       } else {
         WXLogUtils.e(TAG, "Marker is null!");
       }

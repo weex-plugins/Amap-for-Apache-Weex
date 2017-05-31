@@ -26,9 +26,8 @@ import java.util.ArrayList;
  * Created by budao on 2017/3/3.
  */
 @WeexComponent(names = {"weex-amap-polygon"})
-public class WXMapPolygonComponent extends AbstractMapWidgetComponent {
+public class WXMapPolygonComponent extends AbstractMapWidgetComponent<Polygon> {
   ArrayList<LatLng> mPosition = new ArrayList<>();
-  private Polygon mPolygon;
   private int mColor = 0;
   private int mFillColor = 0;
   private float mWidth = 1.0f;
@@ -60,10 +59,13 @@ public class WXMapPolygonComponent extends AbstractMapWidgetComponent {
     } catch (JSONException e) {
       e.printStackTrace();
     }
-    postTask("setPath", new Runnable() {
+    execAfterWidgetReady("setPath", new Runnable() {
       @Override
       public void run() {
-        mPolygon.setPoints(mPosition);
+        Polygon polygon = getWidget();
+        if (polygon != null) {
+          polygon.setPoints(mPosition);
+        }
       }
     });
   }
@@ -71,10 +73,13 @@ public class WXMapPolygonComponent extends AbstractMapWidgetComponent {
   @WXComponentProp(name = Constant.Name.STROKE_COLOR)
   public void setStrokeColor(String param) {
     mColor = Color.parseColor(param);
-    postTask("setStrokeColor", new Runnable() {
+    execAfterWidgetReady("setStrokeColor", new Runnable() {
       @Override
       public void run() {
-        mPolygon.setStrokeColor(mColor);
+        Polygon polygon = getWidget();
+        if (polygon != null) {
+          polygon.setStrokeColor(mColor);
+        }
       }
     });
   }
@@ -82,10 +87,13 @@ public class WXMapPolygonComponent extends AbstractMapWidgetComponent {
   @WXComponentProp(name = Constant.Name.FILL_COLOR)
   public void setFillColor(String param) {
     mFillColor = Color.parseColor(param);
-    postTask("setFillColor", new Runnable() {
+    execAfterWidgetReady("setFillColor", new Runnable() {
       @Override
       public void run() {
-        mPolygon.setFillColor(mFillColor);
+        Polygon polygon = getWidget();
+        if (polygon != null) {
+          polygon.setFillColor(mFillColor);
+        }
       }
     });
   }
@@ -93,10 +101,13 @@ public class WXMapPolygonComponent extends AbstractMapWidgetComponent {
   @WXComponentProp(name = Constant.Name.STROKE_WIDTH)
   public void setStrokeWidth(float param) {
     mWidth = param;
-    postTask("setStrokeWidth", new Runnable() {
+    execAfterWidgetReady("setStrokeWidth", new Runnable() {
       @Override
       public void run() {
-        mPolygon.setStrokeWidth(mWidth);
+        Polygon polygon = getWidget();
+        if (polygon != null) {
+          polygon.setStrokeWidth(mWidth);
+        }
       }
     });
   }
@@ -109,12 +120,13 @@ public class WXMapPolygonComponent extends AbstractMapWidgetComponent {
         polygonOptions.addAll(mPosition);
         polygonOptions.strokeColor(mColor);
         polygonOptions.strokeWidth(mWidth);
-        mPolygon = mapView.getMap().addPolygon(polygonOptions);
+        setWidget(mapView.getMap().addPolygon(polygonOptions));
       }
     });
   }
 
   public boolean contains(LatLng latLng) {
-    return mPolygon != null && mPolygon.contains(latLng);
+      Polygon polygon = getWidget();
+      return polygon != null && polygon.contains(latLng);
   }
 }
