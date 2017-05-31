@@ -528,14 +528,14 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
 
     @Override
     public View getInfoContents(Marker marker) {
-      return render(marker);
+      return null;
     }
 
     private View render(Marker marker) {
       WXMapInfoWindowComponent wxMapInfoWindowComponent = mWXMapViewComponent.mInfoWindowHashMap.get(marker.getId());
       if (wxMapInfoWindowComponent != null) {
-        wxMapInfoWindowComponent.getHostView().getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
-        wxMapInfoWindowComponent.getHostView().getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+//        wxMapInfoWindowComponent.getHostView().getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+//        wxMapInfoWindowComponent.getHostView().getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
         return wxMapInfoWindowComponent.getHostView();
       }
       return null;
