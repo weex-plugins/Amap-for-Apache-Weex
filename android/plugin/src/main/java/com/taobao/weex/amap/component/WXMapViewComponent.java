@@ -505,16 +505,12 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   }
 
   public void postTask(MapOperationTask task) {
-    if (mMapView != null) {
-      if (isMapLoaded) {
-        WXLogUtils.d(TAG, "Exec task " + task.toString());
-        task.execute(mMapView);
-      } else {
-        WXLogUtils.d(TAG, "Padding task " + task.toString());
-        paddingTasks.offer(task);
-      }
+    if (mMapView != null && isMapLoaded) {
+      WXLogUtils.d(TAG, "Exec task " + task.toString());
+      task.execute(mMapView);
     } else {
-      WXLogUtils.e(TAG, "MapView is null!");
+      WXLogUtils.d(TAG, "Padding task " + task.toString());
+      paddingTasks.offer(task);
     }
   }
 
