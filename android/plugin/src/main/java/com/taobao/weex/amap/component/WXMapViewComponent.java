@@ -534,8 +534,8 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
     private View render(Marker marker) {
       WXMapInfoWindowComponent wxMapInfoWindowComponent = mWXMapViewComponent.mInfoWindowHashMap.get(marker.getId());
       if (wxMapInfoWindowComponent != null) {
-//        wxMapInfoWindowComponent.getHostView().getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
-//        wxMapInfoWindowComponent.getHostView().getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        wxMapInfoWindowComponent.getHostView().getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+        wxMapInfoWindowComponent.getHostView().getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
         return wxMapInfoWindowComponent.getHostView();
       }
       return null;

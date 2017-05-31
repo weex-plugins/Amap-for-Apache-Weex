@@ -2,21 +2,23 @@ package com.taobao.weex.amap.component;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
+import android.widget.LinearLayout;
 
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.TextureMapView;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.taobao.weex.WXSDKInstance;
+import com.taobao.weex.amap.R;
 import com.taobao.weex.amap.util.Constant;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
-import com.taobao.weex.ui.view.WXFrameLayout;
 import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.utils.WXUtils;
 
@@ -34,14 +36,19 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker>
   }
 
   @Override
-  protected WXFrameLayout initComponentHostView(@NonNull Context context) {
+  protected LinearLayout initComponentHostView(@NonNull Context context) {
+    return new LinearLayout(context);
+  }
+
+  @Override
+  protected void onHostViewInitialized(LinearLayout host) {
+    super.onHostViewInitialized(host);
     if (getParent() != null && getParent() instanceof WXMapViewComponent) {
       boolean open = (Boolean) getDomObject().getAttrs().get(Constant.Name.OPEN);
       String icon = (String) getDomObject().getAttrs().get(Constant.Name.ICON);
       String position = getDomObject().getAttrs().get(Constant.Name.POSITION).toString();
       initMarker(open, position, icon);
     }
-    return new WXFrameLayout(context);
   }
 
   @Override
@@ -118,7 +125,7 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker>
           //设置Marker可拖动, 将Marker设置为贴地显示，可以双指下拉地图查看效果
           markerOptions.setFlat(true);
           markerOptions.infoWindowEnable(true);
-          //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.infowindow_marker_icon));
+          markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.infowindow_marker_icon));
           markerOptions.title("");
           AMap mMap = mapView.getMap();
           final Marker marker = mMap.addMarker(markerOptions);
@@ -129,9 +136,9 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker>
           getHostView().post(new Runnable() {
             @Override
             public void run() {
-              if (open && !marker.isInfoWindowShown()) {
+              if (open) {
                 marker.showInfoWindow();
-              } else if (!open && marker.isInfoWindowShown()){
+              } else {
                 marker.hideInfoWindow();
               }
             }
