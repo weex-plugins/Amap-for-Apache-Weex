@@ -100,7 +100,7 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent {
 
   @WXComponentProp(name = Constant.Name.TITLE)
   public void setTitle(final String title) {
-    postTask(new Runnable() {
+    postTask("setTitle", new Runnable() {
       @Override
       public void run() {
         setMarkerTitle(title);
@@ -110,7 +110,7 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent {
 
   @WXComponentProp(name = Constant.Name.ICON)
   public void setIcon(final String icon) {
-    postTask(new Runnable() {
+    postTask("setIcon", new Runnable() {
       @Override
       public void run() {
         setMarkerIcon(icon);
@@ -120,7 +120,7 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent {
 
   @WXComponentProp(name = Constant.Name.HIDE_CALL_OUT)
   public void setHideCallOut(final Boolean hide) {
-    postTask(new Runnable() {
+    postTask("setHideCallOut", new Runnable() {
       @Override
       public void run() {
         setMarkerHideCallOut(hide);
@@ -130,7 +130,7 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent {
 
   @WXComponentProp(name = Constant.Name.POSITION)
   public void setPosition(final String position) {
-    postTask(new Runnable() {
+    postTask("setPosition", new Runnable() {
       @Override
       public void run() {
         setMarkerPosition(position);
@@ -229,28 +229,6 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent {
         }
       }.execute();
     }
-
-//    if (!TextUtils.isEmpty(icon)) {
-//      IWXImgLoaderAdapter adapter = WXSDKManager.getInstance().getIWXImgLoaderAdapter();
-//      ImageView imageView = new ImageView(getContext()); // ImageView imageView = new ImageView(getContext());
-//      imageView.setLayoutParams(new ViewGroup.LayoutParams(1, 1));
-//      imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-//      if (adapter != null) {
-//        WXImageStrategy wxImageStrategy = new WXImageStrategy();
-//        wxImageStrategy.setImageListener(new WXImageStrategy.ImageListener() {
-//          @Override
-//          public void onImageFinish(String url, ImageView imageView, boolean result, Map extra) {
-//            imageView.setLayoutParams(
-//                new ViewGroup.LayoutParams(
-//                    ViewGroup.LayoutParams.WRAP_CONTENT,
-//                    ViewGroup.LayoutParams.WRAP_CONTENT));
-//            mMarker.setIcon(BitmapDescriptorFactory.fromView(imageView));
-//          }
-//        });
-//        wxImageStrategy.placeHolder = icon;
-//        adapter.setImage(icon, imageView, WXImageQuality.NORMAL, wxImageStrategy);
-//      }
-//    }
   }
 
   private void setMarkerHideCallOut(Boolean hide) {

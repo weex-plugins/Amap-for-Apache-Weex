@@ -18,6 +18,7 @@ import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
+import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.utils.WXUtils;
 
 import org.json.JSONArray;
@@ -41,9 +42,9 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetComponent {
     if (getParent() != null && getParent() instanceof WXMapViewComponent) {
       mWxMapViewComponent = (WXMapViewComponent) getParent();
       boolean open = (Boolean) getDomObject().getAttrs().get(Constant.Name.OPEN);
-      String offset = (String) getDomObject().getAttrs().get(Constant.Name.ICON);
+      String icon = (String) getDomObject().getAttrs().get(Constant.Name.ICON);
       String position = getDomObject().getAttrs().get(Constant.Name.POSITION).toString();
-      initMarker(open, position, offset);
+      initMarker(open, position, icon);
     }
     // FixMe： 只是为了绕过updateProperties中的逻辑检查
     return new LinearLayout(context);
@@ -63,7 +64,7 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetComponent {
 
   @WXComponentProp(name = Constant.Name.POSITION)
   public void setPosition(final String position) {
-    postTask(new Runnable() {
+    postTask("setPosition", new Runnable() {
       @Override
       public void run() {
         setMarkerPosition(position);
@@ -73,7 +74,7 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetComponent {
 
   @WXComponentProp(name = Constant.Name.OFFSET)
   public void setOffset(final String offset) {
-    postTask(new Runnable() {
+    postTask("setOffset", new Runnable() {
       @Override
       public void run() {
         setMarkerInfoWindowOffset(offset);
@@ -83,7 +84,7 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetComponent {
 
   @WXComponentProp(name = Constant.Name.OPEN)
   public void setOpened(final Boolean opened) {
-    postTask(new Runnable() {
+    postTask("setOpened", new Runnable() {
       @Override
       public void run() {
         if (opened) {
@@ -103,6 +104,8 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetComponent {
         mWxMapViewComponent.getCachedInfoWindow().remove(mMarker.getId());
       }
       mMarker.remove();
+    } else {
+      WXLogUtils.e(TAG, "Marker is null");
     }
   }
 
@@ -137,6 +140,8 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetComponent {
         MarkerOptions markerOptions = mMarker.getOptions();
         markerOptions.setInfoWindowOffset(jsonArray.optInt(0), jsonArray.optInt(1));
         mMarker.setMarkerOptions(markerOptions);
+      } else {
+        WXLogUtils.e(TAG, "Marker is null!");
       }
     } catch (JSONException e) {
       e.printStackTrace();
@@ -151,6 +156,8 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetComponent {
         MarkerOptions markerOptions = mMarker.getOptions();
         markerOptions.position(latLng);
         mMarker.setMarkerOptions(markerOptions);
+      } else {
+        WXLogUtils.e(TAG, "Marker is null!");
       }
     } catch (JSONException e) {
       e.printStackTrace();

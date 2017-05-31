@@ -450,10 +450,8 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   @Override
   public void onLocationChanged(AMapLocation amapLocation) {
     if (mLocationChangedListener != null && amapLocation != null) {
-      if (amapLocation != null
-          && amapLocation.getErrorCode() == 0) {
+      if (amapLocation != null && amapLocation.getErrorCode() == 0) {
         mLocationChangedListener.onLocationChanged(amapLocation);// 显示系统小蓝点
-        // mAMap.moveCamera(CameraUpdateFactory.zoomTo(18));
       } else {
         String errText = "定位失败," + amapLocation.getErrorCode() + ": " + amapLocation.getErrorInfo();
         WXLogUtils.e("AmapErr", errText);

@@ -60,7 +60,7 @@ public class WXMapPolygonComponent extends AbstractMapWidgetComponent {
     } catch (JSONException e) {
       e.printStackTrace();
     }
-    postTask(new Runnable() {
+    postTask("setPath", new Runnable() {
       @Override
       public void run() {
         mPolygon.setPoints(mPosition);
@@ -71,7 +71,7 @@ public class WXMapPolygonComponent extends AbstractMapWidgetComponent {
   @WXComponentProp(name = Constant.Name.STROKE_COLOR)
   public void setStrokeColor(String param) {
     mColor = Color.parseColor(param);
-    postTask(new Runnable() {
+    postTask("setStrokeColor", new Runnable() {
       @Override
       public void run() {
         mPolygon.setStrokeColor(mColor);
@@ -82,7 +82,7 @@ public class WXMapPolygonComponent extends AbstractMapWidgetComponent {
   @WXComponentProp(name = Constant.Name.FILL_COLOR)
   public void setFillColor(String param) {
     mFillColor = Color.parseColor(param);
-    postTask(new Runnable() {
+    postTask("setFillColor", new Runnable() {
       @Override
       public void run() {
         mPolygon.setFillColor(mFillColor);
@@ -93,7 +93,7 @@ public class WXMapPolygonComponent extends AbstractMapWidgetComponent {
   @WXComponentProp(name = Constant.Name.STROKE_WIDTH)
   public void setStrokeWidth(float param) {
     mWidth = param;
-    postTask(new Runnable() {
+    postTask("setStrokeWidth", new Runnable() {
       @Override
       public void run() {
         mPolygon.setStrokeWidth(mWidth);

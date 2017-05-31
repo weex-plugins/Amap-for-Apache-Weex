@@ -11,6 +11,7 @@ import com.taobao.weex.utils.WXLogUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * Created by moxun on 17/5/17.
@@ -18,9 +19,9 @@ import java.util.List;
 
 public abstract class AbstractMapWidgetComponent extends WXComponent<View> {
 
-    private static final String TAG = "WXMapViewComponent";
+    protected static final String TAG = "WXMapViewComponent";
     private List<Runnable> mPaddingTasks = new ArrayList<>();
-    private boolean mIsMapLoaded = false;
+    private AtomicBoolean mIsMapLoaded = new AtomicBoolean(false);
 
     public AbstractMapWidgetComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
         super(instance, dom, parent);
@@ -45,7 +46,7 @@ public abstract class AbstractMapWidgetComponent extends WXComponent<View> {
     }
 
     protected void setMapLoaded(boolean loaded) {
-        mIsMapLoaded = loaded;
+        mIsMapLoaded.set(loaded);
     }
 
     protected void execPaddingTasks() {
@@ -56,7 +57,8 @@ public abstract class AbstractMapWidgetComponent extends WXComponent<View> {
         mPaddingTasks.clear();
     }
 
-    protected void postTask(final Runnable task) {
+    protected void postTask(final String friendlyName, final Runnable task) {
+
         Runnable wrapper = new Runnable() {
             @Override
             public void run() {
@@ -66,14 +68,24 @@ public abstract class AbstractMapWidgetComponent extends WXComponent<View> {
                     WXLogUtils.w(TAG, t);
                 }
             }
+
+            @Override
+            public String toString() {
+                return friendlyName;
+            }
         };
 
-        if (mIsMapLoaded) {
-            WXLogUtils.d(TAG, "Map loaded, exec task immediately");
+        if (mIsMapLoaded.get()) {
+            WXLogUtils.d(TAG, "Map loaded, exec task " + task.toString() + "immediately");
             wrapper.run();
         } else {
             mPaddingTasks.add(wrapper);
-            WXLogUtils.d(TAG, "Map not ready, cache task");
+            WXLogUtils.d(TAG, "Map not ready, cache task " + task.toString());
         }
+    }
+
+    @Deprecated
+    protected void postTask(final Runnable task) {
+        postTask(task.toString(), task);
     }
 }

@@ -60,7 +60,7 @@ public class WXMapPolyLineComponent extends AbstractMapWidgetComponent {
     } catch (JSONException e) {
       e.printStackTrace();
     }
-    postTask(new Runnable() {
+    postTask("setPath", new Runnable() {
       @Override
       public void run() {
         mPolyline.setPoints(mPosition);
@@ -71,7 +71,7 @@ public class WXMapPolyLineComponent extends AbstractMapWidgetComponent {
   @WXComponentProp(name = Constant.Name.STROKE_COLOR)
   public void setStrokeColor(String param) {
     mColor = Color.parseColor(param);
-    postTask(new Runnable() {
+    postTask("setStrokeColor", new Runnable() {
       @Override
       public void run() {
         mPolyline.setColor(mColor);
@@ -82,7 +82,7 @@ public class WXMapPolyLineComponent extends AbstractMapWidgetComponent {
   @WXComponentProp(name = Constant.Name.STROKE_WIDTH)
   public void setStrokeWeight(float param) {
     mWeight = param;
-    postTask(new Runnable() {
+    postTask("setStrokeWeight", new Runnable() {
       @Override
       public void run() {
         mPolyline.setWidth(mWeight);
@@ -93,7 +93,7 @@ public class WXMapPolyLineComponent extends AbstractMapWidgetComponent {
   @WXComponentProp(name = Constant.Name.STROKE_STYLE)
   public void setStrokeStyle(String param) {
     mStyle = param;
-    postTask(new Runnable() {
+    postTask("setStrokeStyle", new Runnable() {
       @Override
       public void run() {
         mPolyline.setDottedLine("dashed".equalsIgnoreCase(mStyle));
