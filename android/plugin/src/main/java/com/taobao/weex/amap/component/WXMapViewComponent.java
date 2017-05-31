@@ -302,91 +302,60 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   }
 
   @WXComponentProp(name = Constant.Name.SCALECONTROL)
-  public void setScaleEnable(boolean scaleEnable) {
-    this.isScaleEnable = scaleEnable;
-    mUiSettings.setScaleControlsEnabled(scaleEnable);
+  public void setScaleEnable(final boolean scaleEnable) {
+    postTask(new MapOperationTask() {
+      @Override
+      public void execute(TextureMapView mapView) {
+        isScaleEnable = scaleEnable;
+        mUiSettings.setScaleControlsEnabled(scaleEnable);
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.ZOOM_ENABLE)
-  public void setZoomEnable(boolean zoomEnable) {
-    this.isZoomEnable = zoomEnable;
-    mUiSettings.setZoomControlsEnabled(zoomEnable);
+  public void setZoomEnable(final boolean zoomEnable) {
+    postTask(new MapOperationTask() {
+      @Override
+      public void execute(TextureMapView mapView) {
+        isZoomEnable = zoomEnable;
+        mUiSettings.setZoomControlsEnabled(zoomEnable);
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.ZOOM)
-  public void setZoom(int level) {
-    mAMap.moveCamera(CameraUpdateFactory.zoomTo(level));
+  public void setZoom(final int level) {
+    postTask(new MapOperationTask() {
+      @Override
+      public void execute(TextureMapView mapView) {
+        mAMap.moveCamera(CameraUpdateFactory.zoomTo(level));
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.COMPASS)
-  public void setCompass(boolean compass) {
-    this.isCompassEnable = compass;
-    mUiSettings.setCompassEnabled(compass);
+  public void setCompass(final boolean compass) {
+    postTask(new MapOperationTask() {
+      @Override
+      public void execute(TextureMapView mapView) {
+        isCompassEnable = compass;
+        mUiSettings.setCompassEnabled(compass);
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.GEOLOCATION)
-  public void setMyLocationEnable(boolean myLocationEnable) {
-    this.isMyLocationEnable = myLocationEnable;
-    if (requestPermissions()) {
-      setMyLocationStatus(myLocationEnable);
-    }
+  public void setMyLocationEnable(final boolean myLocationEnable) {
+    postTask(new MapOperationTask() {
+      @Override
+      public void execute(TextureMapView mapView) {
+        isMyLocationEnable = myLocationEnable;
+        if (requestPermissions()) {
+          setMyLocationStatus(myLocationEnable);
+        }
+      }
+    });
   }
-
-//  @WXComponentProp(name = Constant.Name.MARKER)
-//  public void setMarker(String markers) {
-//    try {
-//      JSONArray jsonArray = new JSONArray(markers);
-//      for (int i = 0; i < jsonArray.length(); i++) {
-//        JSONObject jsonObject = jsonArray.optJSONObject(i);
-//        if (jsonObject != null) {
-//          JSONArray position = jsonObject.optJSONArray("position");
-//          String title = jsonObject.optString("title");
-//          String icon = jsonObject.optString("icon");
-//          if (position != null) {
-//            LatLng latLng = new LatLng(position.optDouble(1), position.optDouble(0));
-//            final MarkerOptions markerOptions = new MarkerOptions();
-//            //设置Marker可拖动
-//            markerOptions.draggable(true);
-//            // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-//            markerOptions.setFlat(true);
-//            if (latLng != null) {
-//              markerOptions.position(latLng);
-//            }
-//            if (!TextUtils.isEmpty(title)) {
-//              markerOptions.title(title);
-//            }
-//            if (!TextUtils.isEmpty(icon)) {
-//              IWXImgLoaderAdapter adapter = WXSDKManager.getInstance().getIWXImgLoaderAdapter();
-//              ImageView imageView = new ImageView(getContext());
-//              imageView.setLayoutParams(new ViewGroup.LayoutParams(1, 1));
-//              imageView.setScaleType(ImageView.ScaleType.FIT_CENTER);
-//              if (adapter != null) {
-//                WXImageStrategy wxImageStrategy = new WXImageStrategy();
-//                wxImageStrategy.setImageListener(new WXImageStrategy.ImageListener() {
-//                  @Override
-//                  public void onImageFinish(String url, ImageView imageView, boolean result, Map extra) {
-//                    imageView.setLayoutParams(
-//                        new ViewGroup.LayoutParams(
-//                            ViewGroup.LayoutParams.WRAP_CONTENT,
-//                            ViewGroup.LayoutParams.WRAP_CONTENT));
-//                    markerOptions.icon(BitmapDescriptorFactory.fromView(imageView));
-//                    mAMap.addMarker(markerOptions);
-//                  }
-//                });
-//                wxImageStrategy.placeHolder = icon;
-//                adapter.setImage(icon, imageView, WXImageQuality.NORMAL, wxImageStrategy);
-//
-//              }
-//            } else {
-//              mAMap.addMarker(markerOptions);
-//            }
-//          }
-//        }
-//      }
-//    } catch (JSONException e) {
-//      e.printStackTrace();
-//    }
-//  }
 
   @Override
   protected void addSubView(View child, int index) {
@@ -394,26 +363,41 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   }
 
   @WXComponentProp(name = Constant.Name.CENTER)
-  public void setCenter(String location) {
-    try {
-      JSONArray jsonArray = new JSONArray(location);
-      LatLng latLng = new LatLng(jsonArray.optDouble(1), jsonArray.optDouble(0));
-      mAMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
-    } catch (JSONException e) {
-      e.printStackTrace();
-    }
+  public void setCenter(final String location) {
+    postTask(new MapOperationTask() {
+      @Override
+      public void execute(TextureMapView mapView) {
+        try {
+          JSONArray jsonArray = new JSONArray(location);
+          LatLng latLng = new LatLng(jsonArray.optDouble(1), jsonArray.optDouble(0));
+          mAMap.moveCamera(CameraUpdateFactory.changeLatLng(latLng));
+        } catch (JSONException e) {
+          e.printStackTrace();
+        }
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.GESTURE)
-  public void setGesture(int gesture) {
-    this.mGesture = gesture;
-    updateGestureSetting();
+  public void setGesture(final int gesture) {
+    postTask(new MapOperationTask() {
+      @Override
+      public void execute(TextureMapView mapView) {
+        mGesture = gesture;
+        updateGestureSetting();
+      }
+    });
   }
 
   @WXComponentProp(name = Constant.Name.INDOORSWITCH)
-  public void setIndoorSwitchEnable(boolean indoorSwitchEnable) {
-    this.isIndoorSwitchEnable = indoorSwitchEnable;
-    mUiSettings.setIndoorSwitchEnabled(indoorSwitchEnable);
+  public void setIndoorSwitchEnable(final boolean indoorSwitchEnable) {
+    postTask(new MapOperationTask() {
+      @Override
+      public void execute(TextureMapView mapView) {
+        isIndoorSwitchEnable = indoorSwitchEnable;
+        mUiSettings.setIndoorSwitchEnabled(indoorSwitchEnable);
+      }
+    });
   }
 
   public void setMyLocationStatus(boolean isActive) {
@@ -508,12 +492,6 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
 
   public HashMap<String, WXMapInfoWindowComponent> getCachedInfoWindow() {
     return mInfoWindowHashMap;
-  }
-
-  @Override
-  public FrameLayout getHostView() {
-    WXLogUtils.e(TAG, "Trying to get MapView");
-    return super.getHostView();
   }
 
   private void execPaddingTasks() {
