@@ -82,8 +82,10 @@ public abstract class AbstractMapWidgetComponent<Widget> extends WXComponent<Vie
         };
 
         if (mWidget != null) {
+            WXLogUtils.d(TAG, "Widget is ready, execute task " + friendlyName + "immediately");
             wrapper.run();
         } else {
+            WXLogUtils.d(TAG, "Widget is not ready, cache task " + friendlyName);
             mPaddingWidgetTasks.add(wrapper);
         }
     }
