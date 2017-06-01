@@ -73,6 +73,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   private AMapLocationClientOption mLocationOption;
   private HashMap<String, WXMapInfoWindowComponent> mInfoWindowHashMap = new HashMap<>();
   private AtomicBoolean isMapLoaded = new AtomicBoolean(false);
+  private AtomicBoolean isInited = new AtomicBoolean(false);
   private Queue<MapOperationTask> paddingTasks = new LinkedList<>();
   private FrameLayout mapContainer;
   private int fakeBackgroundColor = Color.rgb(242, 238, 232);
@@ -94,7 +95,8 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   @Override
   protected void setHostLayoutParams(FrameLayout host, int width, int height, int left, int right, int top, int bottom) {
     super.setHostLayoutParams(host, width, height, left, right, top, bottom);
-    if (!isMapLoaded.get() && mMapView == null && mapContainer.getChildCount() == 0) {
+    if (!isMapLoaded.get() && !isInited.get()) {
+      isInited.set(true);
       mapContainer.postDelayed(new Runnable() {
         @Override
         public void run() {

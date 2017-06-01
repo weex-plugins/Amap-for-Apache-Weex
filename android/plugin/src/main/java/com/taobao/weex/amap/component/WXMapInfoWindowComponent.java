@@ -6,12 +6,10 @@ import android.support.annotation.NonNull;
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.TextureMapView;
-import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.taobao.weex.WXSDKInstance;
-import com.taobao.weex.amap.R;
 import com.taobao.weex.amap.util.Constant;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXDomObject;
@@ -44,10 +42,7 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker>
   protected void onHostViewInitialized(WXFrameLayout host) {
     super.onHostViewInitialized(host);
     if (getParent() != null && getParent() instanceof WXMapViewComponent) {
-      boolean open = (Boolean) getDomObject().getAttrs().get(Constant.Name.OPEN);
-      String icon = (String) getDomObject().getAttrs().get(Constant.Name.ICON);
-      String position = getDomObject().getAttrs().get(Constant.Name.POSITION).toString();
-      initMarker(open, position, icon);
+      initMarker();
     }
   }
 
@@ -114,7 +109,7 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker>
     }
   }
 
-  private void initMarker(final boolean open, final String position, String icon) {
+  private void initMarker() {
     final WXComponent parent = getParent();
     if (parent != null && parent instanceof WXMapViewComponent) {
       final WXMapViewComponent wxMapViewComponent = (WXMapViewComponent) parent;
@@ -125,26 +120,13 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker>
           //设置Marker可拖动, 将Marker设置为贴地显示，可以双指下拉地图查看效果
           markerOptions.setFlat(true);
           markerOptions.infoWindowEnable(true);
-          markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.infowindow_marker_icon));
+          //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.infowindow_marker_icon));
           markerOptions.title("");
           AMap mMap = mapView.getMap();
           final Marker marker = mMap.addMarker(markerOptions);
-          setWidget(marker);
-          wxMapViewComponent.getCachedInfoWindow().put(marker.getId(), WXMapInfoWindowComponent.this);
           marker.setClickable(false);
-          setMarkerPosition(marker, position);
-//          marker.showInfoWindow();
-//          marker.hideInfoWindow();
-//          getHostView().postDelayed(new Runnable() {
-//            @Override
-//            public void run() {
-//              if (open) {
-//                marker.showInfoWindow();
-//              } else {
-//                marker.hideInfoWindow();
-//              }
-//            }
-//          }, 16);
+          wxMapViewComponent.getCachedInfoWindow().put(marker.getId(), WXMapInfoWindowComponent.this);
+          setWidget(marker);
         }
       });
     }
