@@ -120,7 +120,12 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
           WXLogUtils.e(TAG, "Map loaded");
           isMapLoaded.set(true);
           mZoomLevel = mAMap.getCameraPosition().zoom;
-          execPaddingTasks();
+          mMapView.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+              execPaddingTasks();
+            }
+          }, 16);
         }
       });
 
@@ -534,8 +539,8 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
     private View render(Marker marker) {
       WXMapInfoWindowComponent wxMapInfoWindowComponent = mWXMapViewComponent.mInfoWindowHashMap.get(marker.getId());
       if (wxMapInfoWindowComponent != null) {
-        wxMapInfoWindowComponent.getHostView().getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
-        wxMapInfoWindowComponent.getHostView().getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
+//        wxMapInfoWindowComponent.getHostView().getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
+//        wxMapInfoWindowComponent.getHostView().getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
         return wxMapInfoWindowComponent.getHostView();
       }
       return null;
