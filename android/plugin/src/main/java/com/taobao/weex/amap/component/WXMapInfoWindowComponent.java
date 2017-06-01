@@ -6,10 +6,12 @@ import android.support.annotation.NonNull;
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.TextureMapView;
+import com.amap.api.maps.model.BitmapDescriptorFactory;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.taobao.weex.WXSDKInstance;
+import com.taobao.weex.amap.R;
 import com.taobao.weex.amap.util.Constant;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXDomObject;
@@ -123,7 +125,7 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker>
           //设置Marker可拖动, 将Marker设置为贴地显示，可以双指下拉地图查看效果
           markerOptions.setFlat(true);
           markerOptions.infoWindowEnable(true);
-          //markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.infowindow_marker_icon));
+          markerOptions.icon(BitmapDescriptorFactory.fromResource(R.drawable.infowindow_marker_icon));
           markerOptions.title("");
           AMap mMap = mapView.getMap();
           final Marker marker = mMap.addMarker(markerOptions);
