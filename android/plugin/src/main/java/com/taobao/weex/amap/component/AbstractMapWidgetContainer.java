@@ -66,6 +66,8 @@ public class AbstractMapWidgetContainer<Widget> extends WXVContainer<WXFrameLayo
         mWidget = widget;
         if (mWidget != null) {
             execPaddingWidgetTasks();
+        } else {
+            WXLogUtils.w(TAG, "Widget is null when call setWidget");
         }
     }
 

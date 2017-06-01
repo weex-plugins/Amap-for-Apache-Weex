@@ -11,12 +11,14 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.amap.util.Constant;
+import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.ui.view.WXFrameLayout;
 import com.taobao.weex.utils.WXLogUtils;
+import com.taobao.weex.utils.WXUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -27,7 +29,7 @@ import org.json.JSONException;
 
 @WeexComponent(names = {"weex-amap-info-window"})
 public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker> {
-  private boolean skipNextProperty = false;
+  private boolean skipNextProperty = true;
 
   public WXMapInfoWindowComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
     super(instance, dom, parent);
@@ -45,7 +47,6 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker>
       boolean open = (Boolean) getDomObject().getAttrs().get(Constant.Name.OPEN);
       String offset = (String) getDomObject().getAttrs().get(Constant.Name.OFFSET);
       String position = getDomObject().getAttrs().get(Constant.Name.POSITION).toString();
-      skipNextProperty = true;
       initMarker(open, position, offset);
     }
   }
@@ -55,6 +56,13 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker>
     if (skipNextProperty) {
       skipNextProperty = false;
       return true;
+    }
+    switch (key) {
+      case Constants.Name.POSITION:
+        String position = WXUtils.getString(param, null);
+        if (position != null)
+          setPosition(position);
+        return true;
     }
     return super.setProperty(key, param);
   }
@@ -127,10 +135,10 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker>
           final Marker marker = mMap.addMarker(markerOptions);
           marker.setClickable(false);
           wxMapViewComponent.getCachedInfoWindow().put(marker.getId(), WXMapInfoWindowComponent.this);
-          setPosition(position);
-          setOffset(offset);
-          setOpened(open);
           setWidget(marker);
+          setMarkerPosition(marker, position);
+          setMarkerInfoWindowOffset(marker, offset);
+          setOpened(open);
         }
       });
     }
