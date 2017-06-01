@@ -23,13 +23,14 @@ import com.taobao.weex.utils.WXUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.util.Map;
+
 /**
  * Created by budao on 2017/2/9.
  */
 
 @WeexComponent(names = {"weex-amap-info-window"})
 public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker> {
-  private boolean skipNextProperty = true;
 
   public WXMapInfoWindowComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
     super(instance, dom, parent);
@@ -44,19 +45,20 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker>
   protected void onHostViewInitialized(WXFrameLayout host) {
     super.onHostViewInitialized(host);
     if (getParent() != null && getParent() instanceof WXMapViewComponent) {
-      boolean open = (Boolean) getDomObject().getAttrs().get(Constant.Name.OPEN);
-      String offset = (String) getDomObject().getAttrs().get(Constant.Name.OFFSET);
-      String position = getDomObject().getAttrs().get(Constant.Name.POSITION).toString();
-      initMarker(open, position, offset);
+      initMarker();
     }
   }
 
   @Override
+  public void updateProperties(Map<String, Object> props) {
+    // 属性重排序
+    Object opened = props.remove(Constant.Name.OPEN);
+    super.updateProperties(props);
+    setOpened(WXUtils.getBoolean(opened, false));
+  }
+
+  @Override
   protected boolean setProperty(String key, Object param) {
-    if (skipNextProperty) {
-      skipNextProperty = false;
-      return true;
-    }
     switch (key) {
       case Constants.Name.POSITION:
         String position = WXUtils.getString(param, null);
@@ -118,7 +120,7 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker>
     }
   }
 
-  private void initMarker(final boolean open, final String position, final String offset) {
+  private void initMarker() {
     final WXComponent parent = getParent();
     if (parent != null && parent instanceof WXMapViewComponent) {
       final WXMapViewComponent wxMapViewComponent = (WXMapViewComponent) parent;
@@ -136,9 +138,6 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker>
           marker.setClickable(false);
           wxMapViewComponent.getCachedInfoWindow().put(marker.getId(), WXMapInfoWindowComponent.this);
           setWidget(marker);
-          setMarkerPosition(marker, position);
-          setMarkerInfoWindowOffset(marker, offset);
-          setOpened(open);
         }
       });
     }
