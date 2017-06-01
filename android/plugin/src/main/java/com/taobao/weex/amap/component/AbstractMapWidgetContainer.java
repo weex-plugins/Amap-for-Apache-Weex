@@ -1,11 +1,10 @@
 package com.taobao.weex.amap.component;
 
-import android.widget.LinearLayout;
-
 import com.amap.api.maps.TextureMapView;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.ui.component.WXVContainer;
+import com.taobao.weex.ui.view.WXFrameLayout;
 import com.taobao.weex.utils.WXLogUtils;
 
 import java.util.ArrayList;
@@ -16,7 +15,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
  * Created by moxun on 2017/5/31.
  */
 
-public class AbstractMapWidgetContainer<Widget> extends WXVContainer<LinearLayout> {
+public class AbstractMapWidgetContainer<Widget> extends WXVContainer<WXFrameLayout> {
     protected static final String TAG = "WXMapViewComponent";
     private List<Runnable> mPaddingWidgetTasks = new ArrayList<>();
     private AtomicBoolean mIsMapLoaded = new AtomicBoolean(false);

@@ -35,6 +35,7 @@ import com.taobao.weex.annotation.JSMethod;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
+import com.taobao.weex.ui.view.WXFrameLayout;
 import com.taobao.weex.utils.WXLogUtils;
 
 import org.json.JSONArray;
@@ -539,9 +540,12 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
     private View render(Marker marker) {
       WXMapInfoWindowComponent wxMapInfoWindowComponent = mWXMapViewComponent.mInfoWindowHashMap.get(marker.getId());
       if (wxMapInfoWindowComponent != null) {
-//        wxMapInfoWindowComponent.getHostView().getLayoutParams().width = ViewGroup.LayoutParams.WRAP_CONTENT;
-//        wxMapInfoWindowComponent.getHostView().getLayoutParams().height = ViewGroup.LayoutParams.WRAP_CONTENT;
-        return wxMapInfoWindowComponent.getHostView();
+        FrameLayout.LayoutParams lp = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        WXFrameLayout host = wxMapInfoWindowComponent.getHostView();
+        host.setLayoutParams(lp);
+        return host;
+      } else {
+        WXLogUtils.e(TAG, "WXMapInfoWindowComponent with marker id " + marker.getId() + " not found");
       }
       return null;
     }

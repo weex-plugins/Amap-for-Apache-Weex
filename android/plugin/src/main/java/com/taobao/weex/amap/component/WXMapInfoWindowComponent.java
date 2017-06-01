@@ -2,7 +2,6 @@ package com.taobao.weex.amap.component;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-import android.widget.LinearLayout;
 
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.AMap;
@@ -17,6 +16,7 @@ import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
+import com.taobao.weex.ui.view.WXFrameLayout;
 import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.utils.WXUtils;
 
@@ -34,12 +34,12 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker>
   }
 
   @Override
-  protected LinearLayout initComponentHostView(@NonNull Context context) {
-    return new LinearLayout(context);
+  protected WXFrameLayout initComponentHostView(@NonNull Context context) {
+    return new WXFrameLayout(context);
   }
 
   @Override
-  protected void onHostViewInitialized(LinearLayout host) {
+  protected void onHostViewInitialized(WXFrameLayout host) {
     super.onHostViewInitialized(host);
     if (getParent() != null && getParent() instanceof WXMapViewComponent) {
       boolean open = (Boolean) getDomObject().getAttrs().get(Constant.Name.OPEN);
