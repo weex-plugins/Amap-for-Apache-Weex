@@ -11,14 +11,12 @@ import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.amap.util.Constant;
-import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.ui.view.WXFrameLayout;
 import com.taobao.weex.utils.WXLogUtils;
-import com.taobao.weex.utils.WXUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,6 +27,8 @@ import org.json.JSONException;
 
 @WeexComponent(names = {"weex-amap-info-window"})
 public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker> {
+  private boolean skipNextProperty = false;
+
   public WXMapInfoWindowComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
     super(instance, dom, parent);
   }
@@ -42,18 +42,19 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker>
   protected void onHostViewInitialized(WXFrameLayout host) {
     super.onHostViewInitialized(host);
     if (getParent() != null && getParent() instanceof WXMapViewComponent) {
-      initMarker();
+      boolean open = (Boolean) getDomObject().getAttrs().get(Constant.Name.OPEN);
+      String offset = (String) getDomObject().getAttrs().get(Constant.Name.OFFSET);
+      String position = getDomObject().getAttrs().get(Constant.Name.POSITION).toString();
+      skipNextProperty = true;
+      initMarker(open, position, offset);
     }
   }
 
   @Override
   protected boolean setProperty(String key, Object param) {
-    switch (key) {
-      case Constants.Name.POSITION:
-        String position = WXUtils.getString(param, null);
-        if (position != null)
-          setPosition(position);
-        return true;
+    if (skipNextProperty) {
+      skipNextProperty = false;
+      return true;
     }
     return super.setProperty(key, param);
   }
@@ -109,7 +110,7 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker>
     }
   }
 
-  private void initMarker() {
+  private void initMarker(final boolean open, final String position, final String offset) {
     final WXComponent parent = getParent();
     if (parent != null && parent instanceof WXMapViewComponent) {
       final WXMapViewComponent wxMapViewComponent = (WXMapViewComponent) parent;
@@ -126,6 +127,9 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker>
           final Marker marker = mMap.addMarker(markerOptions);
           marker.setClickable(false);
           wxMapViewComponent.getCachedInfoWindow().put(marker.getId(), WXMapInfoWindowComponent.this);
+          setPosition(position);
+          setOffset(offset);
+          setOpened(open);
           setWidget(marker);
         }
       });
