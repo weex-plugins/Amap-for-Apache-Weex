@@ -94,7 +94,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   @Override
   protected void setHostLayoutParams(FrameLayout host, int width, int height, int left, int right, int top, int bottom) {
     super.setHostLayoutParams(host, width, height, left, right, top, bottom);
-    if (!isMapLoaded.get()) {
+    if (!isMapLoaded.get() && mMapView != null && mapContainer.getChildCount() == 0) {
       mapContainer.postDelayed(new Runnable() {
         @Override
         public void run() {
@@ -541,8 +541,8 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
       WXMapInfoWindowComponent wxMapInfoWindowComponent = mWXMapViewComponent.mInfoWindowHashMap.get(marker.getId());
       if (wxMapInfoWindowComponent != null) {
         WXFrameLayout host = wxMapInfoWindowComponent.getHostView();
+        host.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
         WXLogUtils.d(TAG, "Info size: " + host.getMeasuredWidth() + ", " + host.getMeasuredHeight());
-        host.requestLayout();
         return host;
       } else {
         WXLogUtils.e(TAG, "WXMapInfoWindowComponent with marker id " + marker.getId() + " not found");
