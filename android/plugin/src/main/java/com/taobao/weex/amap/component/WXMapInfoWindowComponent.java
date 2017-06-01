@@ -133,6 +133,8 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker>
           wxMapViewComponent.getCachedInfoWindow().put(marker.getId(), WXMapInfoWindowComponent.this);
           marker.setClickable(false);
           setMarkerPosition(marker, position);
+          marker.showInfoWindow();
+          marker.hideInfoWindow();
           getHostView().postDelayed(new Runnable() {
             @Override
             public void run() {
