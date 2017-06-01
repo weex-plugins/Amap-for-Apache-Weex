@@ -542,6 +542,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
       if (wxMapInfoWindowComponent != null) {
         WXFrameLayout host = wxMapInfoWindowComponent.getHostView();
         host.setLayoutParams(new FrameLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        host.forceLayout();
         WXLogUtils.d(TAG, "Info size: " + host.getMeasuredWidth() + ", " + host.getMeasuredHeight());
         return host;
       } else {
