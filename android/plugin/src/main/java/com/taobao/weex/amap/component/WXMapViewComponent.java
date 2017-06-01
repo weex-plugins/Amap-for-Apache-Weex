@@ -94,7 +94,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   @Override
   protected void setHostLayoutParams(FrameLayout host, int width, int height, int left, int right, int top, int bottom) {
     super.setHostLayoutParams(host, width, height, left, right, top, bottom);
-    if (!isMapLoaded.get() && mMapView != null && mapContainer.getChildCount() == 0) {
+    if (!isMapLoaded.get() && mMapView == null && mapContainer.getChildCount() == 0) {
       mapContainer.postDelayed(new Runnable() {
         @Override
         public void run() {
