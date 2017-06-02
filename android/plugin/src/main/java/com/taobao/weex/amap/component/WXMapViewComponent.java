@@ -241,7 +241,6 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
 
     if (mUiSettings != null) {
       mUiSettings.setMyLocationButtonEnabled(enabled);
-
     }
   }
 
@@ -303,6 +302,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
         MapsInitializer.setApiKey(key);
         AMapLocationClient.setApiKey(key);
         //ServiceSettings.getInstance().setApiKey(key);
+        WXLogUtils.d(TAG, "Set API key success");
       }
     } catch (JSONException e) {
       e.printStackTrace();

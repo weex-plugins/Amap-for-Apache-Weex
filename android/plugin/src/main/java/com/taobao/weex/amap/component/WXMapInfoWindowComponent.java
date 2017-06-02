@@ -54,11 +54,14 @@ public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker>
     // 属性重排序
     Object opened = props.remove(Constant.Name.OPEN);
     super.updateProperties(props);
-    setOpened(WXUtils.getBoolean(opened, false));
+    if (opened != null) {
+      setOpened(WXUtils.getBoolean(opened, false));
+    }
   }
 
   @Override
   protected boolean setProperty(String key, Object param) {
+    WXLogUtils.d(TAG, "setProperty: " + key);
     switch (key) {
       case Constants.Name.POSITION:
         String position = WXUtils.getString(param, null);
