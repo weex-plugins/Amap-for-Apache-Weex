@@ -168,6 +168,7 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent<Marker> {
         setMarkerPosition(marker, position);
         setMarkerIcon(marker, icon);
         setWidget(marker);
+        marker.showInfoWindow();
       }
     });
   }
