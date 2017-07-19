@@ -168,7 +168,23 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent<Marker> {
         setMarkerPosition(marker, position);
         setMarkerIcon(marker, icon);
         setWidget(marker);
-        marker.showInfoWindow();
+      }
+    });
+  }
+
+  @WXComponentProp(name = Constant.Name.OPEN)
+  public void setOpened(final Boolean opened) {
+    execAfterWidgetReady("setOpened", new Runnable() {
+      @Override
+      public void run() {
+        Marker marker = getWidget();
+        if (marker != null) {
+          if (opened) {
+            marker.showInfoWindow();
+          } else {
+            marker.hideInfoWindow();
+          }
+        }
       }
     });
   }
