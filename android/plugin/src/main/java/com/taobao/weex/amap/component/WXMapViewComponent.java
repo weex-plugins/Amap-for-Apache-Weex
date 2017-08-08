@@ -167,7 +167,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
         public void onCameraChangeFinish(CameraPosition cameraPosition) {
           if (mZoomChanged) {
             Map<String, Object> data = new HashMap<>();
-            data.put("target", cameraPosition.target.toString());
+            data.put("targetCoordinate", cameraPosition.target.toString());
             data.put("zoom", cameraPosition.zoom);
             data.put("tilt", cameraPosition.tilt);
             data.put("bearing", cameraPosition.bearing);
