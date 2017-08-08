@@ -37,6 +37,7 @@ import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.ui.view.WXFrameLayout;
 import com.taobao.weex.utils.WXLogUtils;
+import com.taobao.weex.utils.WXViewUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -166,12 +167,17 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
         @Override
         public void onCameraChangeFinish(CameraPosition cameraPosition) {
           if (mZoomChanged) {
+
+            float scale = mAMap.getScalePerPixel();
+            float scaleInWeex = scale / WXViewUtils.getWeexPxByReal(scale);
+
             Map<String, Object> data = new HashMap<>();
             data.put("targetCoordinate", cameraPosition.target.toString());
             data.put("zoom", cameraPosition.zoom);
             data.put("tilt", cameraPosition.tilt);
             data.put("bearing", cameraPosition.bearing);
             data.put("isAbroad", cameraPosition.isAbroad);
+            data.put("scalePerPixel", scaleInWeex);
             getInstance().fireEvent(getRef(), Constant.EVENT.ZOOM_CHANGE, data);
           }
         }
