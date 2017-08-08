@@ -44,6 +44,7 @@ import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicBoolean;
 
@@ -165,7 +166,13 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
         @Override
         public void onCameraChangeFinish(CameraPosition cameraPosition) {
           if (mZoomChanged) {
-            getInstance().fireEvent(getRef(), Constant.EVENT.ZOOM_CHANGE);
+            Map<String, Object> data = new HashMap<>();
+            data.put("target", cameraPosition.target.toString());
+            data.put("zoom", cameraPosition.zoom);
+            data.put("tilt", cameraPosition.tilt);
+            data.put("bearing", cameraPosition.bearing);
+            data.put("isAbroad", cameraPosition.isAbroad);
+            getInstance().fireEvent(getRef(), Constant.EVENT.ZOOM_CHANGE, data);
           }
         }
       });
