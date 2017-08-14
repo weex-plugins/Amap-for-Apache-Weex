@@ -1,6 +1,7 @@
 package com.taobao.weex.amap.component;
 
 import android.content.Context;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -18,12 +19,14 @@ import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MarkerOptions;
 import com.taobao.weex.WXSDKInstance;
+import com.taobao.weex.adapter.URIAdapter;
 import com.taobao.weex.amap.util.Constant;
 import com.taobao.weex.amap.util.GifDecoder;
 import com.taobao.weex.common.Constants;
 import com.taobao.weex.dom.WXDomObject;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
+import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.utils.WXUtils;
 
 import org.json.JSONArray;
@@ -40,6 +43,7 @@ import java.net.MalformedURLException;
 import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by budao on 2017/2/9.
@@ -190,63 +194,84 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent<Marker> {
   }
 
   private void setMarkerIcon(@Nullable final Marker mMarker, final String icon) {
-    if (!TextUtils.isEmpty(icon) && mMarker != null) {
-      new AsyncTask<Void, String, Uri>() {
 
-        @Override
-        protected Uri doInBackground(Void... params) {
-          try {
-            return fetchIcon(icon, getContext().getExternalCacheDir());
-          } catch (Exception e) {
-            e.printStackTrace();
-          }
-          return null;
+    if (TextUtils.isEmpty(icon) || mMarker == null) {
+      return;
+    }
+
+    Uri rewrited = getInstance().rewriteUri(Uri.parse(icon), URIAdapter.IMAGE);
+    if (Constants.Scheme.LOCAL.equals(rewrited.getScheme())) {
+      Resources resources = getContext().getResources();
+      List<String> segments = rewrited.getPathSegments();
+      if (segments.size() == 1) {
+        WXLogUtils.d(TAG, "Load marker icon from drawable: " + segments.get(0));
+        int id = resources.getIdentifier(segments.get(0), "drawable", getContext().getPackageName());
+        if (id != 0) {
+          mMarker.setIcon(BitmapDescriptorFactory.fromResource(id));
+          return;
         }
+      }
+    } else if ("path".equals(rewrited.getScheme())) {
+      WXLogUtils.d(TAG, "Load marker icon from path: " + rewrited.getPath());
+      mMarker.setIcon(BitmapDescriptorFactory.fromPath(rewrited.getPath()));
+      return;
+    }
 
-        @Override
-        protected void onPostExecute(Uri result) {
-          if (result != null && new File(result.getPath()).exists()) {
-            if (isGif(result.getPath())) {
-              GifDecoder gifDecoder = new GifDecoder();
-              FileInputStream imgFile = null;
-              try {
+    new AsyncTask<Void, String, Uri>() {
 
-                imgFile = new FileInputStream(result.getPath());
-                gifDecoder.read(imgFile);
-                ArrayList<BitmapDescriptor> bitmapDescriptors = new ArrayList<BitmapDescriptor>();
-                for (int i = 1; i < gifDecoder.getFrameCount(); i++) {
-                  Bitmap bitmap = gifDecoder.getFrame(i);
-                  if (bitmap != null && !bitmap.isRecycled()) {
-                    bitmapDescriptors.add(BitmapDescriptorFactory.fromBitmap(bitmap));
-                  }
-                }
-                mMarker.setIcons(bitmapDescriptors);
-                mMarker.setPeriod(2);
+      @Override
+      protected Uri doInBackground(Void... params) {
+        try {
+          return fetchIcon(icon, getContext().getExternalCacheDir());
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        return null;
+      }
 
-              } catch (FileNotFoundException e) {
-                e.printStackTrace();
-              } catch (IOException e) {
-                e.printStackTrace();
-              } finally {
-                if (imgFile != null) {
-                  try {
-                    imgFile.close();
-                  } catch (IOException e) {
-                    e.printStackTrace();
-                  }
+      @Override
+      protected void onPostExecute(Uri result) {
+        if (result != null && new File(result.getPath()).exists()) {
+          if (isGif(result.getPath())) {
+            GifDecoder gifDecoder = new GifDecoder();
+            FileInputStream imgFile = null;
+            try {
+
+              imgFile = new FileInputStream(result.getPath());
+              gifDecoder.read(imgFile);
+              ArrayList<BitmapDescriptor> bitmapDescriptors = new ArrayList<BitmapDescriptor>();
+              for (int i = 1; i < gifDecoder.getFrameCount(); i++) {
+                Bitmap bitmap = gifDecoder.getFrame(i);
+                if (bitmap != null && !bitmap.isRecycled()) {
+                  bitmapDescriptors.add(BitmapDescriptorFactory.fromBitmap(bitmap));
                 }
               }
+              mMarker.setIcons(bitmapDescriptors);
+              mMarker.setPeriod(2);
 
-            } else {
-              if (mMarker != null) {
-                mMarker.setIcon(BitmapDescriptorFactory.fromPath(result.getPath()));
+            } catch (FileNotFoundException e) {
+              e.printStackTrace();
+            } catch (IOException e) {
+              e.printStackTrace();
+            } finally {
+              if (imgFile != null) {
+                try {
+                  imgFile.close();
+                } catch (IOException e) {
+                  e.printStackTrace();
+                }
               }
             }
 
+          } else {
+            if (mMarker != null) {
+              mMarker.setIcon(BitmapDescriptorFactory.fromPath(result.getPath()));
+            }
           }
+
         }
-      }.execute();
-    }
+      }
+    }.execute();
   }
 
   private void setMarkerHideCallOut(@Nullable final Marker mMarker, Boolean hide) {

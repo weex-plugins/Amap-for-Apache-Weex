@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 public class WXMapViewComponent extends WXVContainer<FrameLayout> implements LocationSource,
     AMapLocationListener {
   private static final String TAG  = "WXMapViewComponent";
-  private static final int REQUEST_CODE_MAPVIEW = 10000001;
+  private static final int REQUEST_CODE_MAPVIEW = 0xA;
   private static String[] permissions = new String[]{
       "android.permission.ACCESS_FINE_LOCATION",
       "android.permission.ACCESS_LOCATION_EXTRA_COMMANDS"
