@@ -6,11 +6,13 @@ package com.taobao.weex.amap.util;
 
 public class Constant {
 
-  public static interface Value {
+  public interface Value {
     int SCROLLGESTURE = 0x1;
     int ZOOMGESTURE = 0x1 << 1;
     int TILTGESTURE = 0x1 << 2;
     int ROTATEGESTURE = 0x1 << 3;
+    String RIGHT_CENTER = "center";
+    String RIGHT_BOTTOM = "bottom";
   }
 
   public interface Name {
@@ -25,6 +27,7 @@ public class Constant {
     String INDOORSWITCH = "indoorswitch";
     String CENTER = "center";
     String KEYS = "sdkKey";
+    String ZOOM_POSITION = "zoomPosition";
 
     // marker
     String MARKER = "marker";

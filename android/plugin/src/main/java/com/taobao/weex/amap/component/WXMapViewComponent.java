@@ -21,6 +21,7 @@ import com.amap.api.location.AMapLocationClient;
 import com.amap.api.location.AMapLocationClientOption;
 import com.amap.api.location.AMapLocationListener;
 import com.amap.api.maps.AMap;
+import com.amap.api.maps.AMapOptions;
 import com.amap.api.maps.CameraUpdateFactory;
 import com.amap.api.maps.LocationSource;
 import com.amap.api.maps.MapsInitializer;
@@ -374,6 +375,24 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
         isMyLocationEnable = myLocationEnable;
         if (requestPermissions()) {
           setMyLocationStatus(myLocationEnable);
+        }
+      }
+    });
+  }
+
+  @WXComponentProp(name = Constant.Name.ZOOM_POSITION)
+  public void setZoomPosition(final String position) {
+    postTask(new MapOperationTask() {
+      @Override
+      public void execute(TextureMapView mapView) {
+        if (mUiSettings != null) {
+          if (Constant.Value.RIGHT_BOTTOM.equalsIgnoreCase(position)) {
+            mUiSettings.setZoomPosition(AMapOptions.ZOOM_POSITION_RIGHT_BUTTOM);
+          } else if (Constant.Value.RIGHT_CENTER.equalsIgnoreCase(position)) {
+            mUiSettings.setZoomPosition(AMapOptions.ZOOM_POSITION_RIGHT_CENTER);
+          } else {
+            WXLogUtils.e(TAG, "Illegal zoom position value: " + position);
+          }
         }
       }
     });
