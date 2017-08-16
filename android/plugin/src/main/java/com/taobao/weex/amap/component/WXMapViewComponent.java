@@ -30,6 +30,7 @@ import com.amap.api.maps.UiSettings;
 import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
+import com.amap.api.maps.model.MyLocationStyle;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.amap.util.Constant;
 import com.taobao.weex.annotation.JSMethod;
@@ -437,6 +438,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
       @Override
       public void execute(TextureMapView mapView) {
         try {
+          WXLogUtils.d(TAG, "setGestures: " + gestures);
           JSONArray array = new JSONArray(gestures);
           mUiSettings.setAllGesturesEnabled(false);
           for (int i = 0; i < array.length(); i++) {
@@ -460,21 +462,12 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
     });
   }
 
-  @WXComponentProp(name = Constant.Name.ZOOM_CONTROLS_ENABLED)
-  public void setZoomControls(final boolean show) {
-    postTask(new MapOperationTask() {
-      @Override
-      public void execute(TextureMapView mapView) {
-        mUiSettings.setZoomControlsEnabled(show);
-      }
-    });
-  }
-
   @WXComponentProp(name = Constant.Name.MY_LOCATION_ENABLED)
   public void setMyLocationEnabled(final boolean enabled) {
     postTask(new MapOperationTask() {
       @Override
       public void execute(TextureMapView mapView) {
+        WXLogUtils.d(TAG, "setMyLocationButtonEnabled: " + enabled);
         mUiSettings.setMyLocationButtonEnabled(enabled);
       }
     });
@@ -485,7 +478,13 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
     postTask(new MapOperationTask() {
       @Override
       public void execute(TextureMapView mapView) {
-        mAMap.setMyLocationStyle(mAMap.getMyLocationStyle().showMyLocation(show));
+        WXLogUtils.d(TAG, "setShowMyLocation: " + show);
+        MyLocationStyle style = mAMap.getMyLocationStyle();
+        if (style == null) {
+          style = new MyLocationStyle();
+        }
+        style.showMyLocation(show);
+        mAMap.setMyLocationStyle(style);
       }
     });
   }
@@ -495,6 +494,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
     postTask(new MapOperationTask() {
       @Override
       public void execute(TextureMapView mapView) {
+        WXLogUtils.d(TAG, "setMapCustomEnable: " + enabled);
         mAMap.setMapCustomEnable(true);
       }
     });
@@ -509,6 +509,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
           JSONObject object = new JSONObject(pathObject);
           String path = object.optString("android");
           if (!TextUtils.isEmpty(path)) {
+            WXLogUtils.d(TAG, "setCustomMapStylePath: " + path);
             mAMap.setCustomMapStylePath(path);
           }
         } catch (JSONException e) {
