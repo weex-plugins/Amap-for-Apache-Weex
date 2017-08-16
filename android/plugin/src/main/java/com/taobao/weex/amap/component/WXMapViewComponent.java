@@ -31,6 +31,7 @@ import com.amap.api.maps.model.CameraPosition;
 import com.amap.api.maps.model.LatLng;
 import com.amap.api.maps.model.Marker;
 import com.amap.api.maps.model.MyLocationStyle;
+import com.amap.api.maps.model.VisibleRegion;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.amap.util.Constant;
 import com.taobao.weex.annotation.JSMethod;
@@ -173,6 +174,12 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
             float scale = mAMap.getScalePerPixel();
             float scaleInWeex = scale / WXViewUtils.getWeexPxByReal(scale);
 
+            VisibleRegion visibleRegion = mAMap.getProjection().getVisibleRegion();
+            WXLogUtils.d(TAG, "Visible region: " + visibleRegion.toString());
+            Map<String, Object> region = new HashMap<>();
+            region.put("northeast", convertLatLng(visibleRegion.latLngBounds.northeast));
+            region.put("southwest", convertLatLng(visibleRegion.latLngBounds.southwest));
+
             Map<String, Object> data = new HashMap<>();
             data.put("targetCoordinate", cameraPosition.target.toString());
             data.put("zoom", cameraPosition.zoom);
@@ -180,6 +187,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
             data.put("bearing", cameraPosition.bearing);
             data.put("isAbroad", cameraPosition.isAbroad);
             data.put("scalePerPixel", scaleInWeex);
+            data.put("visibleRegion", region);
             getInstance().fireEvent(getRef(), Constant.EVENT.ZOOM_CHANGE, data);
           }
         }
@@ -511,6 +519,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
           if (!TextUtils.isEmpty(path)) {
             WXLogUtils.d(TAG, "setCustomMapStylePath: " + path);
             mAMap.setCustomMapStylePath(path);
+            mAMap.setMapCustomEnable(true);
           }
         } catch (JSONException e) {
           e.printStackTrace();
@@ -673,6 +682,13 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
       }
       return null;
     }
+  }
+
+  private Map<String, Object> convertLatLng(LatLng latLng) {
+    Map<String, Object> result = new HashMap<>(2);
+    result.put("latitude", latLng.latitude);
+    result.put("longitude", latLng.longitude);
+    return result;
   }
 
   interface MapOperationTask {
