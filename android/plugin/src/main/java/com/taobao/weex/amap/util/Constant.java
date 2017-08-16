@@ -24,10 +24,16 @@ public class Constant {
     String COMPASS = "compass";
     String GEOLOCATION = "geolocation";
     String GESTURE = "gesture";
+    String GESTURES = "gestures";
     String INDOORSWITCH = "indoorswitch";
     String CENTER = "center";
     String KEYS = "sdkKey";
     String ZOOM_POSITION = "zoomPosition";
+    String ZOOM_CONTROLS_ENABLED = "zoomControlsEnabled";
+    String MY_LOCATION_ENABLED = "myLocationEnabled";
+    String SHOW_MY_LOCATION = "showMyLocation";
+    String CUSTOM_STYLE_PATH = "customStylePath";
+    String CUSTOM_ENABLED = "customEnabled";
 
     // marker
     String MARKER = "marker";

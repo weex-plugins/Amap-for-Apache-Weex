@@ -53,7 +53,7 @@ import java.util.concurrent.atomic.AtomicBoolean;
 @WeexComponent(names = {"weex-amap"})
 public class WXMapViewComponent extends WXVContainer<FrameLayout> implements LocationSource,
     AMapLocationListener {
-  private static final String TAG  = "WXMapViewComponent";
+  private static final String TAG = "WXMapViewComponent";
   private static final int REQUEST_CODE_MAPVIEW = 0xA;
   private static String[] permissions = new String[]{
       "android.permission.ACCESS_FINE_LOCATION",
@@ -105,11 +105,11 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
         public void run() {
           mMapView = new TextureMapView(getContext());
           mapContainer.addView(mMapView, new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
-                  ViewGroup.LayoutParams.MATCH_PARENT));
+              ViewGroup.LayoutParams.MATCH_PARENT));
           WXLogUtils.e(TAG, "Create MapView " + mMapView.toString());
           initMap();
         }
-      },0);
+      }, 0);
     }
   }
 
@@ -420,12 +420,100 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   }
 
   @WXComponentProp(name = Constant.Name.GESTURE)
+  @Deprecated
   public void setGesture(final int gesture) {
     postTask(new MapOperationTask() {
       @Override
       public void execute(TextureMapView mapView) {
         mGesture = gesture;
         updateGestureSetting();
+      }
+    });
+  }
+
+  @WXComponentProp(name = Constant.Name.GESTURES)
+  public void setGestures(final String gestures) {
+    postTask(new MapOperationTask() {
+      @Override
+      public void execute(TextureMapView mapView) {
+        try {
+          JSONArray array = new JSONArray(gestures);
+          mUiSettings.setAllGesturesEnabled(false);
+          for (int i = 0; i < array.length(); i++) {
+            String gesture = array.getString(i);
+            if ("zoom".equalsIgnoreCase(gesture)) {
+              mUiSettings.setZoomGesturesEnabled(true);
+            } else if ("rotate".equalsIgnoreCase(gesture)) {
+              mUiSettings.setRotateGesturesEnabled(true);
+            } else if ("tilt".equalsIgnoreCase(gesture)) {
+              mUiSettings.setTiltGesturesEnabled(true);
+            } else if ("scroll".equalsIgnoreCase(gesture)) {
+              mUiSettings.setScrollGesturesEnabled(true);
+            } else {
+              WXLogUtils.w(TAG, "Wrong gesture: " + gesture);
+            }
+          }
+        } catch (JSONException e) {
+          e.printStackTrace();
+        }
+      }
+    });
+  }
+
+  @WXComponentProp(name = Constant.Name.ZOOM_CONTROLS_ENABLED)
+  public void setZoomControls(final boolean show) {
+    postTask(new MapOperationTask() {
+      @Override
+      public void execute(TextureMapView mapView) {
+        mUiSettings.setZoomControlsEnabled(show);
+      }
+    });
+  }
+
+  @WXComponentProp(name = Constant.Name.MY_LOCATION_ENABLED)
+  public void setMyLocationEnabled(final boolean enabled) {
+    postTask(new MapOperationTask() {
+      @Override
+      public void execute(TextureMapView mapView) {
+        mUiSettings.setMyLocationButtonEnabled(enabled);
+      }
+    });
+  }
+
+  @WXComponentProp(name = Constant.Name.SHOW_MY_LOCATION)
+  public void setShowMyLocation(final boolean show) {
+    postTask(new MapOperationTask() {
+      @Override
+      public void execute(TextureMapView mapView) {
+        mAMap.setMyLocationStyle(mAMap.getMyLocationStyle().showMyLocation(show));
+      }
+    });
+  }
+
+  @WXComponentProp(name = Constant.Name.CUSTOM_ENABLED)
+  public void setCustomEnabled(final boolean enabled) {
+    postTask(new MapOperationTask() {
+      @Override
+      public void execute(TextureMapView mapView) {
+        mAMap.setMapCustomEnable(true);
+      }
+    });
+  }
+
+  @WXComponentProp(name = Constant.Name.CUSTOM_STYLE_PATH)
+  public void setCustomStylePath(final String pathObject) {
+    postTask(new MapOperationTask() {
+      @Override
+      public void execute(TextureMapView mapView) {
+        try {
+          JSONObject object = new JSONObject(pathObject);
+          String path = object.optString("android");
+          if (!TextUtils.isEmpty(path)) {
+            mAMap.setCustomMapStylePath(path);
+          }
+        } catch (JSONException e) {
+          e.printStackTrace();
+        }
       }
     });
   }

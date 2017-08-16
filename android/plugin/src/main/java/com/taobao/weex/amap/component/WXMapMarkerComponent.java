@@ -168,9 +168,9 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent<Marker> {
         // 将Marker设置为贴地显示，可以双指下拉地图查看效果
         markerOptions.setFlat(true);
         Marker marker = mapView.getMap().addMarker(markerOptions);
-        //setMarkerTitle(marker, title);
-        //setMarkerPosition(marker, position);
-        //setMarkerIcon(marker, icon);
+        setMarkerTitle(marker, title);
+        setMarkerPosition(marker, position);
+        setMarkerIcon(marker, icon);
         setWidget(marker);
       }
     });
@@ -194,7 +194,7 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent<Marker> {
   }
 
   private void setMarkerIcon(@Nullable final Marker mMarker, final String icon) {
-
+    WXLogUtils.d(TAG, "setMarkerIcon from: " + icon);
     if (TextUtils.isEmpty(icon) || mMarker == null) {
       return;
     }
@@ -207,7 +207,8 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent<Marker> {
         WXLogUtils.d(TAG, "Load marker icon from drawable: " + segments.get(0));
         int id = resources.getIdentifier(segments.get(0), "drawable", getContext().getPackageName());
         if (id != 0) {
-          mMarker.setIcon(BitmapDescriptorFactory.fromResource(id));
+          BitmapDescriptor descriptor = BitmapDescriptorFactory.fromResource(id);
+          mMarker.setIcon(descriptor);
           return;
         }
       }
