@@ -194,6 +194,7 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent<Marker> {
   }
 
   private void setMarkerIcon(@Nullable final Marker mMarker, final String icon) {
+    WXLogUtils.d(TAG, "Invoke setMarkerIcon on thread " + Thread.currentThread().getName());
     WXLogUtils.d(TAG, "setMarkerIcon from: " + icon);
     if (TextUtils.isEmpty(icon) || mMarker == null) {
       return;
@@ -207,19 +208,29 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent<Marker> {
         WXLogUtils.d(TAG, "Load marker icon from drawable: " + segments.get(0));
         int id = resources.getIdentifier(segments.get(0), "drawable", getContext().getPackageName());
         if (id != 0) {
-          BitmapDescriptor descriptor = BitmapDescriptorFactory.fromResource(id);
-          mMarker.setIcon(descriptor);
+          final BitmapDescriptor descriptor = BitmapDescriptorFactory.fromResource(id);
+          getInstance().runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+              mMarker.setIcon(descriptor);
+            }
+          });
           return;
         }
       }
     } else if ("path".equals(rewrited.getScheme())) {
       WXLogUtils.d(TAG, "Load marker icon from path: " + rewrited.getPath());
-      mMarker.setIcon(BitmapDescriptorFactory.fromPath(rewrited.getPath()));
+      final BitmapDescriptor descriptor = BitmapDescriptorFactory.fromPath(rewrited.getPath());
+      getInstance().runOnUiThread(new Runnable() {
+        @Override
+        public void run() {
+          mMarker.setIcon(descriptor);
+        }
+      });
       return;
     }
 
     new AsyncTask<Void, String, Uri>() {
-
       @Override
       protected Uri doInBackground(Void... params) {
         try {
