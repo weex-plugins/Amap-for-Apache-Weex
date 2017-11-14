@@ -97,7 +97,7 @@
 
 
 
-#### weex-amap-marker 属性 
+#### weex-amap-marker 属性    
 
 | 属性        | 类型         | Demo  | 描述  |
 | ------------- |:-------------:| -----:|----------:|
@@ -111,33 +111,36 @@
 **click**    
 点击marker时触发
 
-#### weex-amap-info-window 属性
+#### weex-amap-info-window 属性    
+
 | 属性        | 类型         | 描述  |
-| ------------- |:-------------:| -----:|----------:|
+| ------------- |:-------------:| -----:|
 | open     | boolean | 是否显示InfoWindow |
 | position     | String | InfoWindow位置 |
 | offset     | String | InfoWindow偏移量 |
 
 #### weex-amap-circle 属性
 | 属性        | 类型         | 描述  |
-| ------------- |:-------------:| -----:|----------:|
+| ------------- |:-------------:| -----:|
 | center     | String | 中心点 |
 | strokeColor     | String | 描边颜色 |
 | fillColor     | String | 填充颜色 |
 | strokeWidth     | float | 描边宽度 |
 | radius     | float | 半径 |
 
-#### weex-amap-polygon 属性
+#### weex-amap-polygon 属性    
+
 | 属性        | 类型         | 描述  |
-| ------------- |:-------------:| -----:|----------:|
+| ------------- |:-------------:| -----:|
 | path     | String | 路径 |
 | strokeColor     | String | 描边颜色 |
 | fillColor     | String | 填充颜色 |
 | strokeWidth     | float | 描边宽度 |
 
-#### weex-amap-polyline 属性
+#### weex-amap-polyline 属性    
+
 | 属性        | 类型         | 描述  |
-| ------------- |:-------------:| -----:|----------:|
+| ------------- |:-------------:| -----:|
 | path     | String | 路径 |
 | strokeColor     | String | 描边颜色 |
 | strokeStyle     | String | 描边样式，可为dashed或空 |
