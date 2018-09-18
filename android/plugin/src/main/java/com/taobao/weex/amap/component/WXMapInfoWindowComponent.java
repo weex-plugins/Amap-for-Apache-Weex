@@ -2,7 +2,6 @@ package com.taobao.weex.amap.component;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
-
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.AMap;
 import com.amap.api.maps.TextureMapView;
@@ -12,18 +11,16 @@ import com.amap.api.maps.model.MarkerOptions;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.amap.util.Constant;
 import com.taobao.weex.common.Constants;
-import com.taobao.weex.dom.WXDomObject;
+import com.taobao.weex.ui.action.BasicComponentData;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.ui.view.WXFrameLayout;
 import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.utils.WXUtils;
-
+import java.util.Map;
 import org.json.JSONArray;
 import org.json.JSONException;
-
-import java.util.Map;
 
 /**
  * Created by budao on 2017/2/9.
@@ -32,8 +29,8 @@ import java.util.Map;
 @WeexComponent(names = {"weex-amap-info-window"})
 public class WXMapInfoWindowComponent extends AbstractMapWidgetContainer<Marker> {
 
-  public WXMapInfoWindowComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
-    super(instance, dom, parent);
+  public WXMapInfoWindowComponent(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
+    super(instance, parent, basicComponentData);
   }
 
   @Override

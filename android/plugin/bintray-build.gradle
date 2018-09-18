@@ -108,7 +108,7 @@ dependencies {
         exclude module: 'httpclient'
     }
     compile 'com.android.support:appcompat-v7:23.1.1'
-    provided 'com.taobao.android:weex_sdk:0.10.0'
+    provided 'com.taobao.android:weex_sdk:0.18.16.143'
     provided 'com.amap.api:map3d-native:4.1.3'
     provided 'com.amap.api:map3d:4.1.3'
     provided 'com.amap.api.location:android_location:2.5.1'

@@ -55,7 +55,7 @@ dependencies {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
     compile 'com.android.support:appcompat-v7:23.1.1'
-    provided 'com.taobao.android:weex_sdk:0.10.0'
+    provided 'com.taobao.android:weex_sdk:0.18.16.143'
     provided 'com.amap.api:3dmap:latest.integration'
     provided 'com.amap.api:location:latest.integration'
     //provided 'com.taobao.android:dynamicimport:1.0.4.18'

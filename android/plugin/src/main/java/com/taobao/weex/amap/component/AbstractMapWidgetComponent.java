@@ -1,14 +1,12 @@
 package com.taobao.weex.amap.component;
 
 import android.view.View;
-
 import com.amap.api.maps.TextureMapView;
 import com.taobao.weex.WXSDKInstance;
-import com.taobao.weex.dom.WXDomObject;
+import com.taobao.weex.ui.action.BasicComponentData;
 import com.taobao.weex.ui.component.WXComponent;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.utils.WXLogUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -24,8 +22,8 @@ public abstract class AbstractMapWidgetComponent<Widget> extends WXComponent<Vie
     private AtomicBoolean mIsMapLoaded = new AtomicBoolean(false);
     private Widget mWidget;
 
-    public AbstractMapWidgetComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
-        super(instance, dom, parent);
+    public AbstractMapWidgetComponent(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
+        super(instance, parent, basicComponentData);
     }
 
     protected void postMapOperationTask(WXMapViewComponent parent, final WXMapViewComponent.MapOperationTask task) {

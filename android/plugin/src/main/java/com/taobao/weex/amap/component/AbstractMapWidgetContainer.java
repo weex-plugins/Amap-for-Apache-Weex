@@ -2,11 +2,10 @@ package com.taobao.weex.amap.component;
 
 import com.amap.api.maps.TextureMapView;
 import com.taobao.weex.WXSDKInstance;
-import com.taobao.weex.dom.WXDomObject;
+import com.taobao.weex.ui.action.BasicComponentData;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.ui.view.WXFrameLayout;
 import com.taobao.weex.utils.WXLogUtils;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -21,16 +20,16 @@ public class AbstractMapWidgetContainer<Widget> extends WXVContainer<WXFrameLayo
     private AtomicBoolean mIsMapLoaded = new AtomicBoolean(false);
     private Widget mWidget;
 
-    public AbstractMapWidgetContainer(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, String instanceId, boolean isLazy) {
-        super(instance, dom, parent, instanceId, isLazy);
+    public AbstractMapWidgetContainer(WXSDKInstance instance, WXVContainer parent, String instanceId, boolean isLazy, BasicComponentData basicComponentData) {
+        super(instance, parent, isLazy, basicComponentData);
     }
 
-    public AbstractMapWidgetContainer(WXSDKInstance instance, WXDomObject node, WXVContainer parent) {
-        super(instance, node, parent);
+    public AbstractMapWidgetContainer(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
+        super(instance, parent, basicComponentData);
     }
 
-    public AbstractMapWidgetContainer(WXSDKInstance instance, WXDomObject node, WXVContainer parent, boolean lazy) {
-        super(instance, node, parent, lazy);
+    public AbstractMapWidgetContainer(WXSDKInstance instance, WXVContainer parent, boolean lazy, BasicComponentData basicComponentData) {
+        super(instance, parent,lazy, basicComponentData);
     }
 
     protected void postMapOperationTask(WXMapViewComponent parent, final WXMapViewComponent.MapOperationTask task) {

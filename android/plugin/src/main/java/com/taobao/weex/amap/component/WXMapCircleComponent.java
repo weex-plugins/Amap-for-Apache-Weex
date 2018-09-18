@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewStub;
-
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.model.Circle;
@@ -13,10 +12,9 @@ import com.amap.api.maps.model.CircleOptions;
 import com.amap.api.maps.model.LatLng;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.amap.util.Constant;
-import com.taobao.weex.dom.WXDomObject;
+import com.taobao.weex.ui.action.BasicComponentData;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
-
 import org.json.JSONArray;
 import org.json.JSONException;
 
@@ -31,8 +29,8 @@ public class WXMapCircleComponent extends AbstractMapWidgetComponent<Circle> {
   private float mWeight = 1.0f;
   private float mRadius = 1.0f;
 
-  public WXMapCircleComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
-    super(instance, dom, parent);
+  public WXMapCircleComponent(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
+    super(instance, parent, basicComponentData);
   }
 
   @Override

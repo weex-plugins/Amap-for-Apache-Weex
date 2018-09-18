@@ -10,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewStub;
-
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.model.BitmapDescriptor;
@@ -23,15 +22,11 @@ import com.taobao.weex.adapter.URIAdapter;
 import com.taobao.weex.amap.util.Constant;
 import com.taobao.weex.amap.util.GifDecoder;
 import com.taobao.weex.common.Constants;
-import com.taobao.weex.dom.WXDomObject;
+import com.taobao.weex.ui.action.BasicComponentData;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.utils.WXUtils;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -44,6 +39,8 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import org.json.JSONArray;
+import org.json.JSONException;
 
 /**
  * Created by budao on 2017/2/9.
@@ -51,8 +48,8 @@ import java.util.List;
 @WeexComponent(names = {"weex-amap-marker"})
 public class WXMapMarkerComponent extends AbstractMapWidgetComponent<Marker> {
 
-  public WXMapMarkerComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
-    super(instance, dom, parent);
+  public WXMapMarkerComponent(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
+    super(instance, parent, basicComponentData);
 
   }
 
@@ -81,9 +78,9 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent<Marker> {
   @Override
   protected View initComponentHostView(@NonNull Context context) {
     if (getParent() != null && getParent() instanceof WXMapViewComponent) {
-      String title = (String) getDomObject().getAttrs().get(Constant.Name.TITLE);
-      String icon = (String) getDomObject().getAttrs().get(Constant.Name.ICON);
-      String position = getDomObject().getAttrs().get(Constant.Name.POSITION).toString();
+      String title = (String) getAttrs().get(Constant.Name.TITLE);
+      String icon = (String) getAttrs().get(Constant.Name.ICON);
+      String position = getAttrs().get(Constant.Name.POSITION).toString();
       initMarker(title, position, icon);
     }
     // FixMe： 只是为了绕过updateProperties中的逻辑检查

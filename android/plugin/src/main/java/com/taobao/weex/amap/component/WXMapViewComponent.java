@@ -14,7 +14,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.Toast;
-
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.location.AMapLocation;
 import com.amap.api.location.AMapLocationClient;
@@ -35,22 +34,20 @@ import com.amap.api.maps.model.VisibleRegion;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.amap.util.Constant;
 import com.taobao.weex.annotation.JSMethod;
-import com.taobao.weex.dom.WXDomObject;
+import com.taobao.weex.ui.action.BasicComponentData;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
 import com.taobao.weex.ui.view.WXFrameLayout;
 import com.taobao.weex.utils.WXLogUtils;
 import com.taobao.weex.utils.WXViewUtils;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
 import java.util.concurrent.atomic.AtomicBoolean;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 @WeexComponent(names = {"weex-amap"})
 public class WXMapViewComponent extends WXVContainer<FrameLayout> implements LocationSource,
@@ -83,8 +80,8 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   private FrameLayout mapContainer;
   private int fakeBackgroundColor = Color.rgb(242, 238, 232);
 
-  public WXMapViewComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent, boolean isLazy) {
-    super(instance, dom, parent, isLazy);
+  public WXMapViewComponent(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData, boolean isLazy) {
+    super(instance, parent, isLazy,basicComponentData);
   }
 
   @Override
@@ -408,7 +405,7 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   }
 
   @Override
-  protected void addSubView(View child, int index) {
+  public void addSubView(View child, int index) {
 
   }
 

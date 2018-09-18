@@ -5,7 +5,6 @@ import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.view.View;
 import android.view.ViewStub;
-
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.model.LatLng;
@@ -13,14 +12,12 @@ import com.amap.api.maps.model.Polyline;
 import com.amap.api.maps.model.PolylineOptions;
 import com.taobao.weex.WXSDKInstance;
 import com.taobao.weex.amap.util.Constant;
-import com.taobao.weex.dom.WXDomObject;
+import com.taobao.weex.ui.action.BasicComponentData;
 import com.taobao.weex.ui.component.WXComponentProp;
 import com.taobao.weex.ui.component.WXVContainer;
-
+import java.util.ArrayList;
 import org.json.JSONArray;
 import org.json.JSONException;
-
-import java.util.ArrayList;
 
 /**
  * Created by budao on 2017/3/3.
@@ -32,8 +29,8 @@ public class WXMapPolyLineComponent extends AbstractMapWidgetComponent<Polyline>
   private String mStyle;
   private float mWeight = 1.0f;
 
-  public WXMapPolyLineComponent(WXSDKInstance instance, WXDomObject dom, WXVContainer parent) {
-    super(instance, dom, parent);
+  public WXMapPolyLineComponent(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
+    super(instance, parent, basicComponentData);
   }
 
   @Override
