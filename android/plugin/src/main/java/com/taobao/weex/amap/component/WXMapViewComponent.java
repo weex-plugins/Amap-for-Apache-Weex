@@ -80,8 +80,8 @@ public class WXMapViewComponent extends WXVContainer<FrameLayout> implements Loc
   private FrameLayout mapContainer;
   private int fakeBackgroundColor = Color.rgb(242, 238, 232);
 
-  public WXMapViewComponent(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData, boolean isLazy) {
-    super(instance, parent, isLazy,basicComponentData);
+  public WXMapViewComponent(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
+    super(instance, parent,basicComponentData);
   }
 
   @Override

@@ -20,16 +20,8 @@ public class AbstractMapWidgetContainer<Widget> extends WXVContainer<WXFrameLayo
     private AtomicBoolean mIsMapLoaded = new AtomicBoolean(false);
     private Widget mWidget;
 
-    public AbstractMapWidgetContainer(WXSDKInstance instance, WXVContainer parent, String instanceId, boolean isLazy, BasicComponentData basicComponentData) {
-        super(instance, parent, isLazy, basicComponentData);
-    }
-
     public AbstractMapWidgetContainer(WXSDKInstance instance, WXVContainer parent, BasicComponentData basicComponentData) {
         super(instance, parent, basicComponentData);
-    }
-
-    public AbstractMapWidgetContainer(WXSDKInstance instance, WXVContainer parent, boolean lazy, BasicComponentData basicComponentData) {
-        super(instance, parent,lazy, basicComponentData);
     }
 
     protected void postMapOperationTask(WXMapViewComponent parent, final WXMapViewComponent.MapOperationTask task) {
