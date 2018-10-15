@@ -1,7 +1,7 @@
 apply from: 'http://mirrors.taobao.net/mirror/gradle/android-parent.gradle'
 apply plugin: 'com.taobao.android.weex.plugin.gradle'
 group = 'com.taobao.android'
-version = '0.0.0.64cd-SNAPSHOT'
+version = '1.0.0.1-SNAPSHOT'
 
 description = """weex_amap"""
 

@@ -3,6 +3,7 @@ package com.taobao.weex.amap.component;
 import android.content.Context;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
@@ -10,6 +11,10 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewStub;
+
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.alibaba.weex.plugin.annotation.WeexComponent;
 import com.amap.api.maps.TextureMapView;
 import com.amap.api.maps.model.BitmapDescriptor;
@@ -39,8 +44,6 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-import org.json.JSONArray;
-import org.json.JSONException;
 
 /**
  * Created by budao on 2017/2/9.
@@ -159,12 +162,8 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent<Marker> {
     postMapOperationTask((WXMapViewComponent) getParent(), new WXMapViewComponent.MapOperationTask() {
       @Override
       public void execute(TextureMapView mapView) {
-        final MarkerOptions markerOptions = new MarkerOptions();
-        //设置Marker可拖动
-        markerOptions.draggable(true);
-        // 将Marker设置为贴地显示，可以双指下拉地图查看效果
-        markerOptions.setFlat(true);
-        Marker marker = mapView.getMap().addMarker(markerOptions);
+        Marker marker = mapView.getMap().addMarker(new MarkerOptions()
+                .position(new LatLng(39.986919,116.353369)).draggable(true).setFlat(true));
         setMarkerTitle(marker, title);
         setMarkerPosition(marker, position);
         setMarkerIcon(marker, icon);
@@ -293,14 +292,15 @@ public class WXMapMarkerComponent extends AbstractMapWidgetComponent<Marker> {
 
   private void setMarkerPosition(@Nullable final Marker mMarker, String position) {
     try {
-      JSONArray jsonArray = new JSONArray(position);
-      LatLng latLng = new LatLng(jsonArray.optDouble(1), jsonArray.optDouble(0));
+      JSONObject jsonObject = JSON.parseObject(position);
+      JSONArray jsonArray = jsonObject.getJSONArray("position");
+      LatLng latLng = new LatLng(jsonArray.getFloat(1), jsonArray.getFloat(0));
       if (mMarker != null) {
         MarkerOptions markerOptions = mMarker.getOptions();
         markerOptions.position(latLng);
         mMarker.setMarkerOptions(markerOptions);
       }
-    } catch (JSONException e) {
+    } catch (Exception e) {
       e.printStackTrace();
     }
   }
