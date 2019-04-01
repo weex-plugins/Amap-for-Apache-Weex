@@ -1,3 +1,5 @@
+# This repo is no longer maintained.
+
 # weex-amap
 
 <img width="320" src="https://img.alicdn.com/tps/TB19sYlPFXXXXaRaXXXXXXXXXXX-600-450.png" />
